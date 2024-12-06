@@ -1,0 +1,40 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Server.Controllers
+{
+    [ApiController]
+    [Route("api/user")] // Base route for all actions in this controller
+    public class UserController : ControllerBase
+    {
+        /*
+         <summary>
+         This is the user controller constructor to perform user actions
+         using services such as an email service ETC
+         </summary>
+        */
+        public UserController()
+        {
+        }
+
+        [AllowAnonymous]
+        [HttpPost("/")] // Route: api/user/
+        public IActionResult Login()
+        {
+            return Ok("Login successful.");
+        }
+
+        [AllowAnonymous]
+        [HttpPost("signup")] // Route: api/user/signup
+        public IActionResult SignUp()
+        {
+            return Ok("Sign-up successful.");
+        }
+
+        [HttpDelete("terminate/account")] // Route: api/user/terminate/account
+        public IActionResult TerminateAccount()
+        {
+            return Ok("Account terminated.");
+        }
+    }
+}
