@@ -1,12 +1,21 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Server.DB;
+using Newtonsoft.Json;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
-builder.Services.AddControllers(); // Add controllers
+builder.Services.AddControllers().AddNewtonsoftJson(); // Add controllers
 builder.Services.AddEndpointsApiExplorer(); // Add endpoint explorer for Swagger
 builder.Services.AddSwaggerGen(); // Add Swagger generation
+
+builder.Services.AddSingleton<MongoDBWrapper>(sp =>
+{
+    var configuration = sp.GetRequiredService<IConfiguration>();
+    return new MongoDBWrapper(configuration);
+});
 
 var app = builder.Build();
 
