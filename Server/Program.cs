@@ -2,6 +2,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Server.DB;
 using Newtonsoft.Json;
+using Server.Services;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -44,12 +47,17 @@ app.MapGet("/weatherforecast", () =>
     return forecast;
 });
 
+app.MapPost("broadcast", async (string user, string message, IHubContext<ChatHub, IChatHubService> hub) =>
+{
+    await hub.Clients.All.ReceiveMessage(user, message);
+    return Results.NoContent();
+});
 app.UseHttpsRedirection();
 
 app.UseAuthorization(); // Enable authorization middleware
 
 app.MapControllers(); // Map controllers to endpoints
-// use: app.MapHub<ChatHub>("/chatHub"); to map hubs
+app.MapHub<ChatHub>("/chatHub"); // Map SignalR hub to map hubs
 app.Run();
 
 // Record used in weather forecast
