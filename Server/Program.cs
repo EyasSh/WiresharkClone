@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers().AddNewtonsoftJson(); // Add controllers
 builder.Services.AddEndpointsApiExplorer(); // Add endpoint explorer for Swagger
 builder.Services.AddSwaggerGen(); // Add Swagger generation
-
+builder.Services.AddSignalR();//Added SignalR for hubs and realtime connections
 builder.Services.AddSingleton<MongoDBWrapper>(sp =>
 {
     var configuration = sp.GetRequiredService<IConfiguration>();
@@ -49,7 +49,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization(); // Enable authorization middleware
 
 app.MapControllers(); // Map controllers to endpoints
-
+// use: app.MapHub<ChatHub>("/chatHub"); to map hubs
 app.Run();
 
 // Record used in weather forecast
