@@ -42,7 +42,7 @@ namespace Server.Controllers
         /// successful.</returns>
 
         [AllowAnonymous]
-        [HttpPost("signup")] // Route: api/user/signup
+        [HttpPost("/signup")] // Route: api/user/signup
         public IActionResult SignUp()
         {
             return Ok("Sign-up successful.");
@@ -54,7 +54,7 @@ namespace Server.Controllers
         /// </summary>
         /// <returns>A successful status code (200) if the account termination was successful.</returns>
 
-        [HttpDelete("terminate/account")] // Route: api/user/terminate/account
+        [HttpDelete("/terminate/account")] // Route: api/user/terminate/account
         public IActionResult TerminateAccount()
         {
             return Ok("Account terminated.");
