@@ -422,35 +422,25 @@
           }
         }
       },
-      "Pcap.Net.x64/1.0.4.1": {
+      "Packet.NET/0.1.1.1": {
         "type": "package",
         "compile": {
-          "lib/net45/PcapDotNet.Base.dll": {
-            "related": ".pdb;.xml"
-          },
-          "lib/net45/PcapDotNet.Core.Extensions.dll": {
-            "related": ".pdb;.XML"
-          },
-          "lib/net45/PcapDotNet.Core.dll": {
-            "related": ".Extensions.pdb;.Extensions.XML;.pdb;.xml"
-          },
-          "lib/net45/PcapDotNet.Packets.dll": {
-            "related": ".pdb;.xml"
-          }
+          "lib/net35/Packer.NET.dll": {}
         },
         "runtime": {
-          "lib/net45/PcapDotNet.Base.dll": {
-            "related": ".pdb;.xml"
-          },
-          "lib/net45/PcapDotNet.Core.Extensions.dll": {
-            "related": ".pdb;.XML"
-          },
-          "lib/net45/PcapDotNet.Core.dll": {
-            "related": ".Extensions.pdb;.Extensions.XML;.pdb;.xml"
-          },
-          "lib/net45/PcapDotNet.Packets.dll": {
-            "related": ".pdb;.xml"
-          }
+          "lib/net35/Packer.NET.dll": {}
+        }
+      },
+      "PacketDotNet/1.4.7": {
+        "type": "package",
+        "dependencies": {
+          "System.Runtime.CompilerServices.Unsafe": "6.0.0"
+        },
+        "compile": {
+          "lib/netstandard2.1/PacketDotNet.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.1/PacketDotNet.dll": {}
         }
       },
       "Scalar.AspNetCore/1.2.49": {
@@ -476,6 +466,20 @@
         },
         "runtime": {
           "lib/net5.0/SharpCompress.dll": {}
+        }
+      },
+      "SharpPcap/6.3.0": {
+        "type": "package",
+        "dependencies": {
+          "PacketDotNet": "1.4.7",
+          "System.Memory": "4.5.5",
+          "System.Text.Encoding.CodePages": "6.0.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/SharpPcap.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/SharpPcap.dll": {}
         }
       },
       "Snappier/1.0.0": {
@@ -575,17 +579,20 @@
           "lib/netcoreapp2.1/_._": {}
         }
       },
-      "System.Runtime.CompilerServices.Unsafe/5.0.0": {
+      "System.Runtime.CompilerServices.Unsafe/6.0.0": {
         "type": "package",
         "compile": {
-          "ref/netstandard2.1/System.Runtime.CompilerServices.Unsafe.dll": {
+          "lib/net6.0/System.Runtime.CompilerServices.Unsafe.dll": {
             "related": ".xml"
           }
         },
         "runtime": {
-          "lib/netcoreapp2.0/System.Runtime.CompilerServices.Unsafe.dll": {
+          "lib/net6.0/System.Runtime.CompilerServices.Unsafe.dll": {
             "related": ".xml"
           }
+        },
+        "build": {
+          "buildTransitive/netcoreapp3.1/_._": {}
         }
       },
       "System.Security.AccessControl/5.0.0": {
@@ -629,6 +636,31 @@
             "rid": "unix"
           },
           "runtimes/win/lib/netcoreapp2.1/System.Security.Principal.Windows.dll": {
+            "assetType": "runtime",
+            "rid": "win"
+          }
+        }
+      },
+      "System.Text.Encoding.CodePages/6.0.0": {
+        "type": "package",
+        "dependencies": {
+          "System.Runtime.CompilerServices.Unsafe": "6.0.0"
+        },
+        "compile": {
+          "lib/net6.0/System.Text.Encoding.CodePages.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/System.Text.Encoding.CodePages.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/netcoreapp3.1/_._": {}
+        },
+        "runtimeTargets": {
+          "runtimes/win/lib/net6.0/System.Text.Encoding.CodePages.dll": {
             "assetType": "runtime",
             "rid": "win"
           }
@@ -1499,28 +1531,30 @@
         "newtonsoft.json.bson.nuspec"
       ]
     },
-    "Pcap.Net.x64/1.0.4.1": {
-      "sha512": "8kyqaySh23tikkLMZW/DgI3uf+om3QCvvg1dj2h7O6nKHoz9G2j0OfIqozI8FvkymbcHei0JjeBcPP3/t6kAtA==",
+    "Packet.NET/0.1.1.1": {
+      "sha512": "WJaxw5hkgHL7Dmm15fwaFFDA0BucWjfo0wUdXNvqEPL/huxodtkCQtQhUijipTpc/NaCryTMfvt1URmB4PIbpw==",
       "type": "package",
-      "path": "pcap.net.x64/1.0.4.1",
+      "path": "packet.net/0.1.1.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "lib/net45/PcapDotNet.Base.dll",
-        "lib/net45/PcapDotNet.Base.pdb",
-        "lib/net45/PcapDotNet.Base.xml",
-        "lib/net45/PcapDotNet.Core.Extensions.XML",
-        "lib/net45/PcapDotNet.Core.Extensions.dll",
-        "lib/net45/PcapDotNet.Core.Extensions.pdb",
-        "lib/net45/PcapDotNet.Core.dll",
-        "lib/net45/PcapDotNet.Core.pdb",
-        "lib/net45/PcapDotNet.Core.xml",
-        "lib/net45/PcapDotNet.Packets.dll",
-        "lib/net45/PcapDotNet.Packets.pdb",
-        "lib/net45/PcapDotNet.Packets.xml",
-        "license.txt",
-        "pcap.net.x64.1.0.4.1.nupkg.sha512",
-        "pcap.net.x64.nuspec"
+        "lib/net35/Packer.NET.dll",
+        "packet.net.0.1.1.1.nupkg.sha512",
+        "packet.net.nuspec"
+      ]
+    },
+    "PacketDotNet/1.4.7": {
+      "sha512": "xh4MGjkDFhJfFtAr6IEwg3ocPm3TO0/AxbYeCVoh9BaVT0xeWJB1p0nwKQ9olsQiQtSqF8M0UXz97U2VnOYY0w==",
+      "type": "package",
+      "path": "packetdotnet/1.4.7",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net47/PacketDotNet.dll",
+        "lib/netstandard2.0/PacketDotNet.dll",
+        "lib/netstandard2.1/PacketDotNet.dll",
+        "packetdotnet.1.4.7.nupkg.sha512",
+        "packetdotnet.nuspec"
       ]
     },
     "Scalar.AspNetCore/1.2.49": {
@@ -1554,6 +1588,18 @@
         "lib/netstandard2.1/SharpCompress.dll",
         "sharpcompress.0.30.1.nupkg.sha512",
         "sharpcompress.nuspec"
+      ]
+    },
+    "SharpPcap/6.3.0": {
+      "sha512": "9tFnPgVYWJj/6fQRFLV34n0Uh9SLwi2zkQ/dPaxx8ZoNuPm1XuJU731qWMsMJlwQD6FL0AFeQpRj7zXLV8iu1Q==",
+      "type": "package",
+      "path": "sharppcap/6.3.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.0/SharpPcap.dll",
+        "sharppcap.6.3.0.nupkg.sha512",
+        "sharppcap.nuspec"
       ]
     },
     "Snappier/1.0.0": {
@@ -1715,36 +1761,29 @@
         "version.txt"
       ]
     },
-    "System.Runtime.CompilerServices.Unsafe/5.0.0": {
-      "sha512": "ZD9TMpsmYJLrxbbmdvhwt9YEgG5WntEnZ/d1eH8JBX9LBp+Ju8BSBhUGbZMNVHHomWo2KVImJhTDl2hIgw/6MA==",
+    "System.Runtime.CompilerServices.Unsafe/6.0.0": {
+      "sha512": "/iUeP3tq1S0XdNNoMz5C9twLSrM/TH+qElHkXWaPvuNOt+99G75NrV0OS2EqHx5wMN7popYjpc8oTjC1y16DLg==",
       "type": "package",
-      "path": "system.runtime.compilerservices.unsafe/5.0.0",
+      "path": "system.runtime.compilerservices.unsafe/6.0.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "Icon.png",
         "LICENSE.TXT",
         "THIRD-PARTY-NOTICES.TXT",
-        "lib/net45/System.Runtime.CompilerServices.Unsafe.dll",
-        "lib/net45/System.Runtime.CompilerServices.Unsafe.xml",
-        "lib/netcoreapp2.0/System.Runtime.CompilerServices.Unsafe.dll",
-        "lib/netcoreapp2.0/System.Runtime.CompilerServices.Unsafe.xml",
-        "lib/netstandard1.0/System.Runtime.CompilerServices.Unsafe.dll",
-        "lib/netstandard1.0/System.Runtime.CompilerServices.Unsafe.xml",
+        "buildTransitive/netcoreapp2.0/System.Runtime.CompilerServices.Unsafe.targets",
+        "buildTransitive/netcoreapp3.1/_._",
+        "lib/net461/System.Runtime.CompilerServices.Unsafe.dll",
+        "lib/net461/System.Runtime.CompilerServices.Unsafe.xml",
+        "lib/net6.0/System.Runtime.CompilerServices.Unsafe.dll",
+        "lib/net6.0/System.Runtime.CompilerServices.Unsafe.xml",
+        "lib/netcoreapp3.1/System.Runtime.CompilerServices.Unsafe.dll",
+        "lib/netcoreapp3.1/System.Runtime.CompilerServices.Unsafe.xml",
         "lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll",
         "lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.xml",
-        "ref/net461/System.Runtime.CompilerServices.Unsafe.dll",
-        "ref/net461/System.Runtime.CompilerServices.Unsafe.xml",
-        "ref/netstandard1.0/System.Runtime.CompilerServices.Unsafe.dll",
-        "ref/netstandard1.0/System.Runtime.CompilerServices.Unsafe.xml",
-        "ref/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll",
-        "ref/netstandard2.0/System.Runtime.CompilerServices.Unsafe.xml",
-        "ref/netstandard2.1/System.Runtime.CompilerServices.Unsafe.dll",
-        "ref/netstandard2.1/System.Runtime.CompilerServices.Unsafe.xml",
-        "system.runtime.compilerservices.unsafe.5.0.0.nupkg.sha512",
+        "system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512",
         "system.runtime.compilerservices.unsafe.nuspec",
-        "useSharedDesignerContext.txt",
-        "version.txt"
+        "useSharedDesignerContext.txt"
       ]
     },
     "System.Security.AccessControl/5.0.0": {
@@ -1849,6 +1888,45 @@
         "version.txt"
       ]
     },
+    "System.Text.Encoding.CodePages/6.0.0": {
+      "sha512": "ZFCILZuOvtKPauZ/j/swhvw68ZRi9ATCfvGbk1QfydmcXBkIWecWKn/250UH7rahZ5OoDBaiAudJtPvLwzw85A==",
+      "type": "package",
+      "path": "system.text.encoding.codepages/6.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "buildTransitive/netcoreapp2.0/System.Text.Encoding.CodePages.targets",
+        "buildTransitive/netcoreapp3.1/_._",
+        "lib/MonoAndroid10/_._",
+        "lib/MonoTouch10/_._",
+        "lib/net461/System.Text.Encoding.CodePages.dll",
+        "lib/net461/System.Text.Encoding.CodePages.xml",
+        "lib/net6.0/System.Text.Encoding.CodePages.dll",
+        "lib/net6.0/System.Text.Encoding.CodePages.xml",
+        "lib/netcoreapp3.1/System.Text.Encoding.CodePages.dll",
+        "lib/netcoreapp3.1/System.Text.Encoding.CodePages.xml",
+        "lib/netstandard2.0/System.Text.Encoding.CodePages.dll",
+        "lib/netstandard2.0/System.Text.Encoding.CodePages.xml",
+        "lib/xamarinios10/_._",
+        "lib/xamarinmac20/_._",
+        "lib/xamarintvos10/_._",
+        "lib/xamarinwatchos10/_._",
+        "runtimes/win/lib/net461/System.Text.Encoding.CodePages.dll",
+        "runtimes/win/lib/net461/System.Text.Encoding.CodePages.xml",
+        "runtimes/win/lib/net6.0/System.Text.Encoding.CodePages.dll",
+        "runtimes/win/lib/net6.0/System.Text.Encoding.CodePages.xml",
+        "runtimes/win/lib/netcoreapp3.1/System.Text.Encoding.CodePages.dll",
+        "runtimes/win/lib/netcoreapp3.1/System.Text.Encoding.CodePages.xml",
+        "runtimes/win/lib/netstandard2.0/System.Text.Encoding.CodePages.dll",
+        "runtimes/win/lib/netstandard2.0/System.Text.Encoding.CodePages.xml",
+        "system.text.encoding.codepages.6.0.0.nupkg.sha512",
+        "system.text.encoding.codepages.nuspec",
+        "useSharedDesignerContext.txt"
+      ]
+    },
     "ZstdSharp.Port/0.7.3": {
       "sha512": "U9Ix4l4cl58Kzz1rJzj5hoVTjmbx1qGMwzAcbv1j/d3NzrFaESIurQyg+ow4mivCgkE3S413y+U9k4WdnEIkRA==",
       "type": "package",
@@ -1878,8 +1956,9 @@
       "MongoDB.Driver >= 3.1.0",
       "MongoDB.Driver.Core >= 2.30.0",
       "Newtonsoft.Json >= 13.0.3",
-      "Pcap.Net.x64 >= 1.0.4.1",
+      "Packet.Net >= 0.1.1.1",
       "Scalar.AspNetCore >= 1.2.49",
+      "SharpPcap >= 6.3.0",
       "Swashbuckle.AspNetCore >= 7.1.0"
     ]
   },
@@ -1958,13 +2037,17 @@
             "target": "Package",
             "version": "[13.0.3, )"
           },
-          "Pcap.Net.x64": {
+          "Packet.Net": {
             "target": "Package",
-            "version": "[1.0.4.1, )"
+            "version": "[0.1.1.1, )"
           },
           "Scalar.AspNetCore": {
             "target": "Package",
             "version": "[1.2.49, )"
+          },
+          "SharpPcap": {
+            "target": "Package",
+            "version": "[6.3.0, )"
           },
           "Swashbuckle.AspNetCore": {
             "target": "Package",
@@ -1999,8 +2082,8 @@
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Package 'Pcap.Net.x64 1.0.4.1' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net9.0'. This package may not be fully compatible with your project.",
-      "libraryId": "Pcap.Net.x64",
+      "message": "Package 'Packet.NET 0.1.1.1' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net9.0'. This package may not be fully compatible with your project.",
+      "libraryId": "Packet.NET",
       "targetGraphs": [
         "net9.0"
       ]

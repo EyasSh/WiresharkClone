@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 using MongoDB.Driver.Encryption;
-using PcapDotNet.Base;
 using Server.DB;
 using Server.Models;
 using Server.Services;
@@ -36,7 +35,7 @@ namespace Server.Controllers
         {
             try
             {
-                if (request.Email.IsNullOrEmpty() || request.Password.IsNullOrEmpty())
+                if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password))
                 {
                     return BadRequest("Invalid login credentials.");
                 }
@@ -114,7 +113,7 @@ namespace Server.Controllers
         public IActionResult TerminateAccount(string email)
         {
             var user = _users.FindSync(user => user.Email == email).FirstOrDefault();
-            if (user == null || (user is not null && user.Email.IsNullOrEmpty()))
+            if (user == null || (user is not null && string.IsNullOrEmpty(user.Email)))
             {
                 return BadRequest("User not found.");
             }
