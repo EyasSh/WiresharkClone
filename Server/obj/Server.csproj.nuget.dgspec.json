@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\eyas_\\source\\repos\\JulianAndSamer\\Server\\Server.csproj": {}
+    "C:\\Users\\samer\\OneDrive\\Desktop\\Code\\Server\\Server.csproj": {}
   },
   "projects": {
-    "C:\\Users\\eyas_\\source\\repos\\JulianAndSamer\\Server\\Server.csproj": {
+    "C:\\Users\\samer\\OneDrive\\Desktop\\Code\\Server\\Server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\eyas_\\source\\repos\\JulianAndSamer\\Server\\Server.csproj",
+        "projectUniqueName": "C:\\Users\\samer\\OneDrive\\Desktop\\Code\\Server\\Server.csproj",
         "projectName": "Server",
-        "projectPath": "C:\\Users\\eyas_\\source\\repos\\JulianAndSamer\\Server\\Server.csproj",
-        "packagesPath": "C:\\Users\\eyas_\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\eyas_\\source\\repos\\JulianAndSamer\\Server\\obj\\",
+        "projectPath": "C:\\Users\\samer\\OneDrive\\Desktop\\Code\\Server\\Server.csproj",
+        "packagesPath": "C:\\Users\\samer\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\samer\\OneDrive\\Desktop\\Code\\Server\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\eyas_\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\samer\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
@@ -36,7 +36,7 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "all"
+          "auditMode": "direct"
         },
         "SdkAnalysisLevel": "9.0.100"
       },
@@ -112,7 +112,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
