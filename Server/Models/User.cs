@@ -8,11 +8,19 @@ namespace Server.Models
         [BsonRepresentation(BsonType.ObjectId)] // Ensures correct ObjectId serialization
         public string? Id { get; set; }
         [BsonElement("name")]
-        public required string Name { get; set; }
+        public required string Name { get; set; } = "";
         [BsonElement("email")]
-        public required string Email { get; set; }
+        public required string Email { get; set; } = "";
         [BsonElement("password")]
-        public required string Password { get; set; }
+        public required string Password { get; set; } = "";
+        public User()
+        { }
+        public User(string name, string email, string password)
+        {
+            Name = name;
+            Email = email;
+            Password = password;
+        }
     }
 
 }
