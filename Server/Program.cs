@@ -46,7 +46,10 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowLocalhostOnly", policy =>
     {
-        policy.WithOrigins("http://localhost:5173")
+        policy.WithOrigins
+        ("http://localhost:5173",
+         "http://localhost:19006"
+         )
               .WithMethods("GET", "POST", "PUT", "DELETE")
               .WithHeaders("Content-Type", "Authorization", "X-Auth")
               .AllowCredentials()
@@ -70,7 +73,7 @@ app.UseCors("AllowLocalhostOnly");
 
 app.UseAuthentication(); // JWT Authentication Middleware
 app.UseAuthorization();  // Authorization Middleware
-
+app.UseCors();           // CORS Middleware
 // API Endpoints
 app.MapGet("/weatherforecast", () =>
 {
