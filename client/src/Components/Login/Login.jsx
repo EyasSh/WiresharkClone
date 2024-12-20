@@ -19,7 +19,7 @@ function Login() {
         console.log(email,password);
     }
     const handleSignup = ()=>{
-        console.log('Sign Up');
+        alert('Sign Up');
     }
     return (
         <>
@@ -47,7 +47,7 @@ function Login() {
             <Button action={()=>handleSubmit()} content={'Login'} status='action'/>
             <div className='signup-div'>
                 <h4>Don&apos;t have an account?</h4>
-                <Button link='/signup' content={'Sign Up'} status='signup' action={()=>handleSignup()}/>
+                <Button link='/signup' content={'Sign Up'} status='signup'/>
             </div>
         </div>
         </>
