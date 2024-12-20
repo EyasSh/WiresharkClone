@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Server.Controllers;
+using MongoDB.Driver;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,12 +20,16 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR();
 
 // MongoDB Dependency Injection
-builder.Services.AddSingleton<MongoDBWrapper>(sp =>
+builder.Services.AddSingleton<IMongoClient>(sp =>
 {
     var configuration = sp.GetRequiredService<IConfiguration>();
-    return new MongoDBWrapper(configuration);
+    var connectionString = configuration.GetValue<string>("DB:ConnectionString");
+    return new MongoClient(connectionString);
 });
+builder.Services.AddScoped<MongoDBWrapper>();
 
+// User Controller Injection
+builder.Services.AddScoped<UserController>();
 // JWT Authentication Configuration
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
