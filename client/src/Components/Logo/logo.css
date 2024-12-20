@@ -1,0 +1,41 @@
+.logo-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 3%;
+}
+
+.logo-container.row {
+    flex-direction: row;
+    margin-bottom: 0;
+}
+
+.logo-container.column {
+    flex-direction: column;
+}
+.brand{
+    margin:0 10px;
+    align-self: center;
+    background-image: linear-gradient(125deg, #66afe9, #804fff); /* Apply gradient */
+    text-overflow: ellipsis; /* Clip overflowing text if needed */
+    -webkit-background-clip: text; /* Apply gradient to text (WebKit browsers) */
+    background-clip: text; /* Apply gradient to text (other browsers) */
+    color: transparent; /* Make text invisible (text content remains) */
+    filter: saturate(3);
+  }
+  .rotating-arrow{
+    animation: rotate 2s infinite linear;
+    height: fit-content;
+    width: fit-content;
+    align-self: center;
+    justify-self: center;
+    margin: 10px 0;
+    filter: saturate(3);
+  }
+  @keyframes rotate {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }

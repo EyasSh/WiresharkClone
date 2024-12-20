@@ -1,0 +1,53 @@
+/* button.css */
+
+@font-face {
+    font-family: 'Montserrat';  
+    src: url('../../assets/Fonts/Montserrat-VariableFont_wght.ttf');
+}
+
+button {
+    height: fit-content; /* Adjust the height as needed */
+    border-radius: 5px;
+    outline: none;
+    color: white;
+    border: 2px solid transparent; /* Add transparent border to maintain consistent size */
+    background-color: transparent;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    padding: 10px 20px; /* Ensure padding is consistent */
+    font-family: 'Montserrat';
+    font-size: auto;
+    cursor: pointer;
+    box-sizing: border-box; /* Ensures padding and border are included in the width and height */
+}
+
+.signup, .purchase{
+    color: white;
+    background-color: #804fff;
+    border: 2px solid transparent;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.signup:hover, .purchase:hover {
+    background-color: #7241e8;
+    box-shadow: 0 4px 15px rgba(114, 65, 232, 0.3); /* Blurry shadow with matching color */
+    border: 2px solid #7241e8; /* Change border color */
+}
+
+.action {
+    color: white;
+    background-color: #66acea;
+    text-align: center;
+}
+
+.action:hover {
+    cursor: pointer;
+    border-color: #66afe9; /* Change border color on focus */
+    box-shadow: 0 0 5px rgba(102, 175, 233, 0.6); /* Adds a subtle shadow */
+}
+
+
+.default-class {
+    background-color: red;
+}

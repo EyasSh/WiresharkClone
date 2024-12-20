@@ -1,5 +1,5 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Montserrat", Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -11,9 +11,13 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  height: max-content;
 
 }
-
+@font-face {
+  font-family: 'Montserrat';
+  src: url("./assets/Fonts/Montserrat-VariableFont_wght.ttf") format('truetype');
+}
 a {
   font-weight: 500;
   color: #646cff;
@@ -64,6 +68,16 @@ button:focus-visible {
     color: #747bff;
   }
   button {
-    background-color: #f9f9f9;
+    color: white;
+    background-color: #66acea;
+    text-align: center;
+  }
+  input input:focus {
+    background-color: rgb(73, 72, 72);
+    color: white;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    padding: 0.85rem;
   }
 }
