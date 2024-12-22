@@ -28,7 +28,7 @@ function Input(props)
             placeholder={props.placeholder} 
             type={props.type || "text"} 
             value={props.value || ""} 
-            onChange={(e) => props.action(e.target.value)} 
+            onChange={async(e) => await props.action(e.target.value)} 
             required={props.required} 
         />
         </div>

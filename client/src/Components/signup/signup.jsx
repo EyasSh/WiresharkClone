@@ -1,0 +1,74 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable no-unused-vars */
+import React, { useState } from 'react';
+import Input from '../Input';
+import './signup.css';
+import "../Login/Login.css";
+import Button from '../Button/Button';
+import axios from 'axios';
+import Logo from '../Logo/Logo';
+
+function Signup(props) {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [name, setName] = useState('');
+    const [date, setDate] = useState(new Date()); // Initially a Date object
+
+    const handleSignup = async () => {
+        try {
+            const response = await axios.post('http://localhost:5256/api/user/signup', {
+                name,
+                email,
+                password,
+                date: date.toISOString().split('T')[0], // Format as YYYY-MM-DD
+            });
+
+            if (response.status === 200) {
+                alert(`${response.data}`);
+            }
+        } catch (e) {
+            alert(`Sign Up Failed ${e.response ? e.response.data : e.message}`);
+        }
+    };
+
+    return (
+        <div className='Login-Container'>
+            <Logo flex='column' />
+            <Input 
+                className='Login-Input'
+                type="text" 
+                placeholder="Name" 
+                value={name} 
+                action={(e) => setName(e)} 
+                required 
+            />
+            <Input 
+                className='Login-Input'
+                type="email" 
+                placeholder="Email" 
+                value={email} 
+                action={(e) => setEmail(e)} 
+                required 
+            />
+            <Input 
+                className='Login-Input'
+                type="password" 
+                placeholder="Password" 
+                value={password} 
+                action={(e) => setPassword(e)} 
+                required 
+            />
+            <Input
+                className='Login-Input'
+                type="date" 
+                placeholder="Date of Birth" 
+                value={date.toISOString().split('T')[0]} // Convert Date object to YYYY-MM-DD
+                action={(e) => setDate(new Date(e))} // Convert input string to Date object
+                required
+            />
+            <Button status='signup' content='Sign Up' action={async () => await handleSignup()} />
+        </div>
+    );
+}
+
+export default Signup;
