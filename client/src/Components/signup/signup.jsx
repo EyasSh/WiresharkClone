@@ -32,10 +32,10 @@ function Signup(props) {
     };
 
     return (
-        <div className='Login-Container'>
+        <div className='Signup-Container'>
             <Logo flex='column' />
             <Input 
-                className='Login-Input'
+                className='Signup-Input'
                 type="text" 
                 placeholder="Name" 
                 value={name} 
@@ -43,7 +43,7 @@ function Signup(props) {
                 required 
             />
             <Input 
-                className='Login-Input'
+                className='Signup-Input'
                 type="email" 
                 placeholder="Email" 
                 value={email} 
@@ -51,15 +51,16 @@ function Signup(props) {
                 required 
             />
             <Input 
-                className='Login-Input'
+                className='Signup-Input'
                 type="password" 
                 placeholder="Password" 
                 value={password} 
                 action={(e) => setPassword(e)} 
                 required 
+                showPasswordToggle={true}
             />
             <Input
-                className='Login-Input'
+                className='Signup-Input'
                 type="date" 
                 placeholder="Date of Birth" 
                 value={date.toISOString().split('T')[0]} // Convert Date object to YYYY-MM-DD

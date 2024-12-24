@@ -1,0 +1,11 @@
+.normal {
+    color: #d3d3d3; /* Light gray for a subtle and neutral appearance */
+}
+
+.warn, .warning {
+    color: #ffa500; /* Orange for warnings to stand out but not be overly aggressive */
+}
+
+.err, .error {
+    color: #ff0000; /* Red remains ideal for errors */
+}

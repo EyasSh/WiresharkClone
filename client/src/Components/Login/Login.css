@@ -1,7 +1,7 @@
 .Login-Container {
     display: flex;
     flex-direction: column;
-    align-items: stretch; /* Allow child elements to define alignment */
+    align-items: center; /* Allow child elements to define alignment */
     justify-content: center;
     overflow: visible;
     height: 105%;

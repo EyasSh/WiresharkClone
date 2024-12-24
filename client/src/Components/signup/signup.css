@@ -1,0 +1,20 @@
+.Signup-Container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center all child elements horizontally */
+    justify-content: center; /* Center all child elements vertically */
+    height: 100vh; /* Full viewport height for proper centering */
+    width: 100%; /* Restrict container width to the viewport */
+    overflow: visible; /* Allow content overflow if necessary */
+    padding: 0 2rem; /* Add padding for better responsiveness */
+}
+
+.Signup-Container .Signup-Input {
+    width: 100%; /* Allow inputs to take up full container width */
+    max-width: 40rem; /* Limit max width for better aesthetics */
+    min-width: 20rem; /* Minimum width to avoid shrinking too much */
+    height: fit-content; /* Keep custom height */
+    margin-bottom: 5%; /* Add spacing between inputs */
+    padding: 1rem; /* Add internal padding for a better look */
+    box-sizing: border-box; /* Ensure padding doesn't affect width */
+}

@@ -4,6 +4,7 @@ import Input from '../Input';
 import './Login.css';
 import Logo from '../Logo/Logo';
 import Button from '../Button/Button';
+import Message from '../Message/Message.jsx';
 
 /**
  * Login component renders a form with email and password inputs.
@@ -43,6 +44,7 @@ function Login() {
                 value={password} 
                 action={(e) => setPassword(e)} 
                 required 
+                showPasswordToggle={true}
             />
             <Button action={()=>handleSubmit()} content={'Login'} status='action'/>
             <div className='signup-div'>
