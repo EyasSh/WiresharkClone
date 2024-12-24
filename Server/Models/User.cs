@@ -13,9 +13,11 @@ namespace Server.Models
         public required string Email { get; set; } = "";
         [BsonElement("password")]
         public required string Password { get; set; } = "";
+        [BsonElement("date")]
+        public required DateOnly date { get; set; } = DateOnly.FromDateTime(DateTime.Now);
         public User()
         { }
-        public User(string name, string email, string password)
+        public User(string name, string email, string password, DateOnly date)
         {
             Name = name;
             Email = email;

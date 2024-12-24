@@ -33,19 +33,31 @@ builder.Services.AddScoped<UserController>();
 // JWT Authentication Configuration
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
     {
-        options.TokenValidationParameters = new TokenValidationParameters
+        ValidateIssuer = true,
+        ValidateAudience = false,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ?? string.Empty)
+        )
+    };
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
         {
-            ValidateIssuer = true,
-            ValidateAudience = false, // No audience validation
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])
-            )
-        };
-    });
+            if (context.Request.Headers.ContainsKey("X-Auth-Token"))
+            {
+                context.Token = context.Request.Headers["X-Auth-Token"];
+            }
+            return Task.CompletedTask;
+        }
+    };
+});
+
 
 // CORS Policy
 builder.Services.AddCors(options =>
@@ -56,8 +68,9 @@ builder.Services.AddCors(options =>
         ("http://localhost:5173",
          "http://localhost:19006"
          )
+
               .WithMethods("GET", "POST", "PUT", "DELETE")
-              .WithHeaders("Content-Type", "Authorization", "X-Auth")
+               .WithHeaders("Content-Type", "X-Auth-Token", "content-type") // Allow the Content-Type header
               .AllowCredentials()
               .SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost");
     });
@@ -74,12 +87,12 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// Ensure CORS is used before auth middleware
+app.UseHttpsRedirection();
 app.UseCors("AllowLocalhostOnly");
-
-app.UseAuthentication(); // JWT Authentication Middleware
-app.UseAuthorization();  // Authorization Middleware
-app.UseCors();           // CORS Middleware
+app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
+app.MapControllers();         // CORS Middleware
 // API Endpoints
 app.MapGet("/weatherforecast", () =>
 {

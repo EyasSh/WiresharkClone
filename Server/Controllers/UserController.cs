@@ -36,7 +36,7 @@ namespace Server.Controllers
         /// </summary>
         /// <returns>A successful status code (200) if the login request was successful.</returns>
         [AllowAnonymous]
-        [HttpPost("/login")] // Route: api/user/login
+        [HttpPost("login")] // Route: api/user/login
         public IActionResult Login([FromBody] Services.LoginRequest request)
         {
             try
@@ -56,8 +56,8 @@ namespace Server.Controllers
                 {
                     var token = GenerateJwtToken(request.Email);
                     var resbod = new User
-                    { Name = user.Name, Email = user.Email, Password = user.Password };
-                    Response.Headers["X-Auth"] = token;
+                    { Name = user.Name, Email = user.Email, Password = user.Password, date = user.date };
+                    Response.Headers["X-Auth-Token"] = token;
                     return Ok(new { User = resbod });
                 }
                 else
@@ -137,12 +137,12 @@ namespace Server.Controllers
         /// successful.</returns>
 
         [AllowAnonymous]
-        [HttpPost("/signup")] // Route: api/user/signup
+        [HttpPost("signup")] // Route: api/user/signup
         public IActionResult SignUp([FromBody] SignupRequest request)
         {
             try
             {
-                if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Name) || string.IsNullOrEmpty(request.Password))
+                if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Name) || string.IsNullOrEmpty(request.Password) || string.IsNullOrEmpty(request.date.ToString()))
                 {
                     return BadRequest("All fields are required.");
                 }
@@ -156,7 +156,8 @@ namespace Server.Controllers
                 {
                     Name = request.Name,
                     Email = request.Email,
-                    Password = Encrypt(request.Password)
+                    Password = Encrypt(request.Password),
+                    date = request.date
                 };
                 _users.InsertOne(user);
 
@@ -176,7 +177,7 @@ namespace Server.Controllers
         /// </summary>
         /// <returns>A successful status code (200) if the account termination was successful.</returns>
         [Authorize]
-        [HttpDelete("/terminate/account/{email}")] // Route: api/user/terminate/account
+        [HttpDelete("terminate/account/{email}")] // Route: api/user/terminate/account
         public IActionResult TerminateAccount(string email)
         {
             var user = _users.FindSync(user => user.Email == email).FirstOrDefault();
