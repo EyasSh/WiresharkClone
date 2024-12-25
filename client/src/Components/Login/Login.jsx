@@ -5,6 +5,8 @@ import './Login.css';
 import Logo from '../Logo/Logo';
 import Button from '../Button/Button';
 import Message from '../Message/Message.jsx';
+import axios from 'axios';
+import { useNavigate } from 'react-router';
 
 /**
  * Login component renders a form with email and password inputs.
@@ -16,9 +18,26 @@ import Message from '../Message/Message.jsx';
 function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const handleSubmit= ()=>{
-        console.log(email,password);
-    }
+    const navigate = useNavigate();
+    const handleSubmit = async () => {
+       
+    
+        try {
+            const response = await axios.post('http://localhost:5256/api/user/login', {
+                email,
+                password,
+            });
+    
+            if (response.status === 200) {
+                localStorage.setItem("X-Auth-Token", response.headers["x-auth-token"]);
+                localStorage.setItem("user", JSON.stringify(response.data));
+                navigate('/home');
+            }
+        } catch (error) {
+            alert(`Login Failed: ${error.response ? error.response.data : error.message}`);
+        }
+    };
+    
     const handleSignup = ()=>{
         alert('Sign Up');
     }

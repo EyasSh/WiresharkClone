@@ -30,6 +30,9 @@ builder.Services.AddScoped<MongoDBWrapper>();
 
 // User Controller Injection
 builder.Services.AddScoped<UserController>();
+//Authentication Service
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
 // JWT Authentication Configuration
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -70,9 +73,9 @@ builder.Services.AddCors(options =>
          )
 
               .WithMethods("GET", "POST", "PUT", "DELETE")
-               .WithHeaders("Content-Type", "X-Auth-Token", "content-type") // Allow the Content-Type header
-              .AllowCredentials()
-              .SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost");
+               .WithHeaders("Content-Type", "X-Auth-Token", "content-type", "x-auth-token") // Allow the Content-Type header
+                .WithExposedHeaders("X-Auth-Token", "x-auth-token") // Expose the custom header
+              .AllowCredentials();
     });
 });
 
@@ -84,8 +87,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-app.UseHttpsRedirection();
 
 app.UseHttpsRedirection();
 app.UseCors("AllowLocalhostOnly");

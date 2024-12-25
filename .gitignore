@@ -36,8 +36,8 @@ dist/
 # Build results
 [Bb]in/
 [Oo]bj/
-bin
-obj
+bin/
+obj/
 
 # Temporary files
 *.temp

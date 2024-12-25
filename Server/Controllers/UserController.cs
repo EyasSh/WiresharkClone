@@ -56,14 +56,15 @@ namespace Server.Controllers
                 {
                     var token = GenerateJwtToken(request.Email);
                     var resbod = new User
-                    { Name = user.Name, Email = user.Email, Password = user.Password, date = user.date };
+                    { Id = user.Id, Name = user.Name, Email = user.Email, Password = user.Password, date = user.date };
                     Response.Headers["X-Auth-Token"] = token;
+                    System.Console.WriteLine("Token: " + token);
                     return Ok(new { User = resbod });
                 }
                 else
                 {
 
-                    return BadRequest("Invalid login credentials or user not found." + $"{user.Email}\nplain pass encrypted:{Encrypt(request.Password)}\nalready encrypted:{user.Password}");
+                    return BadRequest("Invalid login credentials or user not found." + $"{user?.Email ?? "No email or user found"}\nplain pass encrypted:{Encrypt(request.Password)}\nalready encrypted:{user?.Password ?? "No password found"}");
                 }
             }
             catch (Exception ex)
@@ -75,7 +76,7 @@ namespace Server.Controllers
         /// <summary>
         /// Generates a JWT token with the given username.
         /// </summary>
-        /// <param name="username">The username to include in the JWT token.</param>
+        /// <param name="email">The email to include in the JWT token.</param>
         /// <returns>The JWT token.</returns>
         /// <remarks>
         /// The JWT token is generated with the following settings:
@@ -106,14 +107,14 @@ namespace Server.Controllers
         /// </item>
         /// </list>
         /// </remarks>
-        private string GenerateJwtToken(string username)
+        private string GenerateJwtToken(string email)
         {
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_conf["Jwt:Key"]));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_conf["Jwt:Key"] ?? string.Empty));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name, username),
+                new Claim(ClaimTypes.Email, email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
@@ -199,5 +200,50 @@ namespace Server.Controllers
             return BCrypt.Net.BCrypt.HashPassword(password);
         }
         private bool Validate(string plainText, string password) => BCrypt.Net.BCrypt.Verify(plainText, password);
+        [AllowAnonymous]
+        [HttpGet("validate")]
+        public IActionResult ValidateToken()
+        {
+            if (!Request.Headers.ContainsKey("X-Auth-Token"))
+            {
+                System.Console.WriteLine("in first if");
+                return BadRequest("Token is missing.");
+            }
+
+            var token = Request.Headers["X-Auth-Token"].ToString();
+
+            try
+            {
+
+                // Access the authentication scheme's options
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var validationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = _conf["Jwt:Issuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_conf["Jwt:Key"] ?? string.Empty))
+                };
+
+                var principal = tokenHandler.ValidateToken(token, validationParameters, out _);
+
+                // Token is valid, return success with claims if needed
+                var emailClaim = principal.FindFirst(ClaimTypes.Email)?.Value;
+                return Ok(new { Message = "Token is valid", Email = emailClaim });
+            }
+            catch (SecurityTokenException ex)
+            {
+
+                return Unauthorized($"Token validation failed: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
+        }
+
     }
 }
