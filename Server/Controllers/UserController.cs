@@ -11,12 +11,14 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.AspNetCore.SignalR;
 namespace Server.Controllers
 {
     [ApiController]
     [Route("api/user")] // Base route for all actions in this controller
     public class UserController : ControllerBase
     {
+        private readonly IHubContext<SocketService> _hubContext;
         IMongoCollection<User> _users;
         private readonly IConfiguration _conf;
         /*
@@ -25,10 +27,12 @@ namespace Server.Controllers
          using services such as an email service ETC
          </summary>
         */
-        public UserController(MongoDBWrapper dBWrapper, IConfiguration conf)
+        public UserController(MongoDBWrapper dBWrapper, IConfiguration conf
+        , IHubContext<SocketService> hubContext)
         {
             _users = dBWrapper.Users;
             _conf = conf;
+            _hubContext = hubContext;
         }
 
         /// <summary>

@@ -1,0 +1,70 @@
+.Notifications-Container {
+    position: fixed;
+    top: 10px;
+    right: -300px; /* Start off-screen */
+    width: 250px; /* Adjust as needed */
+    padding: 16px;
+    border: none;
+    background-color: white;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    animation: slideIn 0.5s ease-out forwards, fadeOut 1s ease-out 3s forwards; /* Add fadeOut animation */
+    color: rgb(0, 6, 76);
+    align-items: stretch;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: fit-content;
+    border-radius: 10px 0 0 10px;
+    margin-right: -1%;
+}
+
+/* Keyframes for sliding in */
+@keyframes slideIn {
+    from {
+        right: -300px; /* Start off-screen */
+    }
+    to {
+        right: 10px; /* End at the desired position */
+    }
+}
+
+/* Keyframes for fading out */
+@keyframes fadeOut {
+    from {
+        opacity: 1; /* Fully visible */
+    }
+    to {
+        opacity: 0; /* Fully transparent */
+    }
+}
+
+.Notifications-Severity-Indicator {
+    position: absolute;
+    left: 10px;
+    width: 10px;
+    height: 100%;
+}
+
+/* Severity-specific styles */
+.Notifications-Severity-Indicator.ok {
+    background-color: rgb(61, 164, 61); /* Color for Ok */
+    align-self: center;
+    height: 90%;
+}
+
+.Notifications-Severity-Indicator.warn {
+    background-color: orange; /* Color for Warning */
+    align-self: center;
+    height: 90%;
+}
+
+.Notifications-Severity-Indicator.err {
+    background-color: red; /* Color for Error */
+    align-self: center;
+    height: 90%;
+}
+
+.Notifications-Text {
+    margin-left: 40px; /* Ensure text doesn't overlap with the indicator */
+}

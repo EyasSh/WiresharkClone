@@ -71,13 +71,44 @@ builder.Services.AddCors(options =>
         ("http://localhost:5173",
          "http://localhost:19006"
          )
-
-              .WithMethods("GET", "POST", "PUT", "DELETE")
-               .WithHeaders("Content-Type", "X-Auth-Token", "content-type", "x-auth-token") // Allow the Content-Type header
-                .WithExposedHeaders("X-Auth-Token", "x-auth-token") // Expose the custom header
-              .AllowCredentials();
+        .WithMethods("GET", "POST", "PUT", "DELETE")
+        .WithHeaders(
+            "Content-Type",
+            "X-Auth-Token",
+            "content-type",
+            "x-auth-token",
+            "Accept",
+            "Authorization",
+            "User-Agent",
+            "X-Requested-With",
+            "Referer",
+            "Connection",
+            "Sec-WebSocket-Protocol",
+            "Sec-WebSocket-Key",
+            "Sec-WebSocket-Version",
+            "Origin",
+            "x-signalr-user-agent" // Add this header
+        )
+        .WithExposedHeaders(
+            "X-Auth-Token",
+            "x-auth-token",
+            "Content-Type",
+            "Accept",
+            "Authorization",
+            "User-Agent",
+            "X-Requested-With",
+            "Referer",
+            "Connection",
+            "Sec-WebSocket-Protocol",
+            "Sec-WebSocket-Key",
+            "Sec-WebSocket-Version",
+            "Origin",
+            "x-signalr-user-agent" // Expose this header as well
+        )
+        .AllowCredentials();
     });
 });
+
 
 var app = builder.Build();
 
@@ -87,7 +118,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.MapHub<SocketService>("hub");
 app.UseHttpsRedirection();
 app.UseCors("AllowLocalhostOnly");
 app.UseRouting();
@@ -112,15 +143,10 @@ app.MapGet("/weatherforecast", () =>
     return forecast;
 });
 
-// SignalR Endpoint
-app.MapPost("broadcast", async (string user, string message, IHubContext<ChatHub, IChatHubService> hub) =>
-{
-    await hub.Clients.All.ReceiveMessage(user, message);
-    return Results.NoContent();
-});
+
 
 app.MapControllers(); // Map API Controllers
-app.MapHub<ChatHub>("/chatHub"); // Map SignalR Hub
+
 
 app.Run();
 

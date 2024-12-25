@@ -1,13 +1,16 @@
 /* eslint-disable no-unused-vars */
-import React from 'react';
-import './Home.css';
-import { Link, useNavigate } from 'react-router';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router';
 import axios from 'axios';
-//TODO: Add react icons below
+import Notifications from '../Notifications/Notifications';
+import * as signalR from '@microsoft/signalr';
 
 function Home(props) {
     const navigate = useNavigate();
+    const [sid, setSid] = useState('');
+    const [stat, setStatus] = useState('');
+    const [loading, setLoading] = useState(true); // New loading state
+
     useEffect(() => {
         const validateToken = async () => {
             const token = localStorage.getItem('X-Auth-Token');
@@ -27,6 +30,28 @@ function Home(props) {
                 if (response.status === 200) {
                     console.log("Token is valid. Rendering the page...");
                     // Token is valid; proceed with rendering
+                    const connection = new signalR.HubConnectionBuilder()
+                        .withUrl("http://localhost:5256/hub") // Use HTTP or HTTPS
+                        .withAutomaticReconnect()
+                        .build();
+
+                    // Start the connection
+                    connection
+                        .start()
+                        .then(() => {
+                            console.log("Connected to SignalR Hub");
+                        })
+                        .catch(err => console.error("SignalR Connection Error:", err));
+
+                    // Handle the ConnectNotification event
+                    connection.on("ConnectNotification", (connectionId, status) => {
+                        console.log(`Connected with ID: ${connectionId}, Status: ${status}`);
+                        setSid(connectionId);
+                        setStatus(status.toLowerCase());
+                        localStorage.setItem("sid", connectionId);
+                        localStorage.setItem("status", status.toLowerCase());
+                        setLoading(false); // Stop loading once data is set
+                    });
                 } else {
                     alert("Invalid token. Redirecting to login...");
                     navigate('/'); // Redirect to login if token is invalid
@@ -38,9 +63,16 @@ function Home(props) {
         };
 
         validateToken(); // Call the async function
-    }, [navigate]);// Empty dependency array to ensure this runs only once on component mount
+    }, [navigate]);
+
     return (
         <>
+            {/* Render Notifications only when loading is false and stat is set */}
+            {!loading && stat && (
+                <Notifications severity={stat}>
+                    Successfully Connected to Socket Service
+                </Notifications>
+            )}
             <h1>Grove Street, home...at least it was before I fucked everything up</h1>
         </>
     );
