@@ -52,7 +52,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     {
         OnMessageReceived = context =>
         {
-            if (context.Request.Headers.ContainsKey("X-Auth-Token"))
+            if (context.Request.Headers.ContainsKey("X-Auth-Token".ToLower()))
+            {
+                context.Token = context.Request.Headers["X-Auth-Token".ToLower()];
+            }
+            else if (context.Request.Headers.ContainsKey("X-Auth-Token"))
             {
                 context.Token = context.Request.Headers["X-Auth-Token"];
             }

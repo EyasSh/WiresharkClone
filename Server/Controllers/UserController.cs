@@ -58,11 +58,10 @@ namespace Server.Controllers
                 }
                 if (user != null && Validate(request.Password, user.Password))
                 {
-                    var token = GenerateJwtToken(request.Email);
+                    var token = GenerateJwtToken(user.Id ?? new Guid().ToString(), request.Email);
                     var resbod = new User
                     { Id = user.Id, Name = user.Name, Email = user.Email, Password = user.Password, date = user.date };
                     Response.Headers["X-Auth-Token"] = token;
-                    System.Console.WriteLine("Token: " + token);
                     return Ok(new { User = resbod });
                 }
                 else
@@ -111,7 +110,7 @@ namespace Server.Controllers
         /// </item>
         /// </list>
         /// </remarks>
-        private string GenerateJwtToken(string email)
+        private string GenerateJwtToken(string Id, string email)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_conf["Jwt:Key"] ?? string.Empty));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -119,7 +118,7 @@ namespace Server.Controllers
             var claims = new[]
             {
                 new Claim(ClaimTypes.Email, email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new Claim(JwtRegisteredClaimNames.Jti,Id )
             };
 
             var token = new JwtSecurityToken(
@@ -235,7 +234,8 @@ namespace Server.Controllers
 
                 // Token is valid, return success with claims if needed
                 var emailClaim = principal.FindFirst(ClaimTypes.Email)?.Value;
-                return Ok(new { Message = "Token is valid", Email = emailClaim });
+                var idClaim = principal.FindFirst(JwtRegisteredClaimNames.Jti)?.Value;
+                return Ok(new { Message = "Token is valid", Email = emailClaim, Id = idClaim });
             }
             catch (SecurityTokenException ex)
             {

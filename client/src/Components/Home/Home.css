@@ -1,0 +1,4 @@
+.HomeContainer {
+    padding-top: 60px; /* To offset the fixed navbar height */
+    margin-left: 0%;
+}

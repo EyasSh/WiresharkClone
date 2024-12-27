@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router';
 import axios from 'axios';
 import Notifications from '../Notifications/Notifications';
 import * as signalR from '@microsoft/signalr';
+import Nav from '../Nav/Nav';
 
 function Home(props) {
     const navigate = useNavigate();
@@ -66,7 +67,8 @@ function Home(props) {
     }, [navigate]);
 
     return (
-        <>
+        <div className='Home-Container'>
+            <Nav  />
             {/* Render Notifications only when loading is false and stat is set */}
             {!loading && stat && (
                 <Notifications severity={stat}>
@@ -74,7 +76,7 @@ function Home(props) {
                 </Notifications>
             )}
             <h1>Grove Street, home...at least it was before I fucked everything up</h1>
-        </>
+        </div>
     );
 }
 

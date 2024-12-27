@@ -1,0 +1,40 @@
+.NavBox {
+    display: flex; 
+    flex-direction: row;
+    margin-left: -5%;
+    align-items: center; 
+    padding: 10px; 
+    background: rgb(73, 72, 72);
+    position: fixed; /* Makes the navbar stick */
+    top: 0;
+    width: 100%;
+    z-index: 1000; /* Ensures it appears above other content */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional for aesthetics */
+    justify-items: space-between;
+    gap:25%;
+}
+
+.NavItems {
+    display: flex;
+    justify-content: space-between;
+    gap: 100%;
+    margin-left: 10%;
+}
+
+.NavItem {
+    cursor: pointer;
+    color: #66afe9;
+    transition: color 0.3s ease;
+    filter: saturate(3);
+}
+
+.NavItem:hover {
+    color:#a784ff;
+    filter: saturate(3);
+}
+
+.NavItem.active {
+    color: #804fff;
+    font-weight: bold;
+    filter: saturate(3);
+}

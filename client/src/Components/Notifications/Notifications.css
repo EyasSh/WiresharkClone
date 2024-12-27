@@ -1,6 +1,6 @@
 .Notifications-Container {
     position: fixed;
-    top: 10px;
+    top: 10%;
     right: -300px; /* Start off-screen */
     width: 250px; /* Adjust as needed */
     padding: 16px;
