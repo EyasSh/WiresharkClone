@@ -4,12 +4,21 @@ import Logo from '../Logo/Logo';
 import { FaHome, FaCog } from 'react-icons/fa';
 import { FiLogOut } from 'react-icons/fi'; // Import the logout icon
 import './Nav.css';
+import Settings from '../Settings/Settings';
 
 function Nav(props) {
-    const [activeItem, setActiveItem] = useState('home'); // Track active item
+    const [activeItem, setActiveItem] = useState('home');
+    const [isModalOpen, setIsModalOpen] = useState(false); // Modal visibility state
 
     const handleClick = (item) => {
-        setActiveItem(item); // Set the active item
+        setActiveItem(item);
+        if (item === 'settings') {
+            setIsModalOpen(true); // Open the modal when settings is clicked
+        }
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false); // Close the modal
     };
 
     return (
@@ -35,6 +44,11 @@ function Nav(props) {
                     <FiLogOut size={24} title="Logout" />
                 </div>
             </nav>
+             {/* Modal Component */}
+             <Settings isOpen={isModalOpen} onClose={closeModal}>
+                <h2>Settings</h2>
+                <button onClick={closeModal}>Close</button>
+            </Settings>
         </div>
     );
 }

@@ -5,7 +5,7 @@ import axios from 'axios';
 import Notifications from '../Notifications/Notifications';
 import * as signalR from '@microsoft/signalr';
 import Nav from '../Nav/Nav';
-
+import Input from '../Input';
 function Home(props) {
     const navigate = useNavigate();
     const [sid, setSid] = useState('');
