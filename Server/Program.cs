@@ -30,6 +30,8 @@ builder.Services.AddScoped<MongoDBWrapper>();
 
 // User Controller Injection
 builder.Services.AddScoped<UserController>();
+//Email Service Injection
+builder.Services.AddScoped<EmailService>();
 //Authentication Service
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -72,7 +74,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowLocalhostOnly", policy =>
     {
         policy.WithOrigins
-        ("http://localhost:5173",
+        ("http://localhost:5174",
          "http://localhost:19006"
          )
         .WithMethods("GET", "POST", "PUT", "DELETE")

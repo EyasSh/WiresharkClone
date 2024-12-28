@@ -61,7 +61,7 @@ C:\Users\eyas_\source\repos\JulianAndSamer\Server\bin\Debug\net9.0\Microsoft.Ide
 C:\Users\eyas_\source\repos\JulianAndSamer\Server\bin\Debug\net9.0\Microsoft.IdentityModel.Protocols.dll
 C:\Users\eyas_\source\repos\JulianAndSamer\Server\bin\Debug\net9.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Users\eyas_\source\repos\JulianAndSamer\Server\bin\Debug\net9.0\Microsoft.IdentityModel.Tokens.dll
-C:\Users\eyas_\source\repos\JulianAndSamer\Server\bin\Debug\net9.0\Packer.NET.dll
 C:\Users\eyas_\source\repos\JulianAndSamer\Server\bin\Debug\net9.0\PacketDotNet.dll
 C:\Users\eyas_\source\repos\JulianAndSamer\Server\bin\Debug\net9.0\SharpPcap.dll
 C:\Users\eyas_\source\repos\JulianAndSamer\Server\bin\Debug\net9.0\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\eyas_\source\repos\JulianAndSamer\Server\bin\Debug\net9.0\Mailjet.Client.dll

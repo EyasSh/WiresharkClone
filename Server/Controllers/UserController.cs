@@ -20,6 +20,7 @@ namespace Server.Controllers
     {
         private readonly IHubContext<SocketService> _hubContext;
         IMongoCollection<User> _users;
+        private readonly EmailService _emailService;
         private readonly IConfiguration _conf;
         /*
          <summary>
@@ -28,11 +29,13 @@ namespace Server.Controllers
          </summary>
         */
         public UserController(MongoDBWrapper dBWrapper, IConfiguration conf
-        , IHubContext<SocketService> hubContext)
+        , IHubContext<SocketService> hubContext, EmailService emailService
+        )
         {
             _users = dBWrapper.Users;
             _conf = conf;
             _hubContext = hubContext;
+            _emailService = emailService;
         }
 
         /// <summary>
@@ -142,7 +145,7 @@ namespace Server.Controllers
 
         [AllowAnonymous]
         [HttpPost("signup")] // Route: api/user/signup
-        public IActionResult SignUp([FromBody] SignupRequest request)
+        public async Task<IActionResult> SignUp([FromBody] SignupRequest request)
         {
             try
             {
@@ -164,6 +167,13 @@ namespace Server.Controllers
                     date = request.date
                 };
                 _users.InsertOne(user);
+                await _emailService.SendEmailAsync(user.Email, "Welcome to The Service"
+                ,
+                $@"<html><body>Hello {user.Name}, <p>Welcome to Wire Tracer. 
+                We're glad you're here. We're here to make packet analysis easier for you.</p>
+                <br /> 
+                <p>We hope you have a nice day!</p>
+                The ReCoursia Team</body></html>");
 
                 return Ok("Sign-up successful.");
             }

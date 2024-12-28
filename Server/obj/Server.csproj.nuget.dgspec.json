@@ -48,6 +48,10 @@
               "target": "Package",
               "version": "[4.0.3, )"
             },
+            "Mailjet.Api": {
+              "target": "Package",
+              "version": "[3.0.0, )"
+            },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
               "version": "[9.0.0, )"
@@ -80,10 +84,6 @@
               "target": "Package",
               "version": "[13.0.3, )"
             },
-            "Packet.Net": {
-              "target": "Package",
-              "version": "[0.1.1.1, )"
-            },
             "Scalar.AspNetCore": {
               "target": "Package",
               "version": "[1.2.49, )"
@@ -95,6 +95,14 @@
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[7.1.0, )"
+            },
+            "System.Net.Http": {
+              "target": "Package",
+              "version": "[4.3.4, )"
+            },
+            "System.Text.RegularExpressions": {
+              "target": "Package",
+              "version": "[4.3.1, )"
             }
           },
           "imports": [
