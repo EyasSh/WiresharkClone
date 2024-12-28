@@ -74,7 +74,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowLocalhostOnly", policy =>
     {
         policy.WithOrigins
-        ("http://localhost:5174",
+        ("http://localhost:5173", "http://localhost:5174",
          "http://localhost:19006"
          )
         .WithMethods("GET", "POST", "PUT", "DELETE")
