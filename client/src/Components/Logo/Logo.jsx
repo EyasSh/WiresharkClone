@@ -2,6 +2,14 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import './logo.css'
+/**
+ * Logo component renders a logo with a brand name and a rotating arrow graphic.
+ * It allows configuration of the flex direction to display elements in a row or column.
+ *
+ * @param {Object} props - The properties object.
+ * @param {string} props.flex - Determines the flex direction, either 'row' or 'column'.
+ */
+
 function Logo(props) {
     const flexDirection = props.flex === 'row' ? 'row' : 'column';
     return (

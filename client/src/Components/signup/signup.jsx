@@ -14,6 +14,12 @@ function Signup(props) {
     const [name, setName] = useState('');
     const [date, setDate] = useState(new Date()); // Initially a Date object
 
+    /**
+     * Handles the sign up form submission by sending a POST request to the user
+     * controller's sign up action. If the request is successful, it will alert the
+     * response message. If the request fails, it will alert the error response
+     * message.
+     */
     const handleSignup = async () => {
         try {
             const response = await axios.post('http://localhost:5256/api/user/signup', {

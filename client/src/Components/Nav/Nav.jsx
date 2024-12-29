@@ -9,6 +9,15 @@ import { useNavigate } from 'react-router';
 import * as signalR from '@microsoft/signalr';
 import hubConnection from '../Sockets/SignalR';
 
+/**
+ * Nav component renders the navigation bar with Home, Settings, and Logout options.
+ * It manages the active navigation item state and modal visibility for settings.
+ * Handles user interactions to navigate between pages, open settings modal,
+ * and logout, including stopping a SignalR connection and clearing session data.
+ * 
+ * @param {Object} props - The properties passed to the component.
+ */
+
 function Nav(props) {
     const [activeItem, setActiveItem] = useState('home');
     const [isModalOpen, setIsModalOpen] = useState(false); // Modal visibility state

@@ -4,6 +4,19 @@ import React from 'react';
 import { FaMoon, FaSun } from 'react-icons/fa';
 import './Settings.css';
 
+/**
+ * Settings component renders a modal with theme toggle functionality.
+ * 
+ * @param {Object} props - The properties passed to the component.
+ * @param {boolean} props.isOpen - Determines if the modal is open or closed.
+ * @param {function} props.onClose - Function to call when the modal is closed.
+ * @param {ReactNode} props.children - Additional components or elements to render within the modal.
+ * 
+ * @description The component uses a modal overlay to allow users to toggle between light and dark themes. 
+ * Clicking outside the modal or on the close button will close the modal. The current theme is displayed 
+ * with an icon and a text label indicating the mode switch.
+ */
+
 function Settings({ isOpen, onClose, children }) {  
     const [isLightMode, setIsLightMode] = React.useState(
         window.matchMedia('(prefers-color-scheme: light)').matches
