@@ -5,7 +5,7 @@ import React,{ useState} from 'react';
 import './Notifications.css';
 
 function Notifications(props) {
-    const {severity, children} = props;
+    const {severity='err', children} = props;
     return (
         <div className='Notifications-Container'>
             <div className={`Notifications-Severity-Indicator ${severity.toLowerCase()}`} ></div>

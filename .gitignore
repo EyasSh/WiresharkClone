@@ -33,13 +33,12 @@ dist/
 *.sln.docstates
 
 # C# Specific
-# Build results
+# Ignore bin and obj folders everywhere
 [Bb]in/
 [Oo]bj/
-bin/
-obj/
 
-# Temporary files
+# Ignore Rider and temporary files
+*.idea/
 *.temp
 *.cache
 *.bak
@@ -56,7 +55,7 @@ obj/
 *~
 *.swp
 
-# Keep all important files for both projects
+# Explicitly include important files for all projects
 !*.cs
 !*.csproj
 !*.sln
@@ -69,3 +68,11 @@ obj/
 !webpack.config.js
 !vite.config.js
 !README.md
+
+# Keep files in the Server directory but exclude bin/ and obj/
+!/Server/
+!/Server/**
+
+# Ensure bin/ and obj/ inside Server are ignored
+Server/[Bb]in/
+Server/[Oo]bj/
