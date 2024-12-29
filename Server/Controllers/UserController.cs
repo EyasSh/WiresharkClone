@@ -212,7 +212,20 @@ namespace Server.Controllers
         {
             return BCrypt.Net.BCrypt.HashPassword(password);
         }
+        /// <summary>
+        /// Validates the password by comparing it with the hashed password stored in the database.
+        /// </summary>
+        /// <param name="plainText">The plaintext password</param>
+        /// <param name="password">The hashed password</param>
+        /// <returns>True if the password is valid, false otherwise</returns>
         private bool Validate(string plainText, string password) => BCrypt.Net.BCrypt.Verify(plainText, password);
+        /// <summary>
+        /// Validates the token sent in the X-Auth-Token header by checking that it was signed with the same key as the one used for signing the tokens.
+        /// </summary>
+        /// <returns>A successful status code (200) if the token is valid, or Unauthorized (401) if the token is invalid, or InternalServerError (500) if an error occurred.</returns>
+        /// <remarks>
+        /// This endpoint is used to verify that the token is valid, without logging in the user.
+        /// </remarks>
         [AllowAnonymous]
         [HttpGet("validate")]
         public IActionResult ValidateToken()

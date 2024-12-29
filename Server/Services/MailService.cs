@@ -10,11 +10,32 @@ namespace Server.Services
         public string? _apiKey = "";
         public string? _apiSecret = "";
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EmailService"/> class.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
+        /// <remarks>
+        /// Reads the Mailjet API key and secret from the configuration and sets
+        /// the instance fields.
+        /// </remarks>
         public EmailService(IConfiguration configuration)
         {
             _apiKey = configuration["Mailjet:ApiKey"];
             _apiSecret = configuration["Mailjet:ApiSecret"];
         }
+
+/// <summary>
+/// Sends an email asynchronously using the Mailjet client.
+/// </summary>
+/// <param name="to">The recipient's email address.</param>
+/// <param name="subject">The subject of the email.</param>
+/// <param name="body">The HTML content of the email body.</param>
+/// <exception cref="Exception">Thrown when the email fails to send.</exception>
+/// <remarks>
+/// This method constructs a MailjetRequest with the provided email details
+/// and sends it using the MailjetClient. If the response indicates failure,
+/// an exception is thrown with the error message from Mailjet.
+/// </remarks>
 
         public async Task SendEmailAsync(string to, string subject, string body)
         {
