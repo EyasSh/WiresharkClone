@@ -6,6 +6,7 @@ import Notifications from '../Notifications/Notifications';
 import * as signalR from '@microsoft/signalr';
 import Nav from '../Nav/Nav';
 import Input from '../Input';
+import hubConnection from '../Sockets/SignalR';
 function Home(props) {
     const navigate = useNavigate();
     const [sid, setSid] = useState('');
@@ -31,10 +32,7 @@ function Home(props) {
                 if (response.status === 200) {
                     console.log("Token is valid. Rendering the page...");
                     // Token is valid; proceed with rendering
-                    const connection = new signalR.HubConnectionBuilder()
-                        .withUrl("http://localhost:5256/hub") // Use HTTP or HTTPS
-                        .withAutomaticReconnect()
-                        .build();
+                    const connection =hubConnection
 
                     // Start the connection
                     connection

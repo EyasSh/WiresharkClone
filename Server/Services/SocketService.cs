@@ -25,4 +25,17 @@ public class SocketService : Hub<IHubService>
 
 
     }
+    public override async Task OnDisconnectedAsync(Exception? exception)
+    {
+        var sid = Context.ConnectionId;
+        if (_connections.ContainsKey(sid))
+        {
+            _connections.Remove(sid);
+        }
+
+        System.Console.WriteLine($"Disconnected: {sid}");
+        // Perform any additional logic here if needed
+        await base.OnDisconnectedAsync(exception);
+    }
+
 }

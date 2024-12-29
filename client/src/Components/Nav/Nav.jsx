@@ -5,13 +5,38 @@ import { FaHome, FaCog } from 'react-icons/fa';
 import { FiLogOut } from 'react-icons/fi'; // Import the logout icon
 import './Nav.css';
 import Settings from '../Settings/Settings';
+import { useNavigate } from 'react-router';
+import * as signalR from '@microsoft/signalr';
+import hubConnection from '../Sockets/SignalR';
 
 function Nav(props) {
     const [activeItem, setActiveItem] = useState('home');
     const [isModalOpen, setIsModalOpen] = useState(false); // Modal visibility state
-
-    const handleClick = (item) => {
+    const navigate = useNavigate();
+    const sid = localStorage.getItem('sid');
+    const  handleClick = async(item) => {
         setActiveItem(item);
+        if (item === 'logout') {
+            const sid = localStorage.getItem('sid'); // Get the saved session ID
+    
+            try {
+                if (hubConnection.state === signalR.HubConnectionState.Connected) {
+                    // Stop the SignalR connection
+                    await hubConnection.stop();
+                    alert(`SignalR connection stopped. sid: ${sid}`);
+                }
+    
+                // Clear local storage
+                localStorage.removeItem('sid');
+                localStorage.removeItem('user');
+                localStorage.removeItem('status');
+    
+                // Navigate to the login page
+                navigate('/');
+            } catch (err) {
+                console.error("Error during logout process:", err);
+            }
+        }
         if (item === 'settings') {
             setIsModalOpen(true); // Open the modal when settings is clicked
         }
