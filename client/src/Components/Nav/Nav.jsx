@@ -1,13 +1,14 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import Logo from '../Logo/Logo';
-import { FaHome, FaCog } from 'react-icons/fa';
+import { FaUser,FaHome, FaCog } from 'react-icons/fa';
 import { FiLogOut } from 'react-icons/fi'; // Import the logout icon
 import './Nav.css';
 import Settings from '../Settings/Settings';
 import { useNavigate } from 'react-router';
 import * as signalR from '@microsoft/signalr';
 import hubConnection from '../Sockets/SignalR';
+
 
 /**
  * Nav component renders the navigation bar with Home, Settings, and Logout options.
@@ -22,9 +23,9 @@ function Nav(props) {
     const [activeItem, setActiveItem] = useState('home');
     const [isModalOpen, setIsModalOpen] = useState(false); // Modal visibility state
     const navigate = useNavigate();
-    const sid = localStorage.getItem('sid');
-    const  handleClick = async(item) => {
+    const sid = localStorage.getItem('sid');const handleClick = async (item) => {
         setActiveItem(item);
+    
         if (item === 'logout') {
             const sid = localStorage.getItem('sid'); // Get the saved session ID
     
@@ -45,11 +46,17 @@ function Nav(props) {
             } catch (err) {
                 console.error("Error during logout process:", err);
             }
-        }
-        if (item === 'settings') {
+        } else if (item === 'settings') {
             setIsModalOpen(true); // Open the modal when settings is clicked
+        } else if (item === 'profile') {
+            // Navigate to the profile page
+            navigate('/profile');
+        } else if (item === 'home') {
+            // Navigate to the home page
+            navigate('/home');
         }
     };
+    
 
     const closeModal = () => {
         setIsModalOpen(false); // Close the modal
@@ -70,6 +77,12 @@ function Nav(props) {
                     onClick={() => handleClick('settings')}
                 >
                     <FaCog size={24} title="Settings" />
+                </div>
+                <div
+                    className={`NavItem ${activeItem === 'profile' ? 'active' : ''}`}
+                    onClick={() => handleClick('profile')}
+                >
+                    <FaUser size={24} title="Profile" />
                 </div>
                 <div
                     className={`NavItem ${activeItem === 'logout' ? 'active' : ''}`}

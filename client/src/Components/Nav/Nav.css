@@ -1,24 +1,24 @@
 .NavBox {
-    display: flex; 
+    display: flex;
     flex-direction: row;
-    margin-left: -5%;
-    align-items: center; 
-    padding: 10px; 
+    align-items: center;
+    padding: 10px 20px; /* Adjust padding for better spacing */
     background: rgb(73, 72, 72);
-    position: fixed; /* Makes the navbar stick */
+    position: fixed; /* Keeps the navbar at the top */
     top: 0;
-    width: 100%;
+    left: 0; /* Ensures it starts from the left edge */
+    width: 100%; /* Full width to avoid alignment issues */
     z-index: 1000; /* Ensures it appears above other content */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional for aesthetics */
-    justify-items: space-between;
-    gap:25%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Keeps shadow for aesthetics */
+    gap: 0; /* Reduced gap to prevent overflow */
 }
+
 
 .NavItems {
     display: flex;
     justify-content: space-between;
-    gap: 500%;
-    margin-left: -5%;
+    gap: 150%;
+    margin-left:30%;
 }
 
 .NavItem {

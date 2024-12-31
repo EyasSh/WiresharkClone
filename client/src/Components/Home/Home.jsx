@@ -66,7 +66,6 @@ function Home(props) {
 
     return (
         <div className='Home-Container'>
-            <Nav  />
             {/* Render Notifications only when loading is false and stat is set */}
             {!loading && stat && (
                 <Notifications severity={stat}>
