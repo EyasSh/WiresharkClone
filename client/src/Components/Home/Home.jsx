@@ -29,29 +29,7 @@ function Home(props) {
                     }
                 });
 
-                if (response.status === 200) {
-                    console.log("Token is valid. Rendering the page...");
-                    // Token is valid; proceed with rendering
-                    const connection =hubConnection
-
-                    // Start the connection
-                    connection
-                        .start()
-                        .then(() => {
-                            console.log("Connected to SignalR Hub");
-                        })
-                        .catch(err => console.error("SignalR Connection Error:", err));
-
-                    // Handle the ConnectNotification event
-                    connection.on("ConnectNotification", (connectionId, status) => {
-                        console.log(`Connected with ID: ${connectionId}, Status: ${status}`);
-                        setSid(connectionId);
-                        setStatus(status.toLowerCase());
-                        localStorage.setItem("sid", connectionId);
-                        localStorage.setItem("status", status.toLowerCase());
-                        setLoading(false); // Stop loading once data is set
-                    });
-                } else {
+                if (response.status !== 200) {
                     alert("Invalid token. Redirecting to login...");
                     navigate('/'); // Redirect to login if token is invalid
                 }
@@ -66,12 +44,6 @@ function Home(props) {
 
     return (
         <div className='Home-Container'>
-            {/* Render Notifications only when loading is false and stat is set */}
-            {!loading && stat && (
-                <Notifications severity={stat}>
-                    Successfully Connected to Socket Service
-                </Notifications>
-            )}
             <h1>Grove Street, home...at least it was before I fucked everything up</h1>
         </div>
     );
