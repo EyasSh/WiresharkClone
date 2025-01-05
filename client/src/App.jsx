@@ -4,7 +4,9 @@
 // App.jsx
 import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router';
+import './index.css'
 import './App.css';
+import './Components/Button/Button.css'; // Specific button styles come after index.css
 import Login from './Components/Login/Login';
 import Signup from './Components/Signup/Signup';
 import Home from './Components/Home/Home';

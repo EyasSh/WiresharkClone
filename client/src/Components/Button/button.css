@@ -21,33 +21,33 @@ button {
 }
 
 .signup, .purchase{
-    color: white;
-    background-color: #804fff;
-    border: 2px solid transparent;
+    color: white !important;
+    background-color: #804fff !important;
+    border: 2px solid transparent !important;
     border-radius: 5px;
-    cursor: pointer;
-    text-align: center;
+    cursor: pointer !important;
+    text-align: center !important;
 }
 
 .signup:hover, .purchase:hover {
-    background-color: #7241e8;
-    box-shadow: 0 4px 15px rgba(114, 65, 232, 0.3); /* Blurry shadow with matching color */
-    border: 2px solid #7241e8; /* Change border color */
+    background-color: #7241e8 !important;
+    box-shadow: 0 4px 15px rgba(114, 65, 232, 0.3) !important; /* Blurry shadow with matching color */
+    border: 2px solid #7241e8 !important; /* Change border color */
 }
 
 .action {
-    color: white;
-    background-color: #66acea;
-    text-align: center;
+    color: white !important;
+    background-color: #66acea !important;
+    text-align: center !important;
 }
 
 .action:hover {
-    cursor: pointer;
-    border-color: #66afe9; /* Change border color on focus */
-    box-shadow: 0 0 5px rgba(102, 175, 233, 0.6); /* Adds a subtle shadow */
+    cursor: pointer !important;
+    border-color: #66afe9 !important; /* Change border color on focus */
+    box-shadow: 0 0 5px rgba(102, 175, 233, 0.6) !important; /* Adds a subtle shadow */
 }
 
 
 .default-class {
-    background-color: red;
+    background-color: red !important;
 }
