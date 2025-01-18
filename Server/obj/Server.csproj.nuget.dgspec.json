@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\eyas_\\source\\repos\\JulianAndSamer\\Server\\Server.csproj": {}
+    "C:\\Users\\eyas_\\source\\repos\\Samer\\Server\\Server.csproj": {}
   },
   "projects": {
-    "C:\\Users\\eyas_\\source\\repos\\JulianAndSamer\\Server\\Server.csproj": {
+    "C:\\Users\\eyas_\\source\\repos\\Samer\\Server\\Server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\eyas_\\source\\repos\\JulianAndSamer\\Server\\Server.csproj",
+        "projectUniqueName": "C:\\Users\\eyas_\\source\\repos\\Samer\\Server\\Server.csproj",
         "projectName": "Server",
-        "projectPath": "C:\\Users\\eyas_\\source\\repos\\JulianAndSamer\\Server\\Server.csproj",
+        "projectPath": "C:\\Users\\eyas_\\source\\repos\\Samer\\Server\\Server.csproj",
         "packagesPath": "C:\\Users\\eyas_\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\eyas_\\source\\repos\\JulianAndSamer\\Server\\obj\\",
+        "outputPath": "C:\\Users\\eyas_\\source\\repos\\Samer\\Server\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\eyas_\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -36,7 +36,7 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "all"
+          "auditMode": "direct"
         },
         "SdkAnalysisLevel": "9.0.100"
       },
@@ -124,7 +124,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.102/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

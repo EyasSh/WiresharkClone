@@ -27,4 +27,4 @@ packet capturing functionality.
 
 ### Created by
 
-**Samer Jaraisy** and **Julian Totry**
+**Samer Jaraisy**

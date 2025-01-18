@@ -7,6 +7,7 @@ import * as signalR from '@microsoft/signalr';
 import Nav from '../Nav/Nav';
 import Input from '../Input';
 import hubConnection from '../Sockets/SignalR';
+import ResourceMeter from '../ResourceMeter/ResourceMeter';
 function Home(props) {
     const navigate = useNavigate();
     const [sid, setSid] = useState('');
@@ -44,7 +45,9 @@ function Home(props) {
 
     return (
         <div className='Home-Container'>
-            <h1>Grove Street, home...at least it was before I fucked everything up</h1>
+            <ResourceMeter usage={30} resourceName='CPU'/>
+            <ResourceMeter usage={80} resourceName='Memory'/>
+            <ResourceMeter usage={95} resourceName='Disk'/>
         </div>
     );
 }
