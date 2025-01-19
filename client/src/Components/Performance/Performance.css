@@ -1,0 +1,8 @@
+.Performance-Container
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 75vw;
+    background-color: transparent;
+}

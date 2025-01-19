@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.SignalR;
 public interface IHubService
 {
     Task ConnectNotification(string sid, string warningLevel);
+    Task GetMetrics(double cpuUsage, double ramUsage, double diskUsage);
 }
 public class SocketService : Hub<IHubService>
 {
@@ -30,12 +31,28 @@ public class SocketService : Hub<IHubService>
 
 
     }
-        /// <summary>
-        /// This is the OnDisconnectedAsync method that will be called when the client disconnects from the server.
-        /// It will remove the connection from the list of connections and write a message to the console.
-        /// If there is an error, it will write the exception message to the console.
-        /// </summary>
-        /// <param name="exception">Optional exception that may be related to the disconnection.</param>
+    /// <summary>
+    /// Retrieves system metrics such as CPU, RAM, and disk usage percentages.
+    /// Sends the retrieved metrics to the calling client.
+    /// <list type="">
+    /// <item><term>cpuUsage</term><description>The CPU usage percentage Which is compatible with Windows and Linux.</description></item>
+    /// <item><term>ramUsage</term><description>The RAM usage percentage Windows ONLY.</description></item>
+    /// <item><term>diskUsage</term><description>The disk usage percentage Windows ONLY.</description>
+    /// </item>
+    /// </list>
+    /// </summary>
+
+    public async Task GetMetrics()
+    {
+        var metrics = new MetricFetcher().GetSystemMetrics();
+        await Clients.Caller.GetMetrics(metrics.cpuUsage, metrics.ramUsage, metrics.diskUsage);
+    }
+    /// <summary>
+    /// This is the OnDisconnectedAsync method that will be called when the client disconnects from the server.
+    /// It will remove the connection from the list of connections and write a message to the console.
+    /// If there is an error, it will write the exception message to the console.
+    /// </summary>
+    /// <param name="exception">Optional exception that may be related to the disconnection.</param>
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
         var sid = Context.ConnectionId;

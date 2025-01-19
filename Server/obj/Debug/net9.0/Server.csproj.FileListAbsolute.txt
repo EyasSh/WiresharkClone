@@ -132,3 +132,7 @@ C:\Users\eyas_\source\repos\Samer\Server\obj\Debug\net9.0\refint\Server.dll
 C:\Users\eyas_\source\repos\Samer\Server\obj\Debug\net9.0\Server.pdb
 C:\Users\eyas_\source\repos\Samer\Server\obj\Debug\net9.0\Server.genruntimeconfig.cache
 C:\Users\eyas_\source\repos\Samer\Server\obj\Debug\net9.0\ref\Server.dll
+C:\Users\eyas_\source\repos\Samer\Server\bin\Debug\net9.0\System.Configuration.ConfigurationManager.dll
+C:\Users\eyas_\source\repos\Samer\Server\bin\Debug\net9.0\System.Diagnostics.PerformanceCounter.dll
+C:\Users\eyas_\source\repos\Samer\Server\bin\Debug\net9.0\System.Security.Cryptography.ProtectedData.dll
+C:\Users\eyas_\source\repos\Samer\Server\bin\Debug\net9.0\runtimes\win\lib\net9.0\System.Diagnostics.PerformanceCounter.dll

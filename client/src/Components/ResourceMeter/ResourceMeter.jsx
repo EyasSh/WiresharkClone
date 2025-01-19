@@ -1,33 +1,64 @@
 /* eslint-disable no-unused-vars */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './ResourceMeter.css';
 
-function ResourceMeter({ resourceName,usage }) {
-    // Determine color based on usage percentage
+function ResourceMeter({ resourceAvailability, resourceName, usage }) {
     const getColor = (usage) => {
-        if (usage < 70) return '#4caf50';
-        if (usage < 90) return '#ffc107';
-        return '#f44336';
+        if (usage >= 70 && usage < 90) return '#ffc107'; // Yellow for 70–89%
+        if (usage >= 90) return '#f44336'; // Red for 90% and above
+        return '#4caf50'; // Green for below 70%
     };
+    const [animatedUsage, setAnimatedUsage] = useState(usage);
+    const [color, setColor] = useState(getColor(usage)); // Track color in state
 
-    const color = getColor(usage);
+    // Determine color based on usage percentage
+    
+
+    useEffect(() => {
+        const animationDuration = 300; // Duration in milliseconds
+        const steps = 30; // Number of steps for smoother animation
+        const stepTime = animationDuration / steps;
+    
+        const step = (usage - animatedUsage) / steps; // Use the latest `animatedUsage` value
+    
+        let currentUsage = animatedUsage; // Initialize with the current animated usage
+    
+        const interval = setInterval(() => {
+            currentUsage += step;
+    
+            // Stop the animation when close to the target to prevent overshooting
+            if ((step > 0 && currentUsage >= usage) || (step < 0 && currentUsage <= usage)) {
+                clearInterval(interval);
+                setAnimatedUsage(usage); // Ensure it matches the target usage
+                setColor(getColor(usage)); // Final color for the target usage
+            } else {
+                setAnimatedUsage(currentUsage); // Update animated usage
+                setColor(getColor(currentUsage)); // Update color dynamically
+            }
+        }, stepTime);
+    
+        return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [usage]);
+    
 
     return (
         <div className='container'>
-            <h4>{resourceName}</h4>
-        <div className="resource-meter">
-            <div
-                className="meter-circle"
-                style={{
-                    background: `conic-gradient(${color} ${usage}%, #eee ${usage}% 100%)`,
-                }}
-            >
-                <div className="inner-circle">
-                    <span className="percentage">{usage}%</span>
+            <h2>{resourceName}</h2>
+            <div className="resource-meter">
+                <div
+                    className="meter-circle"
+                    style={{
+                        background: `conic-gradient(${color} ${animatedUsage}%, #eee ${animatedUsage}% 100%)`,
+                    }}
+                >
+                    <div className="inner-circle">
+                        <h2 className="percentage">{Math.round(animatedUsage)}%</h2>
+                    </div>
                 </div>
             </div>
-        </div>
+            <h2>{resourceAvailability}</h2>
         </div>
     );
 }
@@ -35,6 +66,7 @@ function ResourceMeter({ resourceName,usage }) {
 ResourceMeter.propTypes = {
     usage: PropTypes.number.isRequired,
     resourceName: PropTypes.string.isRequired,
+    resourceAvailability: PropTypes.string.isRequired,
 };
 
 export default ResourceMeter;

@@ -14,6 +14,7 @@ import Nav from './Components/Nav/Nav';
 import Profile from './Components/Profile/Profile';
 import hubConnection from './Components/Sockets/SignalR'; // Import the SignalR connection
 import Notifications from './Components/Notifications/Notifications';
+import Performance from './Components/Performance/Performance';
 
 export default function App() {
     const [connection, setConnection] = useState(null);
@@ -85,6 +86,7 @@ export function Main({ hubConnection, sid }) {
                 <Route path="/" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/home" element={<Home hubConnection={hubConnection} sid={sid} />} />
+                <Route path="/performance" element={<Performance hubConnection={hubConnection} sid={sid} />} />
                 <Route path="/profile" element={<Profile hubConnection={hubConnection} sid={sid} />} />
             </Routes>
         </>

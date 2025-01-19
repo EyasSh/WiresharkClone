@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { FaUser, FaHome, FaCog } from 'react-icons/fa';
 import { FiLogOut } from 'react-icons/fi'; // Import the logout icon
+import {IoAnalytics, IoAnalyticsSharp} from 'react-icons/io5';
 import './Nav.css';
 import { useNavigate } from 'react-router';
 import Logo from '../Logo/Logo';
@@ -36,6 +37,9 @@ function Nav({ hubConnection, sid }) {
         } else if (item === 'home') {
             navigate('/home', { state: { sid } }); // Pass SID only
         }
+        else if (item === 'performance') {
+            navigate('/performance', { state: { sid } }); // Pass SID only
+        }
     };
     const closeModal = () => {
         setIsModalOpen(false); // Close the modal
@@ -46,6 +50,9 @@ function Nav({ hubConnection, sid }) {
             <nav className="NavItems">
                 <div className={`NavItem ${activeItem === 'home' ? 'active' : ''}`} onClick={() => handleClick('home')}>
                     <FaHome size={24} title="Home" />
+                </div>
+                <div className={`NavItem ${activeItem === 'performance' ? 'active' : ''}`} onClick={() => handleClick('performance')}>
+                    <IoAnalyticsSharp size={24} title="Performance" />
                 </div>
                 <div
                     className={`NavItem ${activeItem === 'profile' ? 'active' : ''}`}

@@ -45,9 +45,7 @@ function Home(props) {
 
     return (
         <div className='Home-Container'>
-            <ResourceMeter usage={30} resourceName='CPU'/>
-            <ResourceMeter usage={80} resourceName='Memory'/>
-            <ResourceMeter usage={95} resourceName='Disk'/>
+           <h1>Home Page</h1>
         </div>
     );
 }
