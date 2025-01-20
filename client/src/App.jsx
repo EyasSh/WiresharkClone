@@ -15,6 +15,7 @@ import Profile from './Components/Profile/Profile';
 import hubConnection from './Components/Sockets/SignalR'; // Import the SignalR connection
 import Notifications from './Components/Notifications/Notifications';
 import Performance from './Components/Performance/Performance';
+import Loading from './Components/Logo/Loading';
 
 export default function App() {
     const [connection, setConnection] = useState(null);
@@ -58,7 +59,7 @@ export default function App() {
     }, []);
 
     if (!connection) {
-        return <div>Loading...</div>; // Wait until the connection is ready
+        return <Loading />; // Wait until the connection is ready
     }
 
     return (

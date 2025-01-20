@@ -2,11 +2,12 @@ namespace Server.Services;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
+using Newtonsoft.Json;
 
 public interface IHubService
 {
     Task ConnectNotification(string sid, string warningLevel);
-    Task GetMetrics(double cpuUsage, double ramUsage, double diskUsage);
+    Task ReceiveMetrics(double cpuUsage, double ramUsage, double diskUsage);
 }
 public class SocketService : Hub<IHubService>
 {
@@ -42,11 +43,16 @@ public class SocketService : Hub<IHubService>
     /// </list>
     /// </summary>
 
-    public async Task GetMetrics()
+
+    public void GetMetrics()
     {
-        var metrics = new MetricFetcher().GetSystemMetrics();
-        await Clients.Caller.GetMetrics(metrics.cpuUsage, metrics.ramUsage, metrics.diskUsage);
+        var (cpuUsage, ramUsage, diskUsage) = new MetricFetcher().GetSystemMetrics();
+        Console.WriteLine($"CPU: {cpuUsage}, RAM: {ramUsage}, Disk: {diskUsage}");
+
+
+        Clients.Caller.ReceiveMetrics(cpuUsage, ramUsage, diskUsage);
     }
+
     /// <summary>
     /// This is the OnDisconnectedAsync method that will be called when the client disconnects from the server.
     /// It will remove the connection from the list of connections and write a message to the console.
