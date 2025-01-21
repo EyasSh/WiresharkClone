@@ -71,7 +71,7 @@ function Performance({ hubConnection }) {
                 resourceAvailability={platformObj.CPU} 
             />
             <ResourceMeter 
-                usage={metrics.ramUsage-10} 
+                usage={metrics.ramUsage} 
                 resourceName="RAM" 
                 resourceAvailability={platformObj.RAM} 
             />
