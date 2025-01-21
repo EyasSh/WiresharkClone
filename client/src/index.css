@@ -110,15 +110,16 @@ input:-webkit-autofill:focus {
   color: #747bff;
 }
 
-[data-theme='light'] button {
+[data-theme='light'] button :not(.signup):not(.purchase):not(.action){
   color: white;
   background-color: #66acea;
   text-align: center;
 }
-[data-theme='light'] input{
-  color:blue;
+[data-theme='light'] input {
+  color: blue;
   background-color: white;
 }
+
 [data-theme='light'] input:focus {
   color:blue;
   background-color: white;
@@ -128,8 +129,8 @@ input:-webkit-autofill:focus {
   padding: 0.85rem;
 }
 
-[data-theme='light'] input:-webkit-autofill,
-[data-theme='light'] input:-webkit-autofill:hover,
+[data-theme='light'] input:-webkit-autofill 
+[data-theme='light'] input:-webkit-autofill:hover
 [data-theme='light'] input:-webkit-autofill:focus {
   background-color: white !important;
   color: rgb(41, 50, 213) !important;
@@ -195,4 +196,5 @@ input:-webkit-autofill:focus {
   -webkit-text-fill-color: white !important;
   transition: background-color 5000s ease-in-out 0s;
 }
+
 

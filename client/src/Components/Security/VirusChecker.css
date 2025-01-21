@@ -8,14 +8,19 @@
 .Link-Container
 {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    gap: 3vh;
+    width: 30vw;
+    
 }
 .File-Container
 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    height: 15vh;
+
 }

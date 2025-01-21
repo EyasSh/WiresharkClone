@@ -1,17 +1,18 @@
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
-using MongoDB.Driver.Encryption;
 using Server.DB;
 using Server.Models;
 using Server.Services;
-using BCrypt;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.SignalR;
+using RestSharp;
+using System.Net;
+using Newtonsoft.Json.Linq;
+
 namespace Server.Controllers
 {
     [ApiController]
@@ -21,6 +22,7 @@ namespace Server.Controllers
         private readonly IHubContext<SocketService> _hubContext;
         IMongoCollection<User> _users;
         private readonly EmailService _emailService;
+        private const string apiKey = "730392f1c1b50b2c0dd1ddac270b3802472f07bb3863282d02162322b8f76e22";
         private readonly IConfiguration _conf;
         /*
          <summary>
@@ -271,6 +273,137 @@ namespace Server.Controllers
                 return StatusCode(500, $"An error occurred: {ex.Message}");
             }
         }
+        /// <summary>
+        /// Uploads a file to VirusTotal and scans it for viruses.
+        /// </summary>
+        /// <param name="file">The file to upload.</param>
+        /// <returns>A JSON response with the file name, number of engines that flagged the file as malicious, and a message indicating the result of the scan.</returns>
+        /// <remarks>
+        /// The file is uploaded to VirusTotal, and then the analysis results are polled until the scan is complete.
+        /// The response includes the file name, the number of engines that flagged the file as malicious, and a message indicating the result of the scan.
+        /// This endpoint is restricted to authorized users.
+        /// </remarks>
+        [Authorize]
+        [HttpPost("file")]
+        public async Task<IActionResult> UploadFile([FromForm] IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("No file uploaded or file is empty.");
+            }
 
+            try
+            {
+                // VirusTotal API key
+
+                string uploadUrl = "https://www.virustotal.com/api/v3/files";
+                // Create a temporary file path
+                string tempFilePath = Path.GetTempFileName();
+
+                // Save the file to the temporary location
+                using (var stream = new FileStream(tempFilePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+                // Create a RestSharp client and request for file upload
+                var client = new RestClient(uploadUrl);
+                var request = new RestRequest();
+                request.Method = Method.Post;
+                request.AddHeader("x-apikey", apiKey);
+                request.AddFile("file", tempFilePath, file.ContentType);
+
+
+                // Upload the file and get the response
+                var uploadResponse = await client.ExecuteAsync(request);
+
+                if (!uploadResponse.IsSuccessful)
+                {
+                    return StatusCode((int)uploadResponse.StatusCode, "Error uploading file to VirusTotal.");
+                }
+
+
+                if (uploadResponse.Content == null)
+                {
+                    return StatusCode(500, "Error uploading file to VirusTotal.");
+                }
+                // Parse the response to get the analysis ID
+                var uploadJson = JObject.Parse(uploadResponse.Content);
+                string? analysisLink = uploadJson["data"]?["links"]?["self"]?.ToString();
+                if (analysisLink == null)
+                {
+                    return StatusCode(500, "Error retrieving analysis link.");
+                }
+
+                if (string.IsNullOrEmpty(analysisLink))
+                {
+                    return StatusCode(500, "Error retrieving analysis link.");
+                }
+
+                // Poll the analysis results
+                var analysisClient = new RestClient(analysisLink);
+                var analysisRequest = new RestRequest();
+                analysisRequest.Method = Method.Get;
+                analysisRequest.AddHeader("x-apikey", apiKey);
+
+                var analysisResponse = await analysisClient.ExecuteAsync(analysisRequest);
+
+                if (!analysisResponse.IsSuccessful)
+                {
+                    return StatusCode((int)analysisResponse.StatusCode, "Error retrieving analysis results.");
+                }
+
+                // Parse the analysis results
+                if (string.IsNullOrEmpty(analysisResponse.Content))
+                {
+                    return StatusCode(500, "Error retrieving analysis results.");
+                }
+                var analysisJson = JObject.Parse(analysisResponse.Content);
+                var stats = analysisJson["data"]?["attributes"]?["stats"];
+                int malicious = stats?["malicious"]?.ToObject<int>() ?? 0;
+                int undetected = stats?["undetected"]?.ToObject<int>() ?? 0;
+
+                // Prepare the response message
+                var resultMessage = new JObject
+                {
+                    ["fileName"] = file.FileName,
+                    ["malicious"] = malicious,
+                    ["undetected"] = undetected,
+                    ["message"] = malicious > 0
+                        ? "The file is flagged as malicious."
+                        : "The file appears to be safe."
+                };
+
+                return Ok(resultMessage);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
+        }
+        /// <summary>
+        /// Validates the domain by retrieving its data from VirusTotal.
+        /// </summary>
+        /// <param name="siteUri">The URI of the domain to validate.</param>
+        /// <returns>A successful status code (200) if the domain validation was successful and the domain data if available, or BadRequest (400) if an error occurred.</returns>
+        /// <remarks>
+        /// This endpoint is restricted to authorized users.
+        /// </remarks>
+        [Authorize]
+        [HttpGet("domain")]
+        public async Task<IActionResult> DomainValidation(string siteUri)
+        {
+            var options = new RestClientOptions($"https://www.virustotal.com/api/v3/domains/{siteUri}/");
+            var client = new RestClient(options);
+            var request = new RestRequest("");
+            request.AddHeader("accept", "application/json");
+            request.AddHeader("x-apikey", apiKey);
+            var response = await client.GetAsync(request);
+            System.Console.WriteLine(response.Content);
+            if (response.StatusCode == HttpStatusCode.OK && response.Content != null)
+            {
+                return Ok(new { response.Content });
+            }
+            return BadRequest("An error occurred while validating the domain.");
+        }
     }
 }

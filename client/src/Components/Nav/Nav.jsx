@@ -57,7 +57,7 @@ function Nav({ hubConnection, sid }) {
                 <div className={`NavItem ${activeItem === 'performance' ? 'active' : ''}`} onClick={() => handleClick('performance')}>
                     <IoAnalyticsSharp size={24} title="Performance" />
                 </div>
-                <div className={`NavItem ${activeItem === 'security' ? 'active' : ''}`} onClick={() => handleClick('performance')}>
+                <div className={`NavItem ${activeItem === 'security' ? 'active' : ''}`} onClick={() => handleClick('security')}>
                     <FaLock size={24} title="Security" />
                 </div>
                 <div

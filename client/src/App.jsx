@@ -89,7 +89,7 @@ export function Main({ hubConnection, sid }) {
                 <Route path="/home" element={<Home hubConnection={hubConnection} sid={sid} />} />
                 <Route path="/performance" element={<Performance hubConnection={hubConnection} sid={sid} />} />
                 <Route path="/profile" element={<Profile hubConnection={hubConnection} sid={sid} />} />
-                <Route path='security' element={<VirusChecker />} />
+                <Route path='/security' element={<VirusChecker />} />
             </Routes>
         </>
     );

@@ -23,14 +23,24 @@ function Input(props) {
         setInputType((prev) => (prev === "password" ? "text" : "password"));
     };
 
+    const handleChange = (e) => {
+        if (props.type === "file") {
+            // Call the action function with the selected file(s)
+            props.action(e.target.files[0]);
+        } else {
+            // Call the action function with the input value
+            props.action(e.target.value);
+        }
+    };
+
     return (
         <div style={{ display: "flex", alignItems: "center", position: "relative", width: "100%" }}>
             <input
                 className={props.className}
                 placeholder={props.placeholder}
-                type={inputType}
-                value={props.value || ""}
-                onChange={(e) => props.action(e.target.value)}
+                type={inputType || "text"}
+                value={props.type === "file" ? undefined : props.value || ""} // file inputs don't use `value`
+                onChange={handleChange}
                 required={props.required}
                 style={{
                     paddingRight: props.showPasswordToggle && props.type === "password" ? "2rem" : "initial",
