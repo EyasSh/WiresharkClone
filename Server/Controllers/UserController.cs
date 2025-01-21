@@ -289,57 +289,45 @@ namespace Server.Controllers
         {
             if (file == null || file.Length == 0)
             {
-                return BadRequest("No file uploaded or file is empty.");
+                return BadRequest(new JObject { ["message"] = "No file uploaded or file is empty." });
             }
 
             try
             {
-                // VirusTotal API key
-
                 string uploadUrl = "https://www.virustotal.com/api/v3/files";
-                // Create a temporary file path
                 string tempFilePath = Path.GetTempFileName();
 
-                // Save the file to the temporary location
                 using (var stream = new FileStream(tempFilePath, FileMode.Create))
                 {
                     await file.CopyToAsync(stream);
                 }
-                // Create a RestSharp client and request for file upload
+
                 var client = new RestClient(uploadUrl);
                 var request = new RestRequest();
                 request.Method = Method.Post;
                 request.AddHeader("x-apikey", apiKey);
                 request.AddFile("file", tempFilePath, file.ContentType);
 
-
-                // Upload the file and get the response
                 var uploadResponse = await client.ExecuteAsync(request);
 
                 if (!uploadResponse.IsSuccessful)
                 {
-                    return StatusCode((int)uploadResponse.StatusCode, "Error uploading file to VirusTotal.");
+                    return StatusCode((int)uploadResponse.StatusCode,
+                        new JObject { ["message"] = "Error uploading file to VirusTotal." });
                 }
-
 
                 if (uploadResponse.Content == null)
                 {
-                    return StatusCode(500, "Error uploading file to VirusTotal.");
+                    return StatusCode(500, new JObject { ["message"] = "Error uploading file to VirusTotal." });
                 }
-                // Parse the response to get the analysis ID
+
                 var uploadJson = JObject.Parse(uploadResponse.Content);
                 string? analysisLink = uploadJson["data"]?["links"]?["self"]?.ToString();
-                if (analysisLink == null)
-                {
-                    return StatusCode(500, "Error retrieving analysis link.");
-                }
-
                 if (string.IsNullOrEmpty(analysisLink))
                 {
-                    return StatusCode(500, "Error retrieving analysis link.");
+                    return StatusCode(500, new JObject { ["message"] = "Error retrieving analysis link." });
                 }
 
-                // Poll the analysis results
                 var analysisClient = new RestClient(analysisLink);
                 var analysisRequest = new RestRequest();
                 analysisRequest.Method = Method.Get;
@@ -349,20 +337,20 @@ namespace Server.Controllers
 
                 if (!analysisResponse.IsSuccessful)
                 {
-                    return StatusCode((int)analysisResponse.StatusCode, "Error retrieving analysis results.");
+                    return StatusCode((int)analysisResponse.StatusCode,
+                        new JObject { ["message"] = "Error retrieving analysis results." });
                 }
 
-                // Parse the analysis results
                 if (string.IsNullOrEmpty(analysisResponse.Content))
                 {
-                    return StatusCode(500, "Error retrieving analysis results.");
+                    return StatusCode(500, new JObject { ["message"] = "Error retrieving analysis results." });
                 }
+
                 var analysisJson = JObject.Parse(analysisResponse.Content);
                 var stats = analysisJson["data"]?["attributes"]?["stats"];
                 int malicious = stats?["malicious"]?.ToObject<int>() ?? 0;
                 int undetected = stats?["undetected"]?.ToObject<int>() ?? 0;
 
-                // Prepare the response message
                 var resultMessage = new JObject
                 {
                     ["fileName"] = file.FileName,
@@ -377,9 +365,10 @@ namespace Server.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"An error occurred: {ex.Message}");
+                return StatusCode(500, new JObject { ["message"] = $"An error occurred: {ex.Message}" });
             }
         }
+
         /// <summary>
         /// Validates the domain by retrieving its data from VirusTotal.
         /// </summary>
