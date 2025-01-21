@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.SignalR;
 using RestSharp;
 using System.Net;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace Server.Controllers
 {
@@ -370,29 +371,110 @@ namespace Server.Controllers
         }
 
         /// <summary>
-        /// Validates the domain by retrieving its data from VirusTotal.
+        /// Validates the domain by retrieving its analysis results from VirusTotal.
         /// </summary>
         /// <param name="siteUri">The URI of the domain to validate.</param>
-        /// <returns>A successful status code (200) if the domain validation was successful and the domain data if available, or BadRequest (400) if an error occurred.</returns>
-        /// <remarks>
-        /// This endpoint is restricted to authorized users.
-        /// </remarks>
+        /// <returns>
+        /// A successful status code (200) with the analysis results if the request was successful,
+        /// or a bad request status code (400) if the site URI is null or empty,
+        /// or an internal server error status code (500) if an error occurred while validating the domain.
+        /// </returns>
         [Authorize]
-        [HttpGet("domain")]
-        public async Task<IActionResult> DomainValidation(string siteUri)
+        [HttpPost("domain")]
+        public async Task<IActionResult> DomainValidation([FromBody] string siteUri)
         {
-            var options = new RestClientOptions($"https://www.virustotal.com/api/v3/domains/{siteUri}/");
-            var client = new RestClient(options);
-            var request = new RestRequest("");
-            request.AddHeader("accept", "application/json");
-            request.AddHeader("x-apikey", apiKey);
-            var response = await client.GetAsync(request);
-            System.Console.WriteLine(response.Content);
-            if (response.StatusCode == HttpStatusCode.OK && response.Content != null)
+            try
             {
-                return Ok(new { response.Content });
+
+
+                // Validate the URL
+                if (string.IsNullOrWhiteSpace(siteUri))
+                {
+
+                    return BadRequest(new { message = "Site URI is required." });
+                }
+
+                // Step 1: Make the first API call to VirusTotal
+                var options = new RestClientOptions("https://www.virustotal.com/api/v3/urls");
+                var client = new RestClient(options);
+                var request = new RestRequest("", Method.Post);
+                request.AddHeader("accept", "application/json");
+                request.AddHeader("content-type", "application/x-www-form-urlencoded");
+                request.AddHeader("x-apikey", apiKey);
+
+                // Place the URL directly in the body as a form field
+                string requestBody = $"url={Uri.EscapeDataString(siteUri)}"; // URL-encoded
+                request.AddStringBody(requestBody, DataFormat.None);
+
+                var response = await client.ExecuteAsync(request);
+
+                // Step 2: Check the response from VirusTotal
+                if (response == null)
+                {
+
+                    return StatusCode(500, new { message = "Failed to send the URL for analysis." });
+                }
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+
+                    return BadRequest(new { message = "Failed to send the URL for analysis.", details = response.Content });
+                }
+
+                Console.WriteLine($"VirusTotal Response: {response.Content}");
+                if (string.IsNullOrEmpty(response.Content))
+                {
+
+                    return StatusCode(500, new { message = "Failed to send the URL for analysis. Response content is null" });
+                }
+                // Parse the response to retrieve the "self" link
+                var responseJson = JObject.Parse(response.Content);
+                string? selfLink = responseJson["data"]?["links"]?["self"]?.ToString();
+
+                if (string.IsNullOrEmpty(selfLink))
+                {
+
+                    return BadRequest(new { message = "Failed to retrieve the analysis link." });
+                }
+
+
+
+                // Step 3: Make the second API call to the "self" link
+                var analysisClient = new RestClient(new RestClientOptions(selfLink));
+                var analysisRequest = new RestRequest("", Method.Get);
+                analysisRequest.AddHeader("accept", "application/json");
+                analysisRequest.AddHeader("x-apikey", apiKey);
+
+                var analysisResponse = await analysisClient.ExecuteAsync(analysisRequest);
+
+                // Check the analysis response
+                if (analysisResponse == null || string.IsNullOrEmpty(analysisResponse.Content))
+                {
+
+                    return StatusCode(500, new { message = "Failed to retrieve the analysis results." });
+                }
+
+                if (analysisResponse.StatusCode != HttpStatusCode.OK)
+                {
+
+                    return BadRequest(new { message = "Failed to retrieve the analysis results.", details = analysisResponse.Content });
+                }
+
+
+
+                // Parse and return the analysis results
+                var analysisJson = JObject.Parse(analysisResponse.Content);
+                return Ok(new
+                {
+                    message = "Analysis completed successfully.",
+                    results = analysisJson
+                });
             }
-            return BadRequest("An error occurred while validating the domain.");
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = $"An error occurred: {ex.Message}" });
+            }
         }
+
     }
 }
