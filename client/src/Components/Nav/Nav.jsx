@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
-import { FaUser, FaHome, FaCog } from 'react-icons/fa';
+import {FaLock, FaUser, FaHome, FaCog } from 'react-icons/fa';
 import { FiLogOut } from 'react-icons/fi'; // Import the logout icon
 import {IoAnalytics, IoAnalyticsSharp} from 'react-icons/io5';
 import './Nav.css';
@@ -40,6 +40,9 @@ function Nav({ hubConnection, sid }) {
         else if (item === 'performance') {
             navigate('/performance', { state: { sid } }); // Pass SID only
         }
+        else if(item==='security'){
+            navigate('/security'); 
+        }
     };
     const closeModal = () => {
         setIsModalOpen(false); // Close the modal
@@ -53,6 +56,9 @@ function Nav({ hubConnection, sid }) {
                 </div>
                 <div className={`NavItem ${activeItem === 'performance' ? 'active' : ''}`} onClick={() => handleClick('performance')}>
                     <IoAnalyticsSharp size={24} title="Performance" />
+                </div>
+                <div className={`NavItem ${activeItem === 'security' ? 'active' : ''}`} onClick={() => handleClick('performance')}>
+                    <FaLock size={24} title="Security" />
                 </div>
                 <div
                     className={`NavItem ${activeItem === 'profile' ? 'active' : ''}`}

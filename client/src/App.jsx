@@ -1,5 +1,4 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */ 
 // App.jsx
 // App.jsx
 import { useEffect, useState } from 'react';
@@ -16,6 +15,7 @@ import hubConnection from './Components/Sockets/SignalR'; // Import the SignalR 
 import Notifications from './Components/Notifications/Notifications';
 import Performance from './Components/Performance/Performance';
 import Loading from './Components/Logo/Loading';
+import VirusChecker from './Components/Security/VirusChecker';
 
 export default function App() {
     const [connection, setConnection] = useState(null);
@@ -89,6 +89,7 @@ export function Main({ hubConnection, sid }) {
                 <Route path="/home" element={<Home hubConnection={hubConnection} sid={sid} />} />
                 <Route path="/performance" element={<Performance hubConnection={hubConnection} sid={sid} />} />
                 <Route path="/profile" element={<Profile hubConnection={hubConnection} sid={sid} />} />
+                <Route path='security' element={<VirusChecker />} />
             </Routes>
         </>
     );
