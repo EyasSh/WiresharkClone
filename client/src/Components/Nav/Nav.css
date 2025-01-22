@@ -17,8 +17,8 @@
 .NavItems {
     display: flex;
     justify-content: space-between;
-    gap: 150%;
-    margin-left: 20%;
+    gap: 100%;
+    margin-left: 10%;
 }
 
 .NavItem {
