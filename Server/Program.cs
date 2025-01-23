@@ -73,7 +73,13 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAllhosts", policy =>
     {
-        policy.AllowAnyOrigin()
+        policy.WithOrigins("http://localhost:5174",
+        "http://localhost:5173",
+        "http://localhost:5177",
+        "http://localhost:5176",
+        "http://localhost:5175",
+        "http://localhost:5172"
+        )
         .WithMethods("GET", "POST", "PUT", "DELETE")
         .WithHeaders(
             "Content-Type",
@@ -107,8 +113,8 @@ builder.Services.AddCors(options =>
             "Sec-WebSocket-Version",
             "Origin",
             "x-signalr-user-agent" // Expose this header as well
-        )
-        .AllowCredentials();
+        ).AllowCredentials();
+
     });
 });
 

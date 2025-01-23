@@ -134,11 +134,11 @@ namespace Server.Services
         {
             if (OperatingSystem.IsWindows())
             {
-                using (var diskCounter = new PerformanceCounter("PhysicalDisk", "% Disk Time", "_Total"))
+                using (var diskCounter = new PerformanceCounter("PhysicalDisk", "Avg. Disk Queue Length", "_Total"))
                 {
                     diskCounter.NextValue(); // Initial call to set up
                     Thread.Sleep(500); // Small delay for an accurate reading
-                    return Math.Round(diskCounter.NextValue(), 2); // Return Disk usage percentage
+                    return Math.Round(diskCounter.NextValue(), 2); // Return the disk queue length
                 }
             }
             else
@@ -147,5 +147,6 @@ namespace Server.Services
                 return -1;
             }
         }
+
     }
 }
