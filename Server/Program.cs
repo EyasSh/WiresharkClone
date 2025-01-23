@@ -71,12 +71,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 // CORS Policy
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowLocalhostOnly", policy =>
+    options.AddPolicy("AllowAllhosts", policy =>
     {
-        policy.WithOrigins
-        ("http://localhost:5173", "http://localhost:5174",
-         "http://localhost:19006","http://localhost:5177"
-         )
+        policy.AllowAnyOrigin()
         .WithMethods("GET", "POST", "PUT", "DELETE")
         .WithHeaders(
             "Content-Type",
@@ -126,7 +123,7 @@ if (app.Environment.IsDevelopment())
 }
 app.MapHub<SocketService>("hub");
 app.UseHttpsRedirection();
-app.UseCors("AllowLocalhostOnly");
+app.UseCors("AllowAllhosts");
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
