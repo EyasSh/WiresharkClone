@@ -9,6 +9,19 @@ import { useNavigate } from 'react-router';
 import Logo from '../Logo/Logo';
 import Settings from '../Settings/Settings';
 
+/**
+ * Nav component renders a navigation bar with links to the home, profile, settings, logout, and performance pages.
+ * It also contains a modal component that is opened when the settings button is clicked.
+ * The component receives a hubConnection and a sid as props, which are used to disconnect the SignalR connection on logout.
+ * The active navigation item is highlighted in the navigation bar.
+ * The component uses the useNavigate hook to navigate to the corresponding page when a navigation item is clicked.
+ * The component uses the useState hook to manage the active item and the isModalOpen state.
+ * The component uses the useEffect hook to set the active item to 'home' when the component mounts.
+ * @param {Object} props
+ * @param {Object} props.hubConnection The SignalR hub connection object.
+ * @param {string} props.sid The session ID of the user.
+ * @returns {ReactElement} The Nav component.
+ */
 function Nav({ hubConnection, sid }) {
     const [activeItem, setActiveItem] = useState('home');
     const [isModalOpen, setIsModalOpen] = useState(false);

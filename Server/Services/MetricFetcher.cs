@@ -24,10 +24,12 @@ namespace Server.Services
             return (cpuUsage, ramUsage, diskUsage);
         }
 
+       
         /// <summary>
-        /// Gets the CPU usage percentage for the current system.
-        /// On Windows, this method uses the PerformanceCounter class to query the CPU usage.
-        /// On other platforms, this method uses the <see cref="GetCpuUsagePercentageCrossPlatform"/> method instead.
+        /// Gets the CPU usage percentage of the current system.
+        /// On Windows, this method uses the PerformanceCounter class to query the system's CPU usage.
+        /// On other platforms, this method measures the time it takes to execute a small delay and uses that
+        /// to calculate the CPU usage.
         /// </summary>
         /// <returns>
         /// The CPU usage percentage of the current system.
@@ -49,11 +51,10 @@ namespace Server.Services
             }
         }
 
+        
         /// <summary>
-        /// Gets the CPU usage percentage for the current system using a cross-platform approach.
-        /// This method takes two measurements of the total CPU time, waits briefly, and then subtracts the two measurements.
-        /// This difference is then divided by the number of processors and the amount of time that elapsed between the two measurements.
-        /// The result is the CPU usage percentage.
+        /// Gets the CPU usage percentage of the current system using a cross-platform approach.
+        /// This method measures the time it takes to execute a small delay and uses that to calculate the CPU usage.
         /// </summary>
         /// <returns>
         /// The CPU usage percentage of the current system.
@@ -74,16 +75,15 @@ namespace Server.Services
             return Math.Round(cpuUsageTotal * 100, 2);
         }
 
+        
         /// <summary>
         /// Gets the total CPU time for all processes on the system.
+        /// This method iterates over all processes and sums up their total CPU time.
+        /// If a process does not allow access to its CPU time, it is ignored.
         /// </summary>
         /// <returns>
         /// The total CPU time for all processes on the system.
         /// </returns>
-        /// <remarks>
-        /// This method iterates over all processes on the system and adds their CPU times together.
-        /// Some processes may not allow access to their CPU time, in which case they are ignored.
-        /// </remarks>
         private TimeSpan GetTotalCpuTime()
         {
             var totalCpuTime = new TimeSpan();
@@ -101,14 +101,17 @@ namespace Server.Services
             return totalCpuTime;
         }
 
+       
         /// <summary>
-        /// Gets the percentage of physical memory that is currently in use.
+        /// Gets the physical memory usage percentage of the current system.
         /// </summary>
         /// <returns>
-        /// The percentage of physical memory that is currently in use.
+        /// The physical memory usage percentage of the current system, or -1 if the system is not Windows.
         /// </returns>
         /// <remarks>
-        /// This method is only supported on Windows.
+        /// This method uses the <see cref="ManagementObjectSearcher"/> class to query the system's memory details.
+        /// It then calculates the percentage of used memory by subtracting the free memory from the total memory.
+        /// The result is returned as a double value between 0 and 100.
         /// </remarks>
         public double GetRamUsagePercentage()
         {

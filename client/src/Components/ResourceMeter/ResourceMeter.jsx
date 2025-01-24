@@ -3,6 +3,16 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './ResourceMeter.css';
 
+/**
+ * A circular meter that displays the usage of a resource with a color indication
+ * of its usage level.
+ *
+ * @param {Object} props - The component's properties.
+ * @param {string} props.resourceAvailability - The name of the availability of the resource.
+ * @param {string} props.resourceName - The name of the resource.
+ * @param {number} props.usage - The percentage of the resource that is currently being used.
+ * @returns {ReactElement} A ReactElement representing the component.
+ */
 function ResourceMeter({ resourceAvailability, resourceName, usage }) {
     const getColor = (usage) => {
         if (usage >= 70 && usage < 90) return '#ffc107'; // Yellow for 70–89%

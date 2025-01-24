@@ -9,13 +9,12 @@ import axios from 'axios';
 import { useNavigate } from 'react-router';
 
 
-/**
- * Login component renders a form with email and password inputs.
- * It uses the Input component to handle user input.
- * The state of the email and password is managed using useState hooks.
- * The form is styled using the 'Login-Container' class.
- */
 
+/**
+ * @function Login
+ * @description A react component which renders a login form and handles login to the system.
+ * @returns {ReactElement} The rendered login form.
+ */
 function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');

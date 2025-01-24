@@ -1,6 +1,12 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import './Logo.css';
+/**
+ * The Loading component renders a loading animation of a rotating arrow.
+ * It does not accept any props.
+ *
+ * @returns {React.ReactElement} The loading animation element.
+ */
 function Loading() {
     return (
         <div>

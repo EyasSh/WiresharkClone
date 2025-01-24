@@ -10,6 +10,16 @@ const platformObj = {
     CPU: "Cross Platform"
 };
 
+/**
+ * Performance component displays system metrics as resource meters.
+ * It fetches metrics from the server every 2 seconds and updates the UI accordingly.
+ * The component also handles the case where the SignalR connection is not established.
+ * If the connection is not established, it will not fetch metrics and will not display anything.
+ * 
+ * @param {Object} hubConnection - The SignalR connection object.
+ * 
+ * @returns {React.ReactElement} A React component displaying system metrics as resource meters.
+ */
 function Performance({ hubConnection }) {
     const [metrics, setMetrics] = useState({
         cpuUsage: 5,

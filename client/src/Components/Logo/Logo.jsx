@@ -9,7 +9,6 @@ import './logo.css'
  * @param {Object} props - The properties object.
  * @param {string} props.flex - Determines the flex direction, either 'row' or 'column'.
  */
-
 function Logo(props) {
     const flexDirection = props.flex === 'row' ? 'row' : 'column';
     return (

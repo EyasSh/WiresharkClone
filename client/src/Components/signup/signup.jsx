@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import Input from '../Input';
@@ -8,7 +7,17 @@ import Button from '../Button/Button';
 import axios from 'axios';
 import Logo from '../Logo/Logo';
 
-function Signup(props) {
+
+
+/**
+ * A react component which renders a sign up form and handles sign up to the system.
+ * The form has fields for name, email, password, and date of birth. When the form is
+ * submitted, it sends a POST request to the user controller's sign up action. If the
+ * request is successful, it will alert the response message. If the request fails, it
+ * will alert the error response message.
+ * @returns {ReactElement} The rendered sign up form.
+ */
+function Signup() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
