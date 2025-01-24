@@ -54,7 +54,12 @@ function ResourceMeter({ resourceAvailability, resourceName, usage }) {
                     }}
                 >
                     <div className="inner-circle">
-                        <h2 className="percentage">{Math.round(animatedUsage)}%</h2>
+                        <h2 className="percentage">
+                            {animatedUsage > 0 && animatedUsage < 1 
+                            ? animatedUsage.toFixed(2) 
+                            : Math.round(animatedUsage)}%
+                        </h2>
+
                     </div>
                 </div>
             </div>

@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Management;
 using System.Threading;
 
 namespace Server.Services
@@ -115,10 +116,20 @@ namespace Server.Services
             {
                 return -1;
             }
-            using (var memoryCounter = new PerformanceCounter("Memory", "% Committed Bytes In Use"))
+
+            // Use ManagementObjectSearcher to query the system's memory details
+            var searcher = new ManagementObjectSearcher("SELECT TotalVisibleMemorySize, FreePhysicalMemory FROM Win32_OperatingSystem");
+            foreach (var obj in searcher.Get())
             {
-                return Math.Round(memoryCounter.NextValue(), 2); // Return memory usage percentage
+                var totalMemory = Convert.ToDouble(obj["TotalVisibleMemorySize"]); // Total physical memory (in KB)
+                var freeMemory = Convert.ToDouble(obj["FreePhysicalMemory"]);     // Free physical memory (in KB)
+
+                // Calculate percentage of used memory
+                var usedMemory = totalMemory - freeMemory;
+                return Math.Round((usedMemory / totalMemory) * 100, 2); // Return the usage percentage
             }
+
+            return -1; // If no data is retrieved
         }
 
         /// <summary>

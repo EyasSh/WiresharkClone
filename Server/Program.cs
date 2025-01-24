@@ -146,7 +146,7 @@ if (app.Environment.IsDevelopment())
 }
 app.MapHub<SocketService>("hub");
 app.UseHttpsRedirection();
-app.UseCors("AllowAllhosts");
+app.UseCors("AllowAllHosts");
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
