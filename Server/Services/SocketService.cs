@@ -47,7 +47,7 @@ public class SocketService : Hub<IHubService>
     public void GetMetrics()
     {
         var (cpuUsage, ramUsage, diskUsage) = new MetricFetcher().GetSystemMetrics();
-        Console.WriteLine($"CPU: {cpuUsage}, RAM: {ramUsage}, Disk: {diskUsage}");
+
 
 
         Clients.Caller.ReceiveMetrics(cpuUsage, ramUsage, diskUsage);

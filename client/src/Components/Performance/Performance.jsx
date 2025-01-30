@@ -22,9 +22,9 @@ const platformObj = {
  */
 function Performance({ hubConnection }) {
     const [metrics, setMetrics] = useState({
-        cpuUsage: 5,
-        ramUsage: 80,
-        diskUsage: 90
+        cpuUsage: 0,
+        ramUsage: 0,
+        diskUsage: 0
     });
 
     useEffect(() => {
@@ -62,7 +62,7 @@ function Performance({ hubConnection }) {
             console.error("SignalR connection not established!");
         }
 
-        // Fetch metrics every 2 seconds
+        // Fetch metrics every 0.5 seconds
         const intervalId = setInterval(fetchMetrics, 500);
 
         return () => {

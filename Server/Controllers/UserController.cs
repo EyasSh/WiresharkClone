@@ -292,7 +292,6 @@ namespace Server.Controllers
             {
                 return BadRequest(new JObject { ["message"] = "No file uploaded or file is empty." });
             }
-
             try
             {
                 string uploadUrl = "https://www.virustotal.com/api/v3/files";
@@ -361,7 +360,6 @@ namespace Server.Controllers
                         ? "The file is flagged as malicious."
                         : "The file appears to be safe."
                 };
-
                 return Ok(resultMessage);
             }
             catch (Exception ex)

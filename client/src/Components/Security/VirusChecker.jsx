@@ -19,6 +19,7 @@ function VirusChecker(props) {
     const [url, setUrl] = useState('');
     const [file, setFile] = useState(null);
     const [urlStatus, setUrlStatus] = useState(''); // State for displaying the result message
+    const [fileStatus, setFileStatus] = useState('');
     // Helper function to determine URL status message
     const getUrlStatusMessage = (stats) => {
         const { malicious, suspicious, harmless } = stats;
@@ -72,9 +73,52 @@ function VirusChecker(props) {
             console.error(error.response ? error.response.data : error.message);
         }
     }
-    const handleFile = async()=>{
-        alert('Checking Virus in File');
+  // Helper function to create a readable message for the file status
+  const getFileStatusMessage = (maliciousCount, undetectedCount) => {
+    // Adjust this logic or wording as needed
+    if (maliciousCount > 0) {
+      return 'This file is malicious. It was flagged by one or more scanning engines.';
     }
+    return 'This file appears safe. No issues were detected.';
+  };
+
+  // --- New handleFile logic ---
+  const handleFile = async () => {
+    // Ensure a file is selected
+    if (!file) {
+      alert('Please select a file first.');
+      return;
+    }
+
+    try {
+      // Build the FormData to send the file
+      const formData = new FormData();
+      // "file" must match the name expected by your .NET controller
+      formData.append('file', file);
+
+      const res = await axios.post(
+        'http://localhost:5256/api/user/file',
+        formData,
+        {
+          headers: {
+            // Let Axios set the content type (including boundary) automatically
+            'X-Auth-Token': localStorage.getItem('X-Auth-Token'),
+          },
+        }
+      );
+
+      if (res.status === 200) {
+        // The server returns malicious, undetected, and message
+        const { malicious, undetected, message } = res.data;
+        // Or you can create a custom message based on counts
+        const userFriendlyMessage = getFileStatusMessage(malicious, undetected);
+
+        setFileStatus(userFriendlyMessage);
+      }
+    } catch (error) {
+      console.error(error.response ? error.response.data : error.message);
+    }
+  };
     return (
         <div className='Vc-Container'>
             <h1 className='Vc-heading'>Check if a link is malicious</h1>
@@ -87,6 +131,7 @@ function VirusChecker(props) {
             <div className='File-Container'>
                 <Input type='file' action={(e)=>setFile(e)} required={true} />
                 <Button content='Check File' action={async()=>await handleFile()} status='signup' />
+                <span className='url-status'>{fileStatus}</span>
             </div>
             
 
