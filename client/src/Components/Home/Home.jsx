@@ -15,10 +15,10 @@ function Home(props) {
     const [sid, setSid] = useState('');
     const [stat, setStatus] = useState('');
     const [loading, setLoading] = useState(true); // New loading state
-
+    const [packets, setPackets] = useState([]); // New packets state
     useEffect(() => {
         const validateToken = async () => {
-            const token = localStorage.getItem('X-Auth-Token');
+            const token = localStorage.getItem('X-Auth-Token') || undefined;
             if (!token) {
                 alert("No token found, redirecting to login...");
                 navigate('/'); // Redirect to login
@@ -26,6 +26,11 @@ function Home(props) {
             }
 
             try {
+                if(token===undefined){
+                    alert("No token found, redirecting to login...");
+                    navigate('/'); // Redirect to login
+                    return;
+                }
                 const response = await axios.get('http://localhost:5256/api/user/validate', {
                     headers: {
                         'X-Auth-Token': token // Add token as a header
@@ -49,7 +54,6 @@ function Home(props) {
         <div className='Home-Container'>
             <div className='Header'>
                 <h1>Packet Analyzer</h1>
-                <p className='Description'>Packets Colored <strong style={{color: 'white'}}>White</strong> or <strong style={{color: 'black'}}>Black</strong> are safe</p>
                 <p className='Description'>Packets Colored <strong style={{color: 'yellow'}}>Yellow</strong> are suspicious</p>
                 <p className='Description'>Packets Colored <strong style={{color: 'red'}}>Red</strong> are potentially malicious </p>
             </div>
