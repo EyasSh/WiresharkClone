@@ -1,4 +1,16 @@
-.HomeContainer {
-    padding-top: 60px; /* To offset the fixed navbar height */
-    margin-left: 0%;
+.Home-Container {
+    padding-top: 90px; /* To offset the fixed navbar height */
+    padding-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap:2vh;
+ 
 }
+.Description {
+    font-size: larger;
+    font-weight: 700;
+    text-align: center;
+}
+

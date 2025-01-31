@@ -8,6 +8,8 @@ import Nav from '../Nav/Nav';
 import Input from '../Input';
 import hubConnection from '../Sockets/SignalR';
 import ResourceMeter from '../ResourceMeter/ResourceMeter';
+import Packet from '../PacketBox/Packet';
+import './Home.css';
 function Home(props) {
     const navigate = useNavigate();
     const [sid, setSid] = useState('');
@@ -45,7 +47,18 @@ function Home(props) {
 
     return (
         <div className='Home-Container'>
-           <h1>Home Page</h1>
+            <div className='Header'>
+                <h1>Packet Analyzer</h1>
+                <p className='Description'>Packets Colored <strong style={{color: 'white'}}>White</strong> or <strong style={{color: 'black'}}>Black</strong> are safe</p>
+                <p className='Description'>Packets Colored <strong style={{color: 'yellow'}}>Yellow</strong> are suspicious</p>
+                <p className='Description'>Packets Colored <strong style={{color: 'red'}}>Red</strong> are potentially malicious </p>
+            </div>
+           <Packet />
+           <Packet />
+           <Packet />
+           <Packet />
+           <Packet />
+           <Packet />
         </div>
     );
 }

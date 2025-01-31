@@ -150,6 +150,32 @@ input:-webkit-autofill:focus {
   justify-content: center;
   color: black;
 }
+[data-theme='light'] .NavBox{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 10px 20px; /* Adjust padding for better spacing */
+  background: rgb(251, 251, 251);
+  position: fixed; /* Keeps the navbar at the top */
+  top: 0;
+  left: 0; /* Ensures it starts from the left edge */
+  width: 100%; /* Full width to avoid alignment issues */
+  z-index: 1000; /* Ensures it appears above other content */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Keeps shadow for aesthetics */
+  gap: 0; /* Reduced gap to prevent overflow */
+}
+[data-theme='light'] .Packet-Container {
+  width: 300px;
+  background-color: #ffffff;
+  color: #2e2e2e;
+  border-radius: 8px;
+  margin: 1rem auto;
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.75);
+  overflow: hidden; 
+  /* Adding a transition on max-height for smooth open/close */
+  transition: max-height 0.5s ease;
+  width: 30vw;
+}
 [data-theme='dark'] {
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;

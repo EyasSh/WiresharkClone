@@ -1,0 +1,47 @@
+.Packet-Container {
+    width: 300px;
+    background-color: #181818;
+    color: #ffffff;
+    border-radius: 8px;
+    margin: 1rem auto;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.75);
+    overflow: hidden; 
+    /* Adding a transition on max-height for smooth open/close */
+    transition: max-height 0.5s ease;
+    width: 30vw;
+  }
+  /* Collapsed: very short max-height just enough to show header */
+  .Packet-Container.collapsed {
+    max-height: 3rem; 
+  }
+  /* Expanded: larger max-height so we can see details */
+  .Packet-Container.expanded {
+    max-height: 500px; 
+  }
+  
+  /* Header row: displayed at all times */
+  .Packet-Header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    font-weight: bold;
+    user-select: none; /* optional: prevent text selection on click */
+  }
+  
+  /* Arrow icon. Rotates based on state (handled in JSX) */
+  .Toggle-Icon {
+    font-size: 1.2rem;
+  }
+  
+  /* The details section is rendered conditionally when expanded */
+  .Packet-Details {
+    padding: 0 1rem 1rem 1rem; 
+    line-height: 1.5;
+  }
+  
+  .Packet-Details p {
+    margin: 0.4rem 0;
+  }
+  
