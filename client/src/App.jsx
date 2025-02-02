@@ -42,7 +42,7 @@ export default function App() {
                      setNotification({
                         severity: status === 'ok' ? 'ok' : 'err',
                         children: status === 'ok'
-                            ? 'Connected successfully to the hub!'
+                            ? 'Initialized Session'
                             : 'Connection error occurred.',
                     });
                   });
