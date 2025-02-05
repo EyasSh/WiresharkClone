@@ -34,7 +34,7 @@ function Login() {
                 navigate('/home');
             }
         } catch (error) {
-            alert(`Login Failed: ${error.response ? error.response.data : error.message}`);
+            throw error
         }
     };
     
