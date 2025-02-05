@@ -8,7 +8,17 @@ namespace Server.Services
     {
         private static bool _stopCapture = false;
 
-        public static void StartCapture()
+        /// <summary>
+        /// Starts the capture process for network packets.
+        /// This is a continuous loop that will run until <see cref="_stopCapture"/> is set to <c>true</c>.
+        /// </summary>
+        /// <remarks>
+        /// This method will select the first device in the list of available network devices.
+        /// It will then open the device in promiscuous mode, with a read timeout of 1000 milliseconds.
+        /// The method will then enter an infinite loop, capturing packets one by one.
+        /// For each packet, it will parse the packet using <see cref="Packet.ParsePacket"/>, and then process it using <see cref="ProcessPacket"/>, and (optionally) sleep for a small period of time to prevent busy-waiting.
+        /// </remarks>
+        public static async Task StartCapture()
         {
             // 1. Select a device (for simplicity, pick the first)
             var devices = CaptureDeviceList.Instance;
@@ -45,6 +55,7 @@ namespace Server.Services
 
                 // (C) Optional small sleep to prevent busy-waiting
                 // Thread.Sleep(1);
+                await Task.Delay(1);
             }
 
             Console.WriteLine("Stopping capture...");
