@@ -1,12 +1,14 @@
 using System;
 using SharpPcap;
 using PacketDotNet;
+using SharpPcap.WinpkFilter;
 
 namespace Server.Services
 {
     public class Capturer
     {
         private static bool _stopCapture = false;
+        public static Stack<Packet> packets = new Stack<Packet>();
 
         /// <summary>
         /// Starts the capture process for network packets.
@@ -18,8 +20,9 @@ namespace Server.Services
         /// The method will then enter an infinite loop, capturing packets one by one.
         /// For each packet, it will parse the packet using <see cref="Packet.ParsePacket"/>, and then process it using <see cref="ProcessPacket"/>, and (optionally) sleep for a small period of time to prevent busy-waiting.
         /// </remarks>
-        public static async Task StartCapture()
+        public static void StartCapture()
         {
+            _stopCapture = false;
             // 1. Select a device (for simplicity, pick the first)
             var devices = CaptureDeviceList.Instance;
             if (devices.Count < 1)
@@ -36,28 +39,34 @@ namespace Server.Services
             Console.WriteLine("Starting capture...");
 
             // 3. Continuous loop for capturing packets
-            while (!_stopCapture)
+            for (int i = 0; i < 750; i++)
             {
-                var status = device.GetNextPacket(out PacketCapture packetCapture);
+                // If user requested a manual stop from elsewhere, break early.
+                if (_stopCapture)
+                    break;
+
+                // Attempt to read the next packet
+                GetPacketStatus status = device.GetNextPacket(out PacketCapture packetCapture);
                 if (status != GetPacketStatus.PacketRead)
                 {
-                    // If no packet read (timeout, error, etc.), loop again
+                    // If no packet was read this iteration (timeout, error, etc.), loop again
                     continue;
                 }
+
                 Console.WriteLine("Above A");
                 // (A) Parse the packet
-                var rawCapture = packetCapture.GetPacket();
-                var parsedPacket = Packet.ParsePacket(rawCapture.LinkLayerType, rawCapture.Data);
+                RawCapture rawCapture = packetCapture.GetPacket();
+                Packet parsedPacket = Packet.ParsePacket(rawCapture.LinkLayerType, rawCapture.Data);
+                packets.Push(parsedPacket);
                 Console.WriteLine("Above B");
-                // (B) Process it
+
+                // (B) Process the packet
                 ProcessPacket(parsedPacket);
                 Console.WriteLine("Above C");
-                // (C) Optional small sleep to prevent busy-waiting
-                // Thread.Sleep(1);
-                await Task.Delay(1);
             }
 
             Console.WriteLine("Stopping capture...");
+            StopCapture();
             device.Close();
         }
 
