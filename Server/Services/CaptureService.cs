@@ -29,8 +29,7 @@ namespace Server.Services
             }
 
             var device = devices[0];
-            Console.WriteLine($"Selected device: {device.Name}");
-
+            Console.WriteLine($"Selected device: {device.Name}\nDescription: {device.Description}");
             // 2. Open the device in promiscuous mode, with a read timeout
             device.Open(DeviceModes.Promiscuous, 1000);
 
@@ -45,14 +44,14 @@ namespace Server.Services
                     // If no packet read (timeout, error, etc.), loop again
                     continue;
                 }
-
+                Console.WriteLine("Above A");
                 // (A) Parse the packet
                 var rawCapture = packetCapture.GetPacket();
                 var parsedPacket = Packet.ParsePacket(rawCapture.LinkLayerType, rawCapture.Data);
-
+                Console.WriteLine("Above B");
                 // (B) Process it
                 ProcessPacket(parsedPacket);
-
+                Console.WriteLine("Above C");
                 // (C) Optional small sleep to prevent busy-waiting
                 // Thread.Sleep(1);
                 await Task.Delay(1);
