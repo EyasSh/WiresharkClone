@@ -10,7 +10,6 @@ public class MongoDBWrapper
     private readonly IMongoClient _client;
     private readonly IMongoDatabase _database;
     public IMongoCollection<User> Users { get; init; }
-    public IMongoCollection<Packet> Packets { get; init; }
 
     public MongoDBWrapper(IConfiguration configuration)
     {
@@ -29,7 +28,6 @@ public class MongoDBWrapper
 
         // Initialize collections
         Users = _database.GetCollection<User>("Users");
-        Packets = _database.GetCollection<Packet>("Packets");
     }
 
 

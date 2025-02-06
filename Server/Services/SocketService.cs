@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
+using Server.Models;
 
 public interface IHubService
 {
     Task ConnectNotification(string sid, string warningLevel);
     Task ReceiveMetrics(double cpuUsage, double ramUsage, double diskUsage);
+    Task ReceivePackets(PacketInfo[] packets);
 }
 public class SocketService : Hub<IHubService>
 {
@@ -51,6 +53,16 @@ public class SocketService : Hub<IHubService>
 
 
         Clients.Caller.ReceiveMetrics(cpuUsage, ramUsage, diskUsage);
+    }
+    /// <summary>
+    /// Retrieves all packets captured by the server.
+    /// The packets are captured using the SharpPcap library.
+    /// Sends the captured packets to the calling client.
+    /// </summary>
+    public void GetPackets()
+    {
+        Queue<PacketInfo> packets = Capturer.StartCapture();
+        Clients.Caller.ReceivePackets(packets.ToArray());
     }
 
     /// <summary>

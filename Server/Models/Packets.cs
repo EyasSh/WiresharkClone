@@ -1,15 +1,17 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using PacketDotNet;
 namespace Server.Models
 {
-    public class Packet
+    public class PacketInfo
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string? Id { get; set; }
-        [BsonElement("data")]
-        public required string Data { get; set; }
-        [BsonElement("timestamp")]
-        public required DateTime Timestamp { get; set; }
+        public IPVersion IPVersion { get; set; }
+        public string? SourceIP { get; set; }
+        public string? DestinationIP { get; set; }
+        public int? SourcePort { get; set; }
+        public int? DestinationPort { get; set; }
+        public string? Protocol { get; set; }
+        public DateTime Timestamp { get; set; }
     }
+
 }

@@ -2,69 +2,141 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import axios from 'axios';
-import Notifications from '../Notifications/Notifications';
-import * as signalR from '@microsoft/signalr';
-import Nav from '../Nav/Nav';
-import Input from '../Input';
 import hubConnection from '../Sockets/SignalR';
-import ResourceMeter from '../ResourceMeter/ResourceMeter';
 import Packet from '../PacketBox/Packet';
 import './Home.css';
+
 function Home(props) {
-    const navigate = useNavigate();
-    const [sid, setSid] = useState('');
-    const [stat, setStatus] = useState('');
-    const [loading, setLoading] = useState(true); // New loading state
-    const [packets, setPackets] = useState([]); // New packets state
-    useEffect(() => {
-        const validateToken = async () => {
-            const token = localStorage.getItem('X-Auth-Token') || undefined;
-            if (!token) {
-                alert("No token found, redirecting to login...");
-                navigate('/'); // Redirect to login
-                return;
-            }
+  const navigate = useNavigate();
+  const [sid, setSid] = useState('');
+  const [stat, setStatus] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [packetsArr, setPackets] = useState([]);
+  const [isFirstCapture, setIsFirstCapture] = useState(true);
 
-            try {
-                if(token===undefined){
-                    alert("No token found, redirecting to login...");
-                    navigate('/'); // Redirect to login
-                    return;
-                }
-                const response = await axios.get('http://localhost:5256/api/user/validate', {
-                    headers: {
-                        'X-Auth-Token': token // Add token as a header
-                    }
-                });
+  useEffect(() => {
+    let isMounted = true;
 
-                if (response.status !== 200) {
-                    alert("Invalid token. Redirecting to login...");
-                    navigate('/'); // Redirect to login if token is invalid
-                }
-            } catch (error) {
-                alert("Validation failed:", error);
-                navigate('/'); // Redirect to login on validation failure
-            }
-        };
+    // 1. Validate token
+    const validateToken = async () => {
+      const token = localStorage.getItem('X-Auth-Token') || undefined;
+      if (!token) {
+        alert("No token found, redirecting to login...");
+        navigate('/');
+        return;
+      }
 
-        validateToken(); // Call the async function
-    }, [navigate]);
+      try {
+        const response = await axios.get('http://localhost:5256/api/user/validate', {
+          headers: {
+            'X-Auth-Token': token
+          }
+        });
 
-    return (
-        <div className='Home-Container'>
-            <div className='Header'>
-                <h1>Packet Analyzer</h1>
-                <p className='Description'>Packets Colored <strong style={{color: 'yellow'}}>Yellow</strong> are suspicious</p>
-                <p className='Description'>Packets Colored <strong style={{color: 'red'}}>Red</strong> are potentially malicious </p>
-            </div>
-           <Packet />
-           <Packet />
-           <Packet />
-           <Packet />
-           <Packet />
-           <Packet />
-        </div>
-    );
+        if (response.status !== 200) {
+          alert("Invalid token. Redirecting to login...");
+          navigate('/');
+        }
+      } catch (error) {
+        alert("Validation failed:", error);
+        navigate('/');
+      }
+    };
+
+    // 2. Function to fetch packets from the server via SignalR
+    const fetchPackets = async () => {
+      try {
+        if (hubConnection.state === "Connected") {
+          console.log("Fetching packets...");
+          await hubConnection.invoke("GetPackets");
+          console.log("Packets request sent");
+        } else {
+          console.log("SignalR not connected");
+        }
+      } catch (err) {
+        console.error(`Error: ${err}`);
+      }
+    };
+
+    // 3. Initialize the listener for incoming packets
+    const initializePacketListener = () => {
+      // Remove any existing handler to avoid duplication
+      hubConnection.off("ReceivePackets");
+
+      hubConnection.on("ReceivePackets", (newPackets) => {
+        console.log("Packets received:", newPackets);
+        if (isMounted) {
+          // Append the new packets to the old array
+          setPackets(oldPackets => [...oldPackets, ...newPackets]);
+          console.log(packetsArr)
+        }
+      });
+    };
+
+    // Validate the token once
+    validateToken();
+
+    // If SignalR is already connected, set up the listener
+    if (hubConnection.state === "Connected") {
+      console.log("SignalR already connected. Initializing listener...");
+      initializePacketListener();
+    } else {
+      console.error("SignalR connection not established!");
+    }
+
+    // Decide whether to immediately fetch once or set interval
+    let intervalId;
+    if (isFirstCapture) {
+      fetchPackets();       // Fetch once immediately
+      setIsFirstCapture(false);
+    } else {
+      intervalId = setInterval(fetchPackets, 5000);
+    }
+
+    // Clean up when component unmounts
+    return () => {
+      isMounted = false;
+      clearInterval(intervalId);
+      hubConnection.off("ReceivePackets");
+      console.log("Home component unmounted and listener removed");
+    };
+
+    // Dependencies:
+  }, [navigate, isFirstCapture]);
+
+  // 4. Render
+  return (
+    <div className='Home-Container'>
+      <div className='Header'>
+        <h1>Packet Analyzer</h1>
+        <p className='Description'>
+          Packets Colored <strong style={{color: 'yellow'}}>Yellow</strong> are suspicious
+        </p>
+        <p className='Description'>
+          Packets Colored <strong style={{color: 'red'}}>Red</strong> are potentially malicious
+        </p>
+      </div>
+
+      {/* Map through the packet array and display each packet */}
+      {packetsArr.map((packet, index) => (
+        <Packet
+          key={index}
+          // You can rename or pass whichever fields you want:
+          // For example, let's pass:
+          //   - packetType => the protocol or ipVersion
+          packetType={`Protocol: ${packet.protocol} | IP Version: ${packet.ipVersion}`}
+          sourceIP={packet.sourceIP}
+          destinationIP={packet.destinationIP}
+          sourcePort={packet.sourcePort}
+          destinationPort={packet.destinationPort}
+          protocol={packet.protocol}
+          // If you want to display the timestamp, you can pass it
+          // to 'packetDescription' or add a new prop in Packet.
+          packetDescription={packet.timestamp}
+        />
+      ))}
+    </div>
+  );
 }
 
 export default Home;
