@@ -39,7 +39,7 @@ public class Capturer
         Console.WriteLine("Starting capture...");
 
         // 3. Continuous loop for capturing packets
-        for (int i = 0; i < 750; i++)
+        for (int i = 0; i < 100; i++)
         {
 
             // Attempt to read the next packet

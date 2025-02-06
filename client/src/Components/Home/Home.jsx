@@ -90,7 +90,7 @@ function Home(props) {
       fetchPackets();       // Fetch once immediately
       setIsFirstCapture(false);
     } else {
-      intervalId = setInterval(fetchPackets, 5000);
+      intervalId = setInterval(fetchPackets, 50);
     }
 
     // Clean up when component unmounts
@@ -102,7 +102,7 @@ function Home(props) {
     };
 
     // Dependencies:
-  }, [navigate, isFirstCapture]);
+  }, [navigate, isFirstCapture,packetsArr]);
 
   // 4. Render
   return (

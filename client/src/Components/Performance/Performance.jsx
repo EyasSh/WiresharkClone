@@ -63,7 +63,7 @@ function Performance({ hubConnection }) {
         }
 
         // Fetch metrics every 0.5 seconds
-        const intervalId = setInterval(fetchMetrics, 500);
+        const intervalId = setInterval(fetchMetrics, 50);
 
         return () => {
             isMounted = false; // Prevent updates to unmounted component
