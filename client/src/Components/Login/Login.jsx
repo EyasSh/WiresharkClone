@@ -34,13 +34,10 @@ function Login() {
                 navigate('/home');
             }
         } catch (error) {
-            throw error
+            console.error(error);
         }
     };
     
-    const handleSignup = ()=>{
-        alert('Sign Up');
-    }
     return (
         <>
         
