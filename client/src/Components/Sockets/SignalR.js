@@ -6,4 +6,4 @@ const hubConnection = new signalR.HubConnectionBuilder()
     .build();
 
 
-export default hubConnection;
+export default hubConnection

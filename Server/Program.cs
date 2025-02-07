@@ -145,6 +145,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.MapHub<SocketService>("hub");
+app.MapHub<PacketHub>("packetHub");
 app.UseHttpsRedirection();
 app.UseCors("AllowAllHosts");
 app.UseRouting();

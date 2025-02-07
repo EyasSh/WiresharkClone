@@ -23,46 +23,99 @@ public class Capturer
     /// </remarks>
     public static Queue<PacketInfo> StartCapture()
     {
-        // 1. Select a device (for simplicity, pick the first)
+        packets = new Queue<PacketInfo>();
+
         var devices = CaptureDeviceList.Instance;
-        if (devices.Count < 1)
+        if (devices == null || devices.Count < 1)
         {
-            Console.WriteLine("No devices found!");
+            Console.WriteLine("❌ No network devices found!");
             return packets;
         }
+
         Console.WriteLine($"Devices found: {devices.Count}");
-        var device = devices[5];
-        Console.WriteLine($"Selected device: {device.MacAddress}\nDescription: {device.Description}");
-        // 2. Open the device in promiscuous mode, with a read timeout
-        device.Open(DeviceModes.Promiscuous, 1000);
 
-        Console.WriteLine("Starting capture...");
-
-        // 3. Continuous loop for capturing packets
-        for (int i = 0; i < 100; i++)
+        // 🟢 Use LINQ to select the first matching device
+        var targetMacs = new HashSet<string>
         {
+            "80-AF-CA-22-11-A1",
+            "EC-2E-98-07-2E-01"
+        };
 
-            // Attempt to read the next packet
-            GetPacketStatus status = device.GetNextPacket(out PacketCapture packetCapture);
-            if (status != GetPacketStatus.PacketRead)
-            {
-                // If no packet was read this iteration (timeout, error, etc.), loop again
-                continue;
-            }
+        ILiveDevice? device = devices.FirstOrDefault(d =>
+            d != null && !string.IsNullOrEmpty(d.MacAddress?.ToString()) &&
+            targetMacs.Contains(d.MacAddress.ToString().ToUpper()));
 
-            Console.WriteLine("Above A");
-            // (A) Parse the packet
-            RawCapture rawCapture = packetCapture.GetPacket();
-            Packet parsedPacket = Packet.ParsePacket(rawCapture.LinkLayerType, rawCapture.Data);
-            Console.WriteLine("Above B");
+        // If no matching device, fall back to the first device
+        System.Console.WriteLine("🟢 Using first device");
+        device ??= devices.FirstOrDefault();
 
-            // (B) Process the packet
-            ProcessPacket(parsedPacket);
-            Console.WriteLine("Above C");
+        if (device == null)
+        {
+            Console.WriteLine("❌ No valid device found!");
+            return packets;
         }
-        device.Close();
+
+        Console.WriteLine($"🎯 Using device: {device.MacAddress}\nDescription: {device.Description}");
+
+        try
+        {
+            device.Open(DeviceModes.Promiscuous, 1000);
+            Console.WriteLine("🟢 Starting capture...");
+
+            for (int i = 0; i < 100; i++)
+            {
+                GetPacketStatus status = device.GetNextPacket(out PacketCapture packetCapture);
+                if (status != GetPacketStatus.PacketRead)
+                    continue;
+
+                RawCapture rawCapture = packetCapture.GetPacket();
+                if (rawCapture == null)
+                {
+                    Console.WriteLine("⚠️ Received a null raw packet.");
+                    continue;
+                }
+
+                Packet parsedPacket = Packet.ParsePacket(rawCapture.LinkLayerType, rawCapture.Data);
+                if (parsedPacket == null)
+                {
+                    Console.WriteLine("⚠️ Failed to parse packet.");
+                    continue;
+                }
+
+                try
+                {
+                    ProcessPacket(parsedPacket);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"❌ Error processing packet: {ex.Message}");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"❌ Exception in packet capture: {ex.Message}");
+        }
+        finally
+        {
+            if (device != null)
+            {
+                try
+                {
+                    device.Close();
+                    Console.WriteLine("🔴 Device closed successfully.");
+                }
+                catch (Exception closeEx)
+                {
+                    Console.WriteLine($"⚠️ Error closing device: {closeEx.Message}");
+                }
+            }
+        }
+
         return packets;
     }
+
+
 
     /// <summary>
     /// Processes the parsed Packet and prints protocol/addresses.

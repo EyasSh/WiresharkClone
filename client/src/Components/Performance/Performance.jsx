@@ -28,24 +28,24 @@ function Performance({ hubConnection }) {
     });
 
     useEffect(() => {
-        let isMounted = true; // Prevent state updates on unmounted component
-
+        let isMounted = true;
+    
         const fetchMetrics = async () => {
             if (hubConnection.state === "Connected") {
                 try {
                     console.log("Fetching metrics...");
-                    await hubConnection.invoke("GetMetrics"); // Request metrics from the server
+                    await hubConnection.invoke("GetMetrics");
                     console.log("Metrics request sent");
                 } catch (error) {
                     console.error("Error fetching metrics:", error);
                 }
             } else {
-                console.log("Connection not ready");
+                console.log("SignalR connection not established!");
             }
         };
-
+    
         const initializeListener = () => {
-            hubConnection.off("ReceiveMetrics"); // Ensure no duplicate listeners
+            hubConnection.off("ReceiveMetrics"); // Remove old listener
             console.log("Registering ReceiveMetrics listener...");
             hubConnection.on("ReceiveMetrics", (cpuUsage, ramUsage, diskUsage) => {
                 console.log("Metrics received:", { cpuUsage, ramUsage, diskUsage });
@@ -54,24 +54,24 @@ function Performance({ hubConnection }) {
                 }
             });
         };
-
+    
         if (hubConnection.state === "Connected") {
             console.log("SignalR already connected. Initializing listener...");
-            initializeListener(); // Register listener if already connected
+            initializeListener();
         } else {
             console.error("SignalR connection not established!");
         }
-
-        // Fetch metrics every 0.5 seconds
-        const intervalId = setInterval(fetchMetrics, 50);
-
+    
+        const intervalId = setInterval(fetchMetrics, 2000);
+    
         return () => {
-            isMounted = false; // Prevent updates to unmounted component
-            clearInterval(intervalId); // Cleanup interval
+            isMounted = false;
+            clearInterval(intervalId);
             hubConnection.off("ReceiveMetrics"); // Remove listener on unmount
             console.log("Performance component unmounted and listener removed");
         };
-    }, [hubConnection]); // Add `hubConnection` as a dependency
+    }, [hubConnection]);
+    
 
     return (
         <div className="Performance-Container">

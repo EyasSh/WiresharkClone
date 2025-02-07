@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import axios from 'axios';
-import hubConnection from '../Sockets/SignalR';
+import packetHubConnection from '../Sockets/packetHub';
 import Packet from '../PacketBox/Packet';
 import './Home.css';
 
@@ -13,96 +13,92 @@ function Home(props) {
   const [loading, setLoading] = useState(true);
   const [packetsArr, setPackets] = useState([]);
   const [isFirstCapture, setIsFirstCapture] = useState(true);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    let isMounted = true;
+    setIsMounted(true);
 
     // 1. Validate token
     const validateToken = async () => {
-      const token = localStorage.getItem('X-Auth-Token') || undefined;
-      if (!token) {
-        alert("No token found, redirecting to login...");
-        navigate('/');
-        return;
-      }
-
-      try {
-        const response = await axios.get('http://localhost:5256/api/user/validate', {
-          headers: {
-            'X-Auth-Token': token
-          }
-        });
-
-        if (response.status !== 200) {
-          alert("Invalid token. Redirecting to login...");
-          navigate('/');
+        const token = localStorage.getItem('X-Auth-Token') || undefined;
+        if (!token) {
+            alert("No token found, redirecting to login...");
+            navigate('/');
+            return;
         }
-      } catch (error) {
-        alert("Validation failed:", error);
-        navigate('/');
-      }
+
+        try {
+            const response = await axios.get('http://localhost:5256/api/user/validate', {
+                headers: {
+                    'X-Auth-Token': token
+                }
+            });
+
+            if (response.status !== 200) {
+                alert("Invalid token. Redirecting to login...");
+                navigate('/');
+            }
+        } catch (error) {
+            alert("Validation failed:", error);
+            navigate('/');
+        }
     };
 
-    // 2. Function to fetch packets from the server via SignalR
+    // 2. Function to fetch packets
     const fetchPackets = async () => {
-      try {
-        if (hubConnection.state === "Connected") {
-          console.log("Fetching packets...");
-          await hubConnection.invoke("GetPackets");
-          console.log("Packets request sent");
+        if (packetHubConnection.state === "Connected") {
+            try {
+                console.log("Fetching packets...");
+                await packetHubConnection.invoke("GetPackets");
+                console.log("Packets request sent");
+            } catch (err) {
+                console.error(`Error: ${err}`);
+            }
         } else {
-          console.log("SignalR not connected");
+            console.log("SignalR not connected");
         }
-      } catch (err) {
-        console.error(`Error: ${err}`);
-      }
     };
 
-    // 3. Initialize the listener for incoming packets
+    // 3. Setup listener for incoming packets
     const initializePacketListener = () => {
-      // Remove any existing handler to avoid duplication
-      hubConnection.off("ReceivePackets");
-
-      hubConnection.on("ReceivePackets", (newPackets) => {
-        console.log("Packets received:", newPackets);
-        if (isMounted) {
-          // Append the new packets to the old array
-          setPackets(oldPackets => [...oldPackets, ...newPackets]);
-          console.log(packetsArr)
-        }
-      });
+        packetHubConnection.off("ReceivePackets"); // Ensure no duplicate listeners
+        packetHubConnection.on("ReceivePackets", (newPackets) => {
+            console.log("Packets received:", newPackets);
+            if (isMounted) {
+                setPackets((oldPackets) => [...oldPackets, ...newPackets]);
+            }
+        });
     };
 
-    // Validate the token once
+    // Validate token once
     validateToken();
 
-    // If SignalR is already connected, set up the listener
-    if (hubConnection.state === "Connected") {
-      console.log("SignalR already connected. Initializing listener...");
-      initializePacketListener();
+    // Ensure SignalR is connected before setting up listeners
+    if (packetHubConnection.state === "Connected") {
+        console.log("SignalR already connected. Initializing listener...");
+        initializePacketListener();
     } else {
-      console.error("SignalR connection not established!");
+        console.error("SignalR connection not established!");
     }
 
-    // Decide whether to immediately fetch once or set interval
     let intervalId;
-    if (isFirstCapture) {
-      fetchPackets();       // Fetch once immediately
-      setIsFirstCapture(false);
-    } else {
-      intervalId = setInterval(fetchPackets, 50);
+
+    if (isFirstCapture && isMounted) {
+        fetchPackets(); // Fetch once immediately
+        setIsFirstCapture(false);
+    } else if (isMounted) {
+        intervalId = setInterval(fetchPackets, 13000);
     }
 
-    // Clean up when component unmounts
     return () => {
-      isMounted = false;
-      clearInterval(intervalId);
-      hubConnection.off("ReceivePackets");
-      console.log("Home component unmounted and listener removed");
+        setIsMounted(false);
+        if (intervalId) {
+            clearInterval(intervalId);
+        }
+        packetHubConnection.off("ReceivePackets"); // Remove listener on unmount
+        console.log("Home component unmounted, stopped fetching.");
     };
-
-    // Dependencies:
-  }, [navigate, isFirstCapture,packetsArr]);
+}, [navigate, isFirstCapture, isMounted]); // Removed `packetsArr` from dependencies
 
   // 4. Render
   return (
