@@ -66,6 +66,7 @@ function Home(props) {
             console.log("Packets received:", newPackets);
             if (isMounted) {
                 setPackets((oldPackets) => [...oldPackets, ...newPackets]);
+                localStorage.setItem('packets', JSON.parse(packetsArr));
             }
         });
     };
@@ -87,7 +88,7 @@ function Home(props) {
         fetchPackets(); // Fetch once immediately
         setIsFirstCapture(false);
     } else if (isMounted) {
-        intervalId = setInterval(fetchPackets, 13000);
+        intervalId = setInterval(fetchPackets, 60000);
     }
 
     return () => {

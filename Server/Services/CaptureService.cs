@@ -37,17 +37,18 @@ public class Capturer
         // 🟢 Use LINQ to select the first matching device
         var targetMacs = new HashSet<string>
         {
-            "80-AF-CA-22-11-A1",
-            "EC-2E-98-07-2E-01"
+            "80AFCA2211A1",
+            "EC2E98072E01"
         };
 
         ILiveDevice? device = devices.FirstOrDefault(d =>
             d != null && !string.IsNullOrEmpty(d.MacAddress?.ToString()) &&
             targetMacs.Contains(d.MacAddress.ToString().ToUpper()));
-
+        System.Console.WriteLine($"{device?.MacAddress?.ToString()}");
         // If no matching device, fall back to the first device
         System.Console.WriteLine("🟢 Using first device");
         device ??= devices.FirstOrDefault();
+        System.Console.WriteLine($"{device?.MacAddress?.ToString()}");
 
         if (device == null)
         {
@@ -62,7 +63,7 @@ public class Capturer
             device.Open(DeviceModes.Promiscuous, 1000);
             Console.WriteLine("🟢 Starting capture...");
 
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 600; i++)
             {
                 GetPacketStatus status = device.GetNextPacket(out PacketCapture packetCapture);
                 if (status != GetPacketStatus.PacketRead)
