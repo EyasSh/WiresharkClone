@@ -66,7 +66,7 @@ function Home(props) {
             console.log("Packets received:", newPackets);
             if (isMounted) {
                 setPackets((oldPackets) => [...oldPackets, ...newPackets]);
-                localStorage.setItem('packets', JSON.parse(packetsArr));
+                localStorage.setItem('packets', JSON.stringify(packetsArr));
             }
         });
     };

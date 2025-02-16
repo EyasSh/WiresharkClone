@@ -30,7 +30,7 @@ function Login() {
     
             if (response.status === 200) {
                 localStorage.setItem("X-Auth-Token", response.headers["x-auth-token"]);
-                localStorage.setItem("user", JSON.stringify(response.data));
+                localStorage.setItem("user", JSON.stringify(response.data.user));
                 navigate('/home');
             }
         } catch (error) {

@@ -13,6 +13,7 @@ using RestSharp;
 using System.Net;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 namespace Server.Controllers
 {
@@ -473,6 +474,28 @@ namespace Server.Controllers
                 return StatusCode(500, new { message = $"An error occurred: {ex.Message}" });
             }
         }
-
+        [Authorize]
+        [HttpPost("usage")]
+        public async Task<IActionResult> Usage([FromBody] PerformanceRequest request)
+        {
+           
+            await _emailService.SendEmailAsync(request.Email, $"{request.Name}, Usage Report",
+           $@"
+                <html>
+                <body>
+                Dear {request.Name},
+                <p>This is a Performance Report for {DateOnly.FromDateTime(DateTime.Now)}.</p>
+                <p><strong>CPU Usage: {request.CpuUsage}</strong></p>
+                <p><strong>RAM Usage: {request.RamUsage}</strong></p>
+                <p><strong>DISK Usage: {request.DiskUsage}</strong></p>
+                <p>We usually send these requests when usage is above 80%. </p>
+                <p>Thank you for using our service.</p>
+                <p>Best regards,</p>
+                <p>The Wire Tracer Team</p>
+                </body>
+                </html>
+            ");
+            return Ok();
+        }
     }
 }

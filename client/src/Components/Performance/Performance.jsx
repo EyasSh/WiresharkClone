@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import './Performance.css'; // Add consistent styles for performance page
 import ResourceMeter from '../ResourceMeter/ResourceMeter';
+import axios from 'axios';
 
 const platformObj = {
     RAM: "Windows Only!",
@@ -26,6 +27,10 @@ function Performance({ hubConnection }) {
         ramUsage: 0,
         diskUsage: 0
     });
+    const user = JSON.parse(localStorage.getItem('user'));
+    console.log(user);
+    const name = user?.name.split(' ')[0] || 'Guest';
+    const email = user?.email;
 
     useEffect(() => {
         let isMounted = true;
@@ -44,17 +49,39 @@ function Performance({ hubConnection }) {
             }
         };
     
-        const initializeListener = () => {
+        const initializeListener = async() => {
             hubConnection.off("ReceiveMetrics"); // Remove old listener
             console.log("Registering ReceiveMetrics listener...");
-            hubConnection.on("ReceiveMetrics", (cpuUsage, ramUsage, diskUsage) => {
+            hubConnection.on("ReceiveMetrics",  async(cpuUsage, ramUsage, diskUsage) => {
                 console.log("Metrics received:", { cpuUsage, ramUsage, diskUsage });
                 if (isMounted) {
                     setMetrics({ cpuUsage, ramUsage, diskUsage });
+                    if(cpuUsage>= 80 || ramUsage >= 80 || diskUsage >= 80) {
+                       
+                        
+                        const res =  await axios.post(
+                          "http://localhost:5256/api/user/usage",
+                          {
+                            CpuUsage: cpuUsage,
+                            RamUsage: ramUsage,
+                            DiskUsage: diskUsage,
+                            Name: name,
+                            Email: email
+                          },
+                          {
+                            headers: {
+                              'X-Auth-Token': localStorage.getItem('X-Auth-Token'),
+                              'Content-Type': 'application/json'
+                            }
+                          }
+                        );
+                        
+                          
+                    }
                 }
             });
         };
-    
+   
         if (hubConnection.state === "Connected") {
             console.log("SignalR already connected. Initializing listener...");
             initializeListener();
