@@ -28,7 +28,6 @@ function Performance({ hubConnection }) {
         diskUsage: 0
     });
     const user = JSON.parse(localStorage.getItem('user'));
-    console.log(user);
     const name = user?.name.split(' ')[0] || 'Guest';
     const email = user?.email;
 
@@ -53,7 +52,7 @@ function Performance({ hubConnection }) {
             hubConnection.off("ReceiveMetrics"); // Remove old listener
             console.log("Registering ReceiveMetrics listener...");
             hubConnection.on("ReceiveMetrics",  async(cpuUsage, ramUsage, diskUsage) => {
-                console.log("Metrics received:", { cpuUsage, ramUsage, diskUsage });
+                console.log("Metrics received:");
                 if (isMounted) {
                     setMetrics({ cpuUsage, ramUsage, diskUsage });
                     if(cpuUsage>= 80 || ramUsage >= 80 || diskUsage >= 80) {

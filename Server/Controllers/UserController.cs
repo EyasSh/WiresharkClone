@@ -478,8 +478,11 @@ namespace Server.Controllers
         [HttpPost("usage")]
         public async Task<IActionResult> Usage([FromBody] PerformanceRequest request)
         {
-           
-            await _emailService.SendEmailAsync(request.Email, $"{request.Name}, Usage Report",
+            if (request.CpuUsage < 80 && request.RamUsage < 80 && request.DiskUsage < 80)
+            {
+                return Ok(new { message = "No excessive usage detected." });
+            }
+            await _emailService.SendEmailAsync(request.Email, $"{request.Name}, Usage Report for {DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")}",
            $@"
                 <html>
                 <body>
