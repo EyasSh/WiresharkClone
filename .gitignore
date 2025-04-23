@@ -80,3 +80,4 @@ Server/[Oo]bj/
 # Ensure bin/ and obj/ inside Server are ignored
 Server/[Bb]in/
 Server/[Oo]bj/
+Server/[Oo]utput
