@@ -171,6 +171,7 @@ namespace Server.Controllers
                     date = request.date
                 };
                 _users.InsertOne(user);
+                PdfGenerator.GenerateSimplePdf();
                 await _emailService.SendEmailAsync(user.Email, "Welcome to The Service"
                 ,
                 $@"<html><body>Hello {user.Name}, <p>Welcome to Wire Tracer. 

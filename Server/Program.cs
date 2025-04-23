@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Server.Controllers;
 using MongoDB.Driver;
+using QuestPDF.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,7 +28,7 @@ builder.Services.AddSingleton<IMongoClient>(sp =>
     return new MongoClient(connectionString);
 });
 builder.Services.AddScoped<MongoDBWrapper>();
-
+QuestPDF.Settings.License = LicenseType.Community;
 // User Controller Injection
 builder.Services.AddScoped<UserController>();
 //Email Service Injection
