@@ -1,5 +1,7 @@
 using Mailjet.Client;
 using Mailjet.Client.Resources;
+using Mailjet.Client.TransactionalEmails;
+using Mailjet.Client.TransactionalEmails.Response;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
@@ -24,46 +26,64 @@ namespace Server.Services
             _apiSecret = configuration["Mailjet:ApiSecret"];
         }
 
-/// <summary>
-/// Sends an email asynchronously using the Mailjet client.
-/// </summary>
-/// <param name="to">The recipient's email address.</param>
-/// <param name="subject">The subject of the email.</param>
-/// <param name="body">The HTML content of the email body.</param>
-/// <exception cref="Exception">Thrown when the email fails to send.</exception>
-/// <remarks>
-/// This method constructs a MailjetRequest with the provided email details
-/// and sends it using the MailjetClient. If the response indicates failure,
-/// an exception is thrown with the error message from Mailjet.
-/// </remarks>
-
-        public async Task SendEmailAsync(string to, string subject, string body)
+        /// <summary>
+        /// Sends an email asynchronously using the Mailjet client.
+        /// </summary>
+        /// <param name="to">The recipient's email address.</param>
+        /// <param name="subject">The subject of the email.</param>
+        /// <param name="body">The HTML content of the email body.</param>
+        /// <exception cref="Exception">Thrown when the email fails to send.</exception>
+        /// <remarks>
+        /// This method constructs a MailjetRequest with the provided email details
+        /// and sends it using the MailjetClient. If the response indicates failure,
+        /// an exception is thrown with the error message from Mailjet.
+        /// </remarks>
+        /// <summary>
+        /// Sends an email with a single PDF attachment.
+        /// </summary>
+        /// <param name="to">Recipient email address.</param>
+        /// <param name="subject">Email subject.</param>
+        /// <param name="body">HTML body content.</param>
+        /// <param name="pdfBytes">PDF file as a byte array.</param>
+        /// <param name="fileName">Filename to present in the attachment.</param>
+        public async Task SendEmailWithAttachmentAsync(
+            string to,
+            string subject,
+            string body,
+            byte[] pdfBytes,
+            string fileName = "document.pdf")
         {
-            MailjetClient client = new MailjetClient(_apiKey, _apiSecret);
+            // Instantiate the Mailjet client
+            var client = new MailjetClient(_apiKey, _apiSecret);
 
-            MailjetRequest request = new MailjetRequest
+            // Build the email
+            var email = new TransactionalEmailBuilder()
+                .WithFrom(new SendContact("noreply.recoursia@gmail.com", "ReCoursia Team"))
+                .WithSubject(subject)
+                .WithHtmlPart(body)
+                .WithTo(new SendContact(to))
+                .WithAttachment(
+                    new Attachment(
+                        fileName,
+                        "application/pdf",
+                        Convert.ToBase64String(pdfBytes)
+                    )
+                )
+                .Build();
+
+            // Send it
+            TransactionalEmailResponse response =
+                await client.SendTransactionalEmailAsync(email);
+
+            // Check result
+            var message = response.Messages.FirstOrDefault();
+            if (message == null || !string.Equals(message.Status, "success", StringComparison.OrdinalIgnoreCase))
             {
-                Resource = Send.Resource
-            }
-            .Property(Send.FromEmail, "noreply.recoursia@gmail.com")
-            .Property(Send.FromName, "ReCoursia Team")
-            .Property(Send.Subject, subject)
-            .Property(Send.HtmlPart, body)
-            .Property(Send.Recipients, new JArray
-                {
-                new JObject
-                {
-                    {"Email", to}
-                }
-                });
-
-            MailjetResponse response = await client.PostAsync(request);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new Exception($"Failed to send email: {response.GetErrorMessage()}");
+                var err = message?.Errors?.FirstOrDefault();
+                throw new Exception($"Mailjet send failed: {err?.ErrorCode} – {err?.ErrorMessage}");
             }
         }
+
     }
 
 }

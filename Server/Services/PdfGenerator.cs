@@ -4,14 +4,13 @@ using QuestPDF.Infrastructure;
 namespace Server.Services;
 public class PdfGenerator
 {
-    public static void GenerateSimplePdf()
+    /// <summary>
+    /// Generates a simple PDF and returns it as a byte array.
+    /// </summary>
+    public static byte[] GenerateSimplePdfBytes()
     {
-        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "output", "hello.pdf");
-
-        // Ensure directory exists
-        Directory.CreateDirectory(Path.GetDirectoryName(filePath)!);
-
-        Document.Create(container =>
+        // Create the document
+        var document = Document.Create(container =>
         {
             container.Page(page =>
             {
@@ -19,11 +18,15 @@ public class PdfGenerator
                 page.Margin(2, Unit.Centimetre);
                 page.Content().Column(col =>
                 {
-                    col.Item().Text("Hello from QuestPDF!").FontSize(20);
-                    col.Item().Text("This PDF was generated and saved locally. 🎉");
+                    col.Item().Text("Hello from QuestPDF! 🎉").FontSize(20);
+                    col.Item().Text("This PDF was generated in-memory for emailing.");
                 });
             });
-        })
-        .GeneratePdf(filePath);
+        });
+
+        // Return the PDF as a byte array
+        // QuestPDF supports GeneratePdf() overload that returns byte[] directly
+        var pdfBytes = document.GeneratePdf();
+        return pdfBytes;  // :contentReference[oaicite:0]{index=0}
     }
 }
