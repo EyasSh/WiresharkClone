@@ -14,8 +14,13 @@ public class PdfTemplateService
     /// source port, destination IP, destination port, and protocol. The HTML is styled for PDF output
     /// with a fixed header and footer, alternating row colors, and hover effects.
     /// </remarks>
-    public static string PacketReportTemplate(IEnumerable<PacketInfo> packets)
+    public static string PacketReportTemplate(IEnumerable<PacketInfo> packets, User? user = null)
     {
+        if (user == null || (packets == null || !packets.Any()))
+        {
+            throw new ArgumentException("User or packets cannot be null or empty.");
+
+        }
         var html = new StringBuilder();
 
         html.Append(@"
@@ -110,13 +115,19 @@ public class PdfTemplateService
         }
 
         html.Append(@"
-        </tbody>
-    </table>
-    <footer>
-        Report generated on " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + @"
-    </footer>
-</body>
-</html>");
+                </tbody>
+            </table>
+            <footer>
+                Report generated on " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + @"
+                <p>
+                    For User: " + user.Name + @"
+                    <br />
+                    Id: " + user.Id + @"
+
+                </p>
+            </footer>
+        </body>
+    </html>");
 
         return html.ToString();
     }
