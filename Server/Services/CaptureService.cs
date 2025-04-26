@@ -139,6 +139,7 @@ public class Capturer
             SourceIP = ipPacket.SourceAddress.ToString(),
             DestinationIP = ipPacket.DestinationAddress.ToString(),
             Timestamp = DateTime.Now,  // or from the RawCapture if you need original timestamps
+            packet = parsedPacket
         };
 
         // Extract TCP
