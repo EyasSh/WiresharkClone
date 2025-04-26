@@ -25,7 +25,33 @@ namespace Server.Services
             _apiKey = configuration["Mailjet:ApiKey"];
             _apiSecret = configuration["Mailjet:ApiSecret"];
         }
+        public async Task SendEmailAsync(string to, string subject, string body)
+        {
+            // Instantiate the Mailjet client
+            var client = new MailjetClient(_apiKey, _apiSecret);
 
+            // Build the email
+            var email = new TransactionalEmailBuilder()
+                .WithFrom(new SendContact("noreply.recoursia@gmail.com", "ReCoursia Team"))
+                .WithSubject(subject)
+                .WithHtmlPart(body)
+                .WithTo(new SendContact(to))
+                .Build();
+
+            // Send the email
+            var response = await client.SendTransactionalEmailAsync(email);
+
+            // Check the response
+            // Check result
+            var message = response.Messages.FirstOrDefault();
+            if (message == null || !string.Equals(message.Status, "success", StringComparison.OrdinalIgnoreCase))
+            {
+                var err = message?.Errors?.FirstOrDefault();
+                throw new Exception($"Mailjet send failed: {err?.ErrorCode} – {err?.ErrorMessage}");
+            }
+        }
+
+        // Send it
         /// <summary>
         /// Sends an email asynchronously using the Mailjet client.
         /// </summary>
