@@ -171,14 +171,14 @@ namespace Server.Controllers
                     date = request.date
                 };
                 _users.InsertOne(user);
-               var bytes = PdfGenerator.GenerateSimplePdfBytes();
+                var bytes = PdfGenerator.GenerateSimplePdfBytes();
                 await _emailService.SendEmailWithAttachmentAsync(user.Email, "Welcome to The Service"
                 ,
                 $@"<html><body>Hello {user.Name}, <p>Welcome to Wire Tracer. 
                 We're glad you're here. We're here to make packet analysis easier for you.</p>
                 <br /> 
                 <p>We hope you have a nice day!</p>
-                The ReCoursia Team</body></html>", bytes,Guid.NewGuid().ToString() + ".pdf");
+                The ReCoursia Team</body></html>", bytes, Guid.NewGuid().ToString() + ".pdf");
 
                 return Ok("Sign-up successful.");
             }
@@ -483,23 +483,21 @@ namespace Server.Controllers
             {
                 return Ok(new { message = "No excessive usage detected." });
             }
-            var pdf = PdfGenerator.GenerateSimplePdfBytes();
+            var user = _users.FindSync(user => user.Email == request.Email).FirstOrDefault() ?? null;
+            var pdf = PdfGenerator.GeneratePerformancePdf((request.CpuUsage, request.RamUsage, request.DiskUsage), user);
             await _emailService.SendEmailWithAttachmentAsync(request.Email, $"{request.Name}, Usage Report for {DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")}",
            $@"
                 <html>
                 <body>
                 Dear {request.Name},
                 <p>This is a Performance Report for {DateOnly.FromDateTime(DateTime.Now)}.</p>
-                <p><strong>CPU Usage: {request.CpuUsage}</strong></p>
-                <p><strong>RAM Usage: {request.RamUsage}</strong></p>
-                <p><strong>DISK Usage: {request.DiskUsage}</strong></p>
                 <p>We usually send these requests when usage is above 80%. </p>
                 <p>Thank you for using our service.</p>
                 <p>Best regards,</p>
                 <p>The Wire Tracer Team</p>
                 </body>
                 </html>
-            ", pdf, Guid.NewGuid().ToString() + ".pdf");
+            ", pdf, user?.Id + "" + DateOnly.FromDateTime(DateTime.Now) + "" + ".pdf");
             return Ok();
         }
     }
