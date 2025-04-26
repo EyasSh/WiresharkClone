@@ -167,8 +167,33 @@ public class Capturer
             packets.Enqueue(info);
             return;
         }
-
-        // ... etc. for ICMP, ARP, etc. ...
+        var icmp = parsedPacket.Extract<IcmpV4Packet>();
+        if (icmp != null)
+        {
+            info.Protocol = "ICMP";
+            Console.WriteLine($"ICMP: {info.SourceIP} -> {info.DestinationIP}");
+            // Possibly store or enqueue info
+            packets.Enqueue(info);
+            return;
+        }
+        var arp = parsedPacket.Extract<ArpPacket>();
+        if (arp != null)
+        {
+            info.Protocol = "ARP";
+            Console.WriteLine($"ARP: {info.SourceIP} -> {info.DestinationIP}");
+            // Possibly store or enqueue info
+            packets.Enqueue(info);
+            return;
+        }
+        var icmp6 = parsedPacket.Extract<IcmpV6Packet>();
+        if (icmp6 != null)
+        {
+            info.Protocol = "ICMPv6";
+            Console.WriteLine($"ICMPv6: {info.SourceIP} -> {info.DestinationIP}");
+            // Possibly store or enqueue info
+            packets.Enqueue(info);
+            return;
+        }
 
         // If none of the above matched, handle other protocols
         info.Protocol = "Other";
