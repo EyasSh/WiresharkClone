@@ -37,7 +37,8 @@ public class PdfGenerator
                     .Text("Performance Report")
                     .FontSize(22)
                     .FontColor(Colors.White)
-                    .SemiBold();
+                    .SemiBold()
+                    .FontFamily("Segoe UI");
 
                 // 3. Single Content block with Column
                 page.Content()
@@ -55,8 +56,8 @@ public class PdfGenerator
 
                             table.Header(header =>
                             {
-                                header.Cell().Background(Colors.Grey.Lighten2).Padding(5).Text("Metric").SemiBold();
-                                header.Cell().Background(Colors.Grey.Lighten2).Padding(5).Text("Value").SemiBold();
+                                header.Cell().Background(Colors.Grey.Lighten2).Padding(5).Text("Metric").SemiBold().FontFamily("Tahoma");
+                                header.Cell().Background(Colors.Grey.Lighten2).Padding(5).Text("Value").SemiBold().FontFamily("Tahoma");
                             });
 
                             void AddRow(string name, string value)
@@ -69,9 +70,9 @@ public class PdfGenerator
                                      .Text(value);
                             }
 
-                            AddRow("CPU Usage", $"{metrics.cpuUsage / 100:P0}");
-                            AddRow("RAM Usage", $"{metrics.ramUsage / 100:P0}");
-                            AddRow("Disk Usage", $"{metrics.diskUsage / 100:P0}");
+                            AddRow("CPU Usage", $"{metrics.cpuUsage / 100:P1}");
+                            AddRow("RAM Usage", $"{metrics.ramUsage / 100:P1}");
+                            AddRow("Disk Usage", $"{metrics.diskUsage / 100:P1}");
                         });
 
                         // 3.2 Conditional user info
@@ -80,6 +81,7 @@ public class PdfGenerator
                             col.Item()
                                 .PaddingTop(15)
                                 .Text($"User: {user.Name}  |  Email: {user.Email}")
+                                .FontFamily("Tahoma")
                                 .FontSize(12)
                                 .FontColor(Colors.Grey.Darken1);
                         }
@@ -90,8 +92,9 @@ public class PdfGenerator
                     .AlignCenter()
                     .Padding(5)
                     .Text($"Generated on {DateTime.Now:yyyy-MM-dd HH:mm:ss}")
+                    .FontFamily("Verdana")
                     .FontSize(10)
-                    .FontColor(Colors.Grey.Lighten1);
+                    .FontColor(Colors.Grey.Darken1);
             });
         });
 

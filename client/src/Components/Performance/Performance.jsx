@@ -96,7 +96,7 @@ function Performance({ hubConnection }) {
             hubConnection.off("ReceiveMetrics"); // Remove listener on unmount
             console.log("Performance component unmounted and listener removed");
         };
-    }, [hubConnection]);
+    }, [hubConnection, name, email]);
     
 
     return (
