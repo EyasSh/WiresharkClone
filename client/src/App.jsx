@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */ 
 // App.jsx
 // App.jsx
@@ -11,7 +10,7 @@ import Login from './Components/Login/Login';
 import Signup from './Components/Signup/Signup';
 import Home from './Components/Home/Home';
 import Nav from './Components/Nav/Nav';
-import Profile from './Components/Profile/Profile';
+import Packets from './Components/Packets/Packets';
 import hubConnection from './Components/Sockets/SignalR'; // Import the SignalR connection
 import packetHubConnection from './Components/Sockets/packetHub';
 import Notifications from './Components/Notifications/Notifications';
@@ -117,7 +116,7 @@ export function Main({ hubConnection, sid, packetConnection, psid }) {
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/home" element={<Home hubConnection={packetConnection} sid={psid} />} />
                 <Route path="/performance" element={<Performance hubConnection={hubConnection} sid={sid} />} />
-                <Route path="/profile" element={<Profile hubConnection={hubConnection} sid={sid} />} />
+                <Route path="/packets" element={<Packets hubConnection={hubConnection} sid={sid} />} />
                 <Route path='/security' element={<VirusChecker />} />
             </Routes>
         </>

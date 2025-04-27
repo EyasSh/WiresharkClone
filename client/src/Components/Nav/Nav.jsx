@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
-import {FaLock, FaUser, FaHome, FaCog } from 'react-icons/fa';
+import {FaLock, FaHome, FaCog, FaEnvelope } from 'react-icons/fa';
 import { FiLogOut } from 'react-icons/fi'; // Import the logout icon
 import {IoAnalytics, IoAnalyticsSharp} from 'react-icons/io5';
 import './Nav.css';
@@ -45,8 +45,8 @@ function Nav({ hubConnection, sid }) {
         }
         else if (item === 'settings') {
             setIsModalOpen(true); // Open the modal when settings is clicked
-        } else if (item === 'profile') {
-            navigate('/profile', { state: { sid } }); // Pass SID only
+        } else if (item === 'packets') {
+            navigate('/packets', { state: { sid } }); // Pass SID only
         } else if (item === 'home') {
             navigate('/home', { state: { sid } }); // Pass SID only
         }
@@ -75,9 +75,9 @@ function Nav({ hubConnection, sid }) {
                 </div>
                 <div
                     className={`NavItem ${activeItem === 'profile' ? 'active' : ''}`}
-                    onClick={() => handleClick('profile')}
+                    onClick={() => handleClick('packets')}
                 >
-                    <FaUser size={24} title="Profile" />
+                    <FaEnvelope size={24} title="Packet History" />
                 </div>
                 <div
                     className={`NavItem ${activeItem === 'settings' ? 'active' : ''}`}
