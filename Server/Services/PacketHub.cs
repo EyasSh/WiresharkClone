@@ -40,6 +40,11 @@ public class PacketHub : Hub<IPacketContext>
     public void GetPackets()
     {
         Queue<PacketInfo> packets = Capturer.StartCapture();
+        Analyzer.DetectSynFlood(packets, 150, Analyzer.defaultQuarterWindow);
+        Analyzer.DetectUdpFlood(packets, 150, Analyzer.defaultQuarterWindow);
+        Analyzer.DetectPortScan(packets, 5, Analyzer.defaultQuarterWindow);
+        Analyzer.DetectPingOfDeathV4(packets);
+        Analyzer.DetectPingOfDeathV6(packets);
         Clients.Caller.ReceivePackets(packets.ToArray());
     }
     public override async Task OnDisconnectedAsync(Exception? exception)

@@ -1,11 +1,27 @@
 using Server.Models;
 using PacketDotNet;
+using System.Reflection.Metadata;
+using Microsoft.VisualBasic;
 
 
 namespace Server.Services;
+/// <summary>
+/// This class contains methods to analyze network packets for potential attacks.
+/// It includes methods to detect SYN floods, UDP floods, TCP port scans, and Ping of Death attacks.
+/// The methods are static and can be called from anywhere in the application.
+/// The methods take an enumerable of <see cref="PacketInfo"/> objects as input and analyze them based on various criteria.
+/// </summary>
 public static class Analyzer
 {
-
+    public static TimeSpan defaultQuarterWindow = TimeSpan.FromSeconds(15);
+    public static TimeSpan defaultHalfWindow = TimeSpan.FromSeconds(30);
+    public static TimeSpan defaultWindow = TimeSpan.FromSeconds(60);
+    public static int udpTcpSynThreshold = 600;
+    public static int udpHalfThreshold = 300;
+    public static int udpQuarterThreshold = 150;
+    public static int portScanThreshold = 20;
+    public static int synHalfThreshold = 10;
+    public static int synQuarterThreshold = 5;
     /// <summary>
     /// Detect SYN flood: count TCP SYN packets per source IP in the time window
     /// </summary>
@@ -141,6 +157,12 @@ public static class Analyzer
             }
         }
     }
+    /// <summary>
+    /// Detects Ping of Death attacks by analyzing packet sizes in an enumerable of <see cref="PacketInfo"/> objects.
+    /// A Ping of Death is suspected if an ICMP echo-request packet's payload length exceeds the maximum allowable IP size of 65,535 bytes.
+    /// If a packet is identified as a Ping of Death, it is marked as suspicious and malicious.
+    /// </summary>
+    /// <param name="packets">Enumerable of <see cref="PacketInfo"/> objects representing the captured packets to be analyzed.</param>
     public static void DetectPingOfDeathV6(
         IEnumerable<PacketInfo> packets)
     {
