@@ -114,7 +114,22 @@ function Home(props) {
           Packets Colored <strong style={{color: 'red'}}>Red</strong> are potentially malicious
         </p>
       </div>
-
+        <div className='Items'>
+            <span className='Item'>Source IP</span>
+            <span className='Item'>Source Port</span>
+            <span className='Item'>Packet Type</span>
+            <span className='Item'>Destination IP</span>
+            <span className='Item'>Destination Port</span>
+        </div>
+        <Packet
+            packetType="Packet Type"
+            sourceIP="Source IP"
+            destinationIP="Destination IP"
+            sourcePort="Source Port"
+            destinationPort="Destination Port"
+            protocol="Protocol"
+            packetDescription="Packet Description"
+        ></Packet>
       {/* Map through the packet array and display each packet */}
       {packetsArr.map((packet, index) => (
         <Packet

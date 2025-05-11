@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
@@ -11,7 +12,7 @@ public interface IPacketContext
 }
 public class PacketHub : Hub<IPacketContext>
 {
-    private static readonly Dictionary<string, string> _connections = new();
+    private static readonly ConcurrentDictionary<string, string> _connections = new();
     /// <summary>
     /// This is the OnConnectedAsync method that will be called when the client establishes a connection to the server.
     /// It will add the connection to the list of connections and send a message to the client with the connection ID.
