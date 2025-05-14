@@ -6,6 +6,7 @@ import axios from 'axios';
 import packetHubConnection from '../Sockets/packetHub';
 import Packet from '../PacketBox/Packet';
 import './Home.css';
+import DetailBox from '../DetailBox/DetailBox';
 
 function Home(props) {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ function Home(props) {
   const [packetsArr, setPackets] = useState([]);
   const [isFirstCapture, setIsFirstCapture] = useState(true);
   const [isMounted, setIsMounted] = useState(false);
+  const [pressedPacket, setPressedPacket] = useState(-1);
 
   useEffect(() => {
     setIsMounted(true);
@@ -101,7 +103,6 @@ function Home(props) {
         console.log("Home component unmounted, stopped fetching.");
     };
 }, [navigate, isFirstCapture, isMounted]); // Removed `packetsArr` from dependencies
-
   // 4. Render
   return (
     <div className='Home-Container'>
@@ -137,8 +138,20 @@ function Home(props) {
           // If you want to display the timestamp, you can pass it
           // to 'packetDescription' or add a new prop in Packet.
           packetDescription={packet.timestamp}
+            clickHandler={() => {
+                setPressedPacket(index);
+                console.log(`Packet ${index} clicked`);
+                // You can add more logic here if needed
+            }}
         />
       ))}
+        {pressedPacket !== -1 && (
+        <DetailBox
+            key={pressedPacket}                  // <–– this forces a full remount on each packet
+            packet={packetsArr !==undefined || packetsArr !==null ? packetsArr[pressedPacket] : null}
+            onClose={() => setPressedPacket(-1)}
+        />
+    )}
     </div>
   );
 }

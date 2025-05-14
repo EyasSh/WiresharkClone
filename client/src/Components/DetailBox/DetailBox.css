@@ -1,0 +1,24 @@
+[data-theme='dark'].detail-box{
+    padding: 20px;
+    background-color: #181818;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+[data-theme='dark'].detail-box-content{
+    display: flex;
+    color: white;
+    flex-direction: column;
+    gap: 10px;
+}
+[data-theme="light"].detail-box{
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+[data-theme="light"].detail-box-content{
+    display: flex;
+    color: black;
+    flex-direction: column;
+    gap: 10px;
+}

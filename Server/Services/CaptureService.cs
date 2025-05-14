@@ -92,7 +92,7 @@ public class Capturer
                     Console.WriteLine($"❌ Error processing packet: {ex.Message}");
                 }
             }
-           
+
         }
         catch (Exception ex)
         {
@@ -140,7 +140,9 @@ public class Capturer
             SourceIP = ipPacket.SourceAddress.ToString(),
             DestinationIP = ipPacket.DestinationAddress.ToString(),
             Timestamp = DateTime.Now,  // or from the RawCapture if you need original timestamps
-            packet = parsedPacket
+            packet = parsedPacket,
+            HeaderLength = parsedPacket.HeaderData.Length,
+            TotalLength = parsedPacket.TotalPacketLength
         };
 
         // Extract TCP

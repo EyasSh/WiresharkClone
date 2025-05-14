@@ -10,7 +10,8 @@ function Packet({
   sourcePort,
   destinationPort,
   protocol,
-  packetDescription
+  packetDescription,
+  clickHandler
 }) {
 
   const [Type, setPacketType] = useState(packetType);
@@ -20,15 +21,19 @@ function Packet({
   const [DestinationPort, setDestinationPort] = useState(destinationPort);
   const [Protocol, setProtocol] = useState(protocol);
   const [PacketDescription, setPacketDescription] = useState(packetDescription);
-
+  const handleClick = () => {
+    if (clickHandler) {
+      clickHandler();
+    }
+  }
 
   return (
-    <div className={`Packet-Container`}>
-      <spam>{SourceIP}</spam>
-      <spam>{SourcePort}</spam>
-      <spam>{Type}</spam>
-      <spam>{DestinationIP}</spam>
-      <spam>{DestinationIP}</spam>
+    <div className={`Packet-Container`} onClick={handleClick}>
+      <span>{SourceIP}</span>
+      <span>{SourcePort}</span>
+      <span>{Type}</span>
+      <span>{DestinationIP}</span>
+      <span>{DestinationIP}</span>
     </div>
   );
 }
@@ -40,7 +45,8 @@ Packet.propTypes = {
   sourcePort: PropTypes.number,
   destinationPort: PropTypes.number,
   protocol: PropTypes.string,
-  packetDescription: PropTypes.string
+  packetDescription: PropTypes.string,
+  clickHandler: PropTypes.func
 };
 
 export default Packet;

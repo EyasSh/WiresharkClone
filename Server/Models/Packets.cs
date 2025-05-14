@@ -18,6 +18,8 @@ namespace Server.Models
         public DateTime Timestamp { get; set; }
         public bool isSuspicious { get; set; } = false;
         public bool isMalicious { get; set; } = false;
+        public int HeaderLength { get; set; }
+        public int TotalLength { get; set; }
     }
 
 }
