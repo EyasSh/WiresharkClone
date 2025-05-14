@@ -121,15 +121,6 @@ function Home(props) {
             <span className='Item'>Destination IP</span>
             <span className='Item'>Destination Port</span>
         </div>
-        <Packet
-            packetType="Packet Type"
-            sourceIP="Source IP"
-            destinationIP="Destination IP"
-            sourcePort="Source Port"
-            destinationPort="Destination Port"
-            protocol="Protocol"
-            packetDescription="Packet Description"
-        ></Packet>
       {/* Map through the packet array and display each packet */}
       {packetsArr.map((packet, index) => (
         <Packet

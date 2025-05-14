@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using PacketDotNet;
@@ -6,6 +7,8 @@ namespace Server.Models
     public class PacketInfo
     {
         public IPVersion IPVersion { get; set; }
+        [JsonIgnore]
+        [BsonIgnore]
         public Packet? packet { get; set; }
         public string? SourceIP { get; set; }
         public string? DestinationIP { get; set; }
