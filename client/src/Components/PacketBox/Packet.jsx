@@ -4,36 +4,29 @@ import PropTypes from 'prop-types';
 import './Packet.css';
 
 function Packet({
-  packetType,
-  sourceIP,
-  destinationIP,
-  sourcePort,
-  destinationPort,
-  protocol,
-  packetDescription,
-  clickHandler
+  ...props
 }) {
 
-  const [Type, setPacketType] = useState(packetType);
-  const [SourceIP, setSourceIP] = useState(sourceIP);
-  const [DestinationIP, setDestinationIP] = useState(destinationIP);
-  const [SourcePort, setSourcePort] = useState(sourcePort);
-  const [DestinationPort, setDestinationPort] = useState(destinationPort);
-  const [Protocol, setProtocol] = useState(protocol);
-  const [PacketDescription, setPacketDescription] = useState(packetDescription);
+  const [Type, setPacketType] = useState(props.packetType);
+  const [SourceIP, setSourceIP] = useState(props.sourceIP);
+  const [DestinationIP, setDestinationIP] = useState(props.destinationIP);
+  const [SourcePort, setSourcePort] = useState(props.sourcePort);
+  const [DestinationPort, setDestinationPort] = useState(props.destinationPort);
+  const [Protocol, setProtocol] = useState(props.protocol);
+  const [PacketDescription, setPacketDescription] = useState(props. packetDescription);
   const handleClick = () => {
-    if (clickHandler) {
-      clickHandler();
+    if (props.clickHandler && props.index>=0) {
+      props.clickHandler(props.index);
     }
   }
 
   return (
-    <div className={`Packet-Container`} onClick={handleClick}>
+    <div className={`Packet-Container`} onClick={()=>handleClick()}>
       <span>{SourceIP}</span>
       <span>{SourcePort}</span>
       <span>{Type}</span>
       <span>{DestinationIP}</span>
-      <span>{DestinationIP}</span>
+      <span>{DestinationPort}</span>
     </div>
   );
 }
@@ -46,7 +39,8 @@ Packet.propTypes = {
   destinationPort: PropTypes.number,
   protocol: PropTypes.string,
   packetDescription: PropTypes.string,
-  clickHandler: PropTypes.func
+  clickHandler: PropTypes.func,
+  index: PropTypes.number,
 };
 
 export default Packet;

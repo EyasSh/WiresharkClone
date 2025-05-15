@@ -1,24 +1,38 @@
-[data-theme='dark'].detail-box{
-    padding: 20px;
-    background-color: #181818;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+/* DetailBox.css */
+.detail-box {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9999;
+  background: #181818;
+  padding: 1rem;
+  /* anything else you need… */
 }
-[data-theme='dark'].detail-box-content{
-    display: flex;
-    color: white;
-    flex-direction: column;
-    gap: 10px;
+/* DetailBox.css */
+
+.detail-box-content {
+  max-height: 60vh;       /* allow room to scroll if content gets tall */
+  overflow-y: auto;
+  padding-right: 0.5rem;  /* space for a scrollbar */
 }
-[data-theme="light"].detail-box{
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+.detail-box-content p,
+.detail-box-content h3 {
+  margin: 0.5rem 0;
+  color: #fff;            /* white text against the dark background */
+  line-height: 1.4;
 }
-[data-theme="light"].detail-box-content{
-    display: flex;
-    color: black;
-    flex-direction: column;
-    gap: 10px;
+
+.detail-box-content strong {
+  display: inline-block;
+  width: 140px;           /* align all labels */
+  font-weight: 600;
+}
+
+.detail-box-content h3 {
+  margin-top: 1rem;
+  font-size: 1.2rem;
+  border-bottom: 1px solid #222;
+  padding-bottom: 0.25rem;
 }
