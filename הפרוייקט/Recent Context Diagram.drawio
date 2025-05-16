@@ -75,11 +75,12 @@
             <mxPoint x="16" y="-1" as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="lLTY7_Zr0CbymDJMCOrj-17" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.655;exitY=1.02;exitDx=0;exitDy=0;exitPerimeter=0;edgeStyle=orthogonalEdgeStyle;curved=1;" parent="1" source="lLTY7_Zr0CbymDJMCOrj-1" target="lLTY7_Zr0CbymDJMCOrj-2" edge="1">
+        <mxCell id="lLTY7_Zr0CbymDJMCOrj-17" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.642;exitY=0.99;exitDx=0;exitDy=0;exitPerimeter=0;edgeStyle=orthogonalEdgeStyle;curved=1;" parent="1" source="lLTY7_Zr0CbymDJMCOrj-1" target="lLTY7_Zr0CbymDJMCOrj-2" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="400" y="350" as="sourcePoint" />
             <mxPoint x="640" y="330" as="targetPoint" />
             <Array as="points">
+              <mxPoint x="384" y="319" />
               <mxPoint x="384" y="350" />
               <mxPoint x="641" y="350" />
             </Array>
