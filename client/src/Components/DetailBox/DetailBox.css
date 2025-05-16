@@ -3,14 +3,18 @@
   position: fixed;
   bottom: 0;
   left: 0;
-  width: 100%;
+  width: 99%;
   z-index: 9999;
   background: #181818;
   padding: 1rem;
   /* anything else you need… */
 }
 /* DetailBox.css */
-
+.detail-box span {
+  font-size: 1.5rem;
+  color: #fff;            /* white text against the dark background */
+  font-weight: 600;
+}
 .detail-box-content {
   max-height: 60vh;       /* allow room to scroll if content gets tall */
   overflow-y: auto;
