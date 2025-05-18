@@ -98,7 +98,7 @@ function VirusChecker(props) {
       const user = JSON.parse(localStorage.getItem('user'));
       const email = user.email;
       formData.append('email', email);
-      alert(email);
+      
 
       const res = await axios.post(
         'http://localhost:5256/api/user/file',

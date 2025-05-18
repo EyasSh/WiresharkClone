@@ -6,8 +6,9 @@ namespace Server.Services;
 
 public class PdfGenerator
 {
-    public static byte[] GenerateFilePdf(string fileName, int malicious, int undected)
+    public static byte[] GenerateFilePdf(string fileName, int malicious, int undetected)
     {
+        int sum = malicious + undetected;
         var document = Document.Create(container =>
         {
             container.Page(page =>
@@ -17,19 +18,22 @@ public class PdfGenerator
                 page.DefaultTextStyle(x => x.FontSize(14).FontFamily("Arial"));
 
                 // Wrap header text in a container and apply padding correctly
-                page.Header().Element(header =>
-                {
-                    header
-                        .PaddingBottom(20)
-                        .AlignCenter()
-                        .Text("Virus Scan Report")
-                        .FontSize(24)
-                        .Bold()
-                        .FontColor(Colors.Blue.Medium);
-                });
+                page.Header()
+                    .Height(50)
+                    .Background(Colors.Blue.Medium)
+                    .Padding(10)
+                    .AlignMiddle()
+                    .Text("Virus Scan Report")
+                    .FontSize(22)
+                    .FontColor(Colors.White)
+                    .SemiBold()
+                    .FontFamily("Segoe UI");
 
-                page.Content().Column(column =>
+
+
+                page.Content().PaddingVertical(15).Column(column =>
                 {
+
                     column.Spacing(15);
 
                     column.Item().Text(text =>
@@ -41,13 +45,13 @@ public class PdfGenerator
                     column.Item().Text(text =>
                     {
                         text.Span("⚠️ Bad Detections: ").SemiBold().FontColor(Colors.Red.Medium);
-                        text.Span(malicious.ToString());
+                        text.Span($"{malicious} / {sum}");
                     });
 
                     column.Item().Text(text =>
                     {
                         text.Span("✅ Undetected by Engines: ").SemiBold().FontColor(Colors.Green.Medium);
-                        text.Span(undected.ToString());
+                        text.Span($"{undetected} / {sum}");
                     });
 
                     column.Item().PaddingTop(20).LineHorizontal(1).LineColor(Colors.Grey.Lighten2);

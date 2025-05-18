@@ -366,8 +366,8 @@ namespace Server.Controllers
                 var pdf = PdfGenerator.GenerateFilePdf(file.FileName, malicious, undetected);
                 await _emailService.SendEmailWithAttachmentAsync(
                     email,
-                    "Virus Scan Report",
-                    "Please find the Virus Scan Report attached.",
+                    $"Virus Scan Report for {DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")}",
+                    $"<html><body><p>Please find the Virus Scan Report of {file.FileName} attached.</p></body></html>",
                     pdf,
                     $"{Guid.NewGuid()}_VirusScanReport.pdf"
                 );
