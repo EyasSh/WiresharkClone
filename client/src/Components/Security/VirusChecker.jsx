@@ -95,6 +95,10 @@ function VirusChecker(props) {
       const formData = new FormData();
       // "file" must match the name expected by your .NET controller
       formData.append('file', file);
+      const user = JSON.parse(localStorage.getItem('user'));
+      const email = user.email;
+      formData.append('email', email);
+      alert(email);
 
       const res = await axios.post(
         'http://localhost:5256/api/user/file',

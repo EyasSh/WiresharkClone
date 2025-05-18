@@ -81,6 +81,7 @@ namespace Server.Services
         {
             // Instantiate the Mailjet client
             var client = new MailjetClient(_apiKey, _apiSecret);
+            System.Console.WriteLine("Sending email to: " + to);
 
             // Build the email
             var email = new TransactionalEmailBuilder()
@@ -96,16 +97,19 @@ namespace Server.Services
                     )
                 )
                 .Build();
-
+            System.Console.WriteLine("Sending email with attachment...");
             // Send it
             TransactionalEmailResponse response =
                 await client.SendTransactionalEmailAsync(email);
+            System.Console.WriteLine("Raw Mailjet response: " + response.ToString());
 
+            System.Console.WriteLine("Email sent with attachment.");
             // Check result
             var message = response.Messages.FirstOrDefault();
             if (message == null || !string.Equals(message.Status, "success", StringComparison.OrdinalIgnoreCase))
             {
                 var err = message?.Errors?.FirstOrDefault();
+                System.Console.WriteLine("Error sending email with attachment.");
                 throw new Exception($"Mailjet send failed: {err?.ErrorCode} – {err?.ErrorMessage}");
             }
         }

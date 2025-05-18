@@ -288,7 +288,7 @@ namespace Server.Controllers
         /// </remarks>
         [Authorize]
         [HttpPost("file")]
-        public async Task<IActionResult> UploadFile([FromForm] IFormFile file)
+        public async Task<IActionResult> UploadFile([FromForm] IFormFile file, [FromForm] string email)
         {
             if (file == null || file.Length == 0)
             {
@@ -362,6 +362,16 @@ namespace Server.Controllers
                         ? "The file is flagged as malicious."
                         : "The file appears to be safe."
                 };
+                System.Console.WriteLine($"File: {file.FileName}, Malicious: {malicious}, Undetected: {undetected}");
+                var pdf = PdfGenerator.GenerateFilePdf(file.FileName, malicious, undetected);
+                await _emailService.SendEmailWithAttachmentAsync(
+                    email,
+                    "Virus Scan Report",
+                    "Please find the Virus Scan Report attached.",
+                    pdf,
+                    $"{Guid.NewGuid()}_VirusScanReport.pdf"
+                );
+                System.Console.WriteLine("Email sent successfully.");
                 return Ok(resultMessage);
             }
             catch (Exception ex)
