@@ -25,7 +25,6 @@ function DetailBox({ packet, onClose }) {
         <p><strong>Source IP:</strong> {packet.sourceIP}</p>
         <p><strong>Destination IP:</strong> {packet.destinationIP}</p>
         <p><strong>Protocol:</strong> {packet.protocol}</p>
-        <p><strong>Length:</strong> {packet.length} bytes</p>
         <p><strong>Timestamp:</strong> {packet.timestamp}</p>
         <h3>Lengths</h3>
         <p>Header Length: {packet.headerLength} bytes</p>

@@ -1,19 +1,26 @@
-import { useState, useEffect } from 'react';
+// src/Home/Home.jsx
+
+import{ useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import axios from 'axios';
 import packetHubConnection from '../Sockets/packetHub';
 import Packet from '../PacketBox/Packet';
 import DetailBox from '../DetailBox/DetailBox';
+import FilterButton from '../FilterButton/FilterButton';
 import './Home.css';
 
-function Home() {
+export default function Home() {
   const navigate = useNavigate();
-  const [packetsArr, setPackets] = useState([]);
-  const [pressedPacket, setPressedPacket] = useState(-1);
 
-  // 1️⃣ Token validation on mount
+  // ─── raw data & filter ───────────────────────────────────
+  const [packetsArr, setPacketsArr] = useState([]);
+  const [filter, setFilter]       = useState('All');
+  const [filteredPackets, setFilteredPackets] = useState([]);
+  const [selectedIndex, setSelectedIndex]     = useState(-1);
+
+  // ─── auth check ──────────────────────────────────────────
   useEffect(() => {
-    const validateToken = async () => {
+    (async () => {
       const token = localStorage.getItem('X-Auth-Token');
       if (!token) return navigate('/');
       try {
@@ -25,92 +32,97 @@ function Home() {
       } catch {
         navigate('/');
       }
-    };
-    validateToken();
+    })();
   }, [navigate]);
 
-  // 2️⃣ SignalR listener: push every batch into state
+  // ─── SignalR listener ─────────────────────────────────────
   useEffect(() => {
-    if (packetHubConnection.state !== 'Connected') {
-      console.error('SignalR not connected!');
-      return;
-    }
-
+    if (packetHubConnection.state !== 'Connected') return;
     packetHubConnection.off('ReceivePackets');
-    packetHubConnection.on('ReceivePackets', (newPackets) => {
-      console.log('Packets received:', newPackets);
-      setPackets((old) => {
-        const updated = [...old, ...newPackets];
-        localStorage.setItem('packets', JSON.stringify(updated));
-        return updated;
+    packetHubConnection.on('ReceivePackets', newPackets => {
+      setPacketsArr(old => {
+        const upd = [...old, ...newPackets];
+        localStorage.setItem('packets', JSON.stringify(upd));
+        return upd;
       });
     });
+    return () => packetHubConnection.off('ReceivePackets');
+  }, []);
 
-    return () => {
-      packetHubConnection.off('ReceivePackets');
-    };
-  }, []); // run once
-
-  // 3️⃣ Fire off GetPackets and start the 60s interval
+  // ─── initial fetch + interval ─────────────────────────────
   useEffect(() => {
     const fetchOnce = () => {
       if (packetHubConnection.state === 'Connected') {
         packetHubConnection.invoke('GetPackets').catch(console.error);
       }
     };
-
     fetchOnce();
     const id = setInterval(fetchOnce, 60_000);
     return () => clearInterval(id);
-  }, []); // run once
-useEffect(() => {
-    if(pressedPacket >= 0 && pressedPacket < packetsArr.length) {
-      const packet = packetsArr[pressedPacket];
-      console.log('Selected packet:', packet);
-      console.log(pressedPacket)
-    }
-},[pressedPacket, packetsArr]);
-  // 4️⃣ Derive the selected packet
+  }, []);
+
+  // ─── THIS is the one & only filter effect ────────────────
+  useEffect(() => {
+    const result = packetsArr.filter(p =>
+      filter === 'All' ? true : p.protocol === filter
+    );
+    console.log(
+      `[FilterEffect] filter="${filter}" raw=${packetsArr.length} → filtered=${result.length}`
+    );
+    setFilteredPackets(result);
+    setSelectedIndex(-1); // clear any detail when the list changes
+  }, [packetsArr, filter]);
+
+  // ─── pick the packet for the detail box ──────────────────
   const selectedPacket =
-    pressedPacket >= 0 && pressedPacket < packetsArr.length
-      ? packetsArr[pressedPacket]
+    selectedIndex >= 0 && selectedIndex < filteredPackets.length
+      ? filteredPackets[selectedIndex]
       : null;
 
   return (
     <div className="Home-Container">
-      <div className='Header'>
+      <header className="Header">
         <h1>Packet Analyzer</h1>
-        <p className='Description'>
-          Packets Colored <strong style={{color: 'yellow'}}>Yellow</strong> are suspicious
+        <p className="Description">
+          Packets Colored <strong style={{ color: 'yellow' }}>Yellow</strong> are suspicious
         </p>
-        <p className='Description'>
-          Packets Colored <strong style={{color: 'red'}}>Red</strong> are potentially malicious
+        <p className="Description">
+          Packets Colored <strong style={{ color: 'red' }}>Red</strong> are potentially malicious
         </p>
-      </div>
-      {packetsArr.map((p, idx) => (
-        <Packet
-          key={idx}
-          packetType={`Protocol: ${p.protocol} | IP v${p.ipVersion}`}
-          sourceIP={p.sourceIP}
-          destinationIP={p.destinationIP}
-          sourcePort={p.sourcePort}
-          destinationPort={p.destinationPort}
-          protocol={p.protocol}
-          packetDescription={p.timestamp}
-          index={idx}
-          clickHandler={(i) => setPressedPacket(i)}
+      </header>
+
+      <div className="Filter-Container">
+        <FilterButton
+          selected={filter}
+          onChange={setFilter}
         />
-      ))}
+      </div>
+
+      <div className="Packets-List">
+        {filteredPackets.map((p, i) => (
+          <Packet
+            // use a key that changes whenever filter toggles back to All
+            key={`${p.protocol}-${p.timestamp}-${i}`}
+            packetType={`Protocol: ${p.protocol} | IP v${p.ipVersion}`}
+            sourceIP={p.sourceIP}
+            destinationIP={p.destinationIP}
+            sourcePort={p.sourcePort}
+            destinationPort={p.destinationPort}
+            protocol={p.protocol}
+            packetDescription={p.timestamp}
+            index={i}
+            clickHandler={() => setSelectedIndex(i)}
+          />
+        ))}
+      </div>
 
       {selectedPacket && (
         <DetailBox
           packet={selectedPacket}
-          index={pressedPacket}
-          onClose={() => setPressedPacket(-1)}
+          index={selectedIndex}
+          onClose={() => setSelectedIndex(-1)}
         />
       )}
     </div>
   );
 }
-
-export default Home;
