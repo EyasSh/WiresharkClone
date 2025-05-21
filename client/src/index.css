@@ -1,3 +1,18 @@
+/* Hide scrollbars in Firefox */
+* {
+  scrollbar-width: none;
+}
+
+/* Hide scrollbars in IE10+ */
+* {
+  -ms-overflow-style: none;
+}
+
+/* Hide scrollbars in Chrome, Safari, Opera */
+*::-webkit-scrollbar {
+  display: none;
+}
+
 :root {
   font-family: "Montserrat", Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
