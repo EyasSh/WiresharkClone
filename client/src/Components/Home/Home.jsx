@@ -109,7 +109,8 @@ export default function Home() {
             sourcePort={p.sourcePort}
             destinationPort={p.destinationPort}
             protocol={p.protocol}
-            packetDescription={p.timestamp}
+            packetDescription={p.description}
+            timestamp={p.timestamp}
             index={i}
             clickHandler={() => setSelectedIndex(i)}
           />

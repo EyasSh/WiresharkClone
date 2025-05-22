@@ -2,7 +2,7 @@ import  { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './FilterButton.css';
 
-const OPTIONS = ['All', 'TCP', 'UDP', 'ICMP'];
+const OPTIONS = ['All', 'TCP', 'UDP', 'ICMP',"ARP"];
 
 export default function FilterButton({ selected, onChange }) {
   const [open, setOpen] = useState(false);

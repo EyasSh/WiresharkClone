@@ -153,8 +153,10 @@ public class Capturer
             info.DestinationPort = tcp.DestinationPort;
             info.Protocol = "TCP";
             Console.WriteLine($"TCP: {info.SourceIP}:{info.SourcePort} -> {info.DestinationIP}:{info.DestinationPort}");
+            info.Description = PacketInfo.Descriptions["TCP"];
             // Possibly store or enqueue info
             packets.Enqueue(info);
+            
             return;
         }
 
@@ -166,6 +168,7 @@ public class Capturer
             info.DestinationPort = udp.DestinationPort;
             info.Protocol = "UDP";
             Console.WriteLine($"UDP: {info.SourceIP}:{info.SourcePort} -> {info.DestinationIP}:{info.DestinationPort}");
+            info.Description = PacketInfo.Descriptions["UDP"];
             // Possibly store or enqueue info
             packets.Enqueue(info);
             return;
@@ -175,6 +178,7 @@ public class Capturer
         {
             info.Protocol = "ICMP";
             Console.WriteLine($"ICMP: {info.SourceIP} -> {info.DestinationIP}");
+            info.Description = PacketInfo.Descriptions["ICMP"];
             // Possibly store or enqueue info
             packets.Enqueue(info);
             return;
@@ -184,6 +188,7 @@ public class Capturer
         {
             info.Protocol = "ARP";
             Console.WriteLine($"ARP: {info.SourceIP} -> {info.DestinationIP}");
+            info.Description = PacketInfo.Descriptions["ARP"];
             // Possibly store or enqueue info
             packets.Enqueue(info);
             return;
