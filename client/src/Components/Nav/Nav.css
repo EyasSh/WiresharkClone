@@ -2,8 +2,6 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: 10px 20px; /* Adjust padding for better spacing */
-    background: rgb(73, 72, 72);
     position: fixed; /* Keeps the navbar at the top */
     top: 0;
     left: 0; /* Ensures it starts from the left edge */
@@ -11,8 +9,9 @@
     z-index: 1000; /* Ensures it appears above other content */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Keeps shadow for aesthetics */
     gap: 0; /* Reduced gap to prevent overflow */
+    background-color: #151515;
+    padding: 10px 20px; /* Adjust padding for better spacing */
 }
-
 
 .NavItems {
     display: flex;

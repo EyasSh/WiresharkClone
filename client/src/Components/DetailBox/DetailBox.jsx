@@ -2,7 +2,7 @@
 // DetailBox.jsx
 import React from 'react';
 import PropTypes from 'prop-types';
-import './DetailBox.css';
+import '../../index.css';
 import JsonParser from '../../Services/JsonParser';
 
 /**

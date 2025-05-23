@@ -5,6 +5,7 @@ import {FaLock, FaHome, FaCog, FaEnvelope } from 'react-icons/fa';
 import { FiLogOut } from 'react-icons/fi'; // Import the logout icon
 import {IoAnalytics, IoAnalyticsSharp} from 'react-icons/io5';
 import './Nav.css';
+import '../../index.css';
 import { useNavigate } from 'react-router';
 import Logo from '../Logo/Logo';
 import Settings from '../Settings/Settings';

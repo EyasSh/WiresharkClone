@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import {useState} from 'react';
-import './PacketPaper.css';
+import '../../index.css';
 import PropTypes from 'prop-types';
 /**
  * PacketPaper component renders a section titled "Packet Paper".
