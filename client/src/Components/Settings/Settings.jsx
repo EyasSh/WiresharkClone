@@ -16,12 +16,18 @@ import './Settings.css';
  * Clicking outside the modal or on the close button will close the modal. The current theme is displayed 
  * with an icon and a text label indicating the mode switch.
  */
-
 function Settings({ isOpen, onClose, children }) {  
     const [isLightMode, setIsLightMode] = React.useState(
         window.matchMedia('(prefers-color-scheme: light)').matches
     );
 
+
+    /**
+     * Toggles the theme between light and dark mode.
+     * 
+     * @description Stores the new theme in local state and updates the document's data-theme attribute.
+     * This causes the theme to be updated globally, via the CSS rules that target the attribute.
+     */
     const toggleTheme = () => {
         const newMode = isLightMode ? 'dark' : 'light';
         setIsLightMode(!isLightMode);

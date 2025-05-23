@@ -15,7 +15,7 @@
   font-weight: 600;
   position: fixed;
   right: 0.7rem;
-  bottom: 38%;
+  bottom: 41%;
 }
 .detail-box-content {
   max-height: 60vh;       /* allow room to scroll if content gets tall */
@@ -32,7 +32,7 @@
 
 .detail-box-content strong {
   display: inline-block;
-  width: 140px;           /* align all labels */
+  width: 200px;           /* align all labels */
   font-weight: 600;
 }
 

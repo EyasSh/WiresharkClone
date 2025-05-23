@@ -4,6 +4,13 @@ import './FilterButton.css';
 
 const OPTIONS = ['All', 'TCP', 'UDP', 'ICMP',"ARP"];
 
+/**
+ * A dropdown button component for selecting a filter option.
+ * @param {Object} props
+ * @param {string} props.selected The currently selected filter option.
+ * @param {function} props.onChange Called when the user selects a new filter option.
+ * @returns {ReactElement} The FilterButton component.
+ */
 export default function FilterButton({ selected, onChange }) {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);

@@ -27,6 +27,15 @@ export default function App() {
     const [pnotification,setPNotification] = useState(null);
 
     useEffect(() => {
+        /**
+         * Establishes a connection to the SignalR hub. If the connection is established successfully, 
+         * it sets the connection state to 'Connected' and sets the sid and psid states with the connection ID.
+         * If there is an error connecting to the hub, it sets the connection state to 'Disconnected' and 
+         * displays an error notification.
+         * 
+         * @function startConnection
+         * @returns {void}
+         */
         const startConnection = async () => {
             try {
                 if (hubConnection.state === 'Connected') {

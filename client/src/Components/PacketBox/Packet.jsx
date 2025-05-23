@@ -3,6 +3,23 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import './Packet.css';
 
+/**
+ * Packet component renders a network packet's basic details.
+ * 
+ * @param {Object} props - The properties object.
+ * @param {string} props.packetType - The type of the packet.
+ * @param {string} props.sourceIP - The source IP address of the packet.
+ * @param {string} props.destinationIP - The destination IP address of the packet.
+ * @param {number} props.sourcePort - The source port of the packet.
+ * @param {number} props.destinationPort - The destination port of the packet.
+ * @param {string} props.protocol - The protocol used by the packet.
+ * @param {string} props.packetDescription - A description of the packet.
+ * @param {function} props.clickHandler - A function to handle click events on the packet.
+ * @param {number} props.index - The index of the packet in the list.
+ * 
+ * @returns {ReactElement} A React component displaying the packet details in a styled container.
+ */
+
 function Packet({
   ...props
 }) {
@@ -14,6 +31,11 @@ function Packet({
   const [DestinationPort, setDestinationPort] = useState(props.destinationPort);
   const [Protocol, setProtocol] = useState(props.protocol);
   const [PacketDescription, setPacketDescription] = useState(props. packetDescription);
+  /**
+   * Handles click events on the packet by calling the clickHandler function
+   * with the packet's index if it exists and the index is valid.
+   * @function
+   */
   const handleClick = () => {
     if (props.clickHandler && props.index>=0) {
       props.clickHandler(props.index);

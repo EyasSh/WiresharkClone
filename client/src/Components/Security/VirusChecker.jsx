@@ -35,6 +35,19 @@ function VirusChecker(props) {
         }
     };
 
+/**
+ * Asynchronously handles the URL checking process by sending a POST request
+ * to the server to validate the URL against VirusTotal. 
+ * On success, updates the URL status message based on the server's response.
+ * 
+ * The function sends the URL as a raw string in the request body, 
+ * along with necessary headers for content type and authentication.
+ * 
+ * If the response status is 200, it extracts statistical data from the response
+ * and uses it to generate a user-friendly status message which is then displayed.
+ * 
+ * In case of an error, logs the error details to the console.
+ */
     const handleUrl = async()=>{
         try {
             const res = await axios.post(

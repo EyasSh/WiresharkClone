@@ -9,6 +9,14 @@ import DetailBox from '../DetailBox/DetailBox';
 import FilterButton from '../FilterButton/FilterButton';
 import './Home.css';
 
+/**
+ * Home component is the main page of the application. It displays a list of packets
+ * captured by the server, with an option to filter by protocol. When a packet is
+ * selected, it shows the packet details in a modal box.
+ *
+ * @type {React.FC}
+ */
+
 export default function Home() {
   const navigate = useNavigate();
 

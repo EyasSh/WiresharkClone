@@ -34,6 +34,10 @@ function Performance({ hubConnection }) {
     useEffect(() => {
         let isMounted = true;
     
+        /**
+         * Fetches metrics from the server using SignalR. If the connection is not established, it logs an error message.
+         * If the connection is established, it logs a success message and invokes the "GetMetrics" method on the server.
+         */
         const fetchMetrics = async () => {
             if (hubConnection.state === "Connected") {
                 try {
@@ -48,6 +52,13 @@ function Performance({ hubConnection }) {
             }
         };
     
+        /**
+         * Initializes the ReceiveMetrics listener on the SignalR connection.
+         * The listener is invoked when the server sends a message with the name "ReceiveMetrics".
+         * When the listener is invoked, it logs the received metrics and updates the component's state.
+         * If the received metrics exceed a certain threshold (80% for CPU and RAM, 8% for disk),
+         * it sends a POST request to the server with the metrics and the user's name and email.
+         */
         const initializeListener = async() => {
             hubConnection.off("ReceiveMetrics"); // Remove old listener
             console.log("Registering ReceiveMetrics listener...");

@@ -4,6 +4,18 @@ import React from 'react';
 import './button.css';
 import { Link } from 'react-router';
 
+/**
+ * Button component renders a button with the specified content and
+ * optional link or action.
+ * 
+ * @param {Object} props - The properties object.
+ * @param {string} props.content - The content to display within the button.
+ * @param {string} [props.status=''] - The status of the button. Can be "action", "purchase", or "signup".
+ * @param {string} [props.link=''] - The link to navigate to when the button is clicked.
+ * @param {function} [props.action=function(){}] - The action to take when the button is clicked.
+ * 
+ * @returns {ReactElement} The Button component.
+ */
 function Button(props) {
     const statusClass = statusHandler(props.status);
     const buttonContent = props.content.toString();

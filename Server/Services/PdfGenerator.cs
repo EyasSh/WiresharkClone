@@ -4,6 +4,11 @@ using QuestPDF.Infrastructure;
 using Server.Models;
 namespace Server.Services;
 
+/// <summary>
+/// This class provides methods to generate various types of PDF reports.
+/// It holds templates for reports such as performance, packet, and virus scan reports.
+/// The methods use the QuestPDF library to create and format the PDFs.
+/// </summary>
 public class PdfGenerator
 {
     public static byte[] GenerateFilePdf(string fileName, int malicious, int undetected)

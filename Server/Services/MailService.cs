@@ -7,6 +7,9 @@ using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 namespace Server.Services
 {
+    /// <summary>
+    /// Represents a service for sending emails using the Mailjet API.
+    /// </summary>
     public class EmailService
     {
         public string? _apiKey = "";

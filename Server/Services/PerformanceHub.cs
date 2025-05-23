@@ -46,8 +46,6 @@ public class SocketService : Hub<IHubService>
     /// </item>
     /// </list>
     /// </summary>
-
-
     public void GetMetrics()
     {
         var (cpuUsage, ramUsage, diskUsage) = new MetricFetcher().GetSystemMetrics();

@@ -3,7 +3,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './DetailBox.css';
+import JsonParser from '../../Services/JsonParser';
 
+/**
+ * DetailBox component renders a modal window with packet details.
+ * 
+ * @param {Object} props - The properties object.
+ * @param {Object} props.packet - The packet object containing the information to display.
+ * @param {function} props.onClose - The function to call when the modal is closed.
+ * 
+ * @description The component renders packet details and lengths in a modal window.
+ * Clicking outside the modal or on the close button will close the modal.
+ * The component is used within the Packet component to show details when clicked.
+ */
 function DetailBox({ packet, onClose }) {
   console.log('🔍 DetailBox render, packet =', packet);
   if (!packet) return null;
@@ -27,6 +39,7 @@ function DetailBox({ packet, onClose }) {
         <p><strong>Protocol:</strong> {packet.protocol}</p>
         <p><strong>Timestamp:</strong> {packet.timestamp}</p>
         <p><strong>Description:</strong> {packet.description}</p>
+        <p><strong>Application Layer Text:</strong>  { packet.applicationLayerText ? JsonParser(packet.applicationLayerText): 'N/A'}</p>
         <h3>Lengths</h3>
         <p>Header Length: {packet.headerLength} bytes</p>
         <p>Total Length: {packet.totalLength} bytes</p>

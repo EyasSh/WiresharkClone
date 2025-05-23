@@ -7,6 +7,9 @@ using System.Threading;
 
 namespace Server.Services
 {
+    /// <summary>
+    /// This class provides methods to fetch system metrics such as CPU, RAM, and disk usage.
+    /// </summary>
     public class MetricFetcher
     {
         /// <summary>
@@ -24,7 +27,7 @@ namespace Server.Services
             return (cpuUsage, ramUsage, diskUsage);
         }
 
-       
+
         /// <summary>
         /// Gets the CPU usage percentage of the current system.
         /// On Windows, this method uses the PerformanceCounter class to query the system's CPU usage.
@@ -51,7 +54,7 @@ namespace Server.Services
             }
         }
 
-        
+
         /// <summary>
         /// Gets the CPU usage percentage of the current system using a cross-platform approach.
         /// This method measures the time it takes to execute a small delay and uses that to calculate the CPU usage.
@@ -75,7 +78,7 @@ namespace Server.Services
             return Math.Round(cpuUsageTotal * 100, 2);
         }
 
-        
+
         /// <summary>
         /// Gets the total CPU time for all processes on the system.
         /// This method iterates over all processes and sums up their total CPU time.
@@ -101,7 +104,7 @@ namespace Server.Services
             return totalCpuTime;
         }
 
-       
+
         /// <summary>
         /// Gets the physical memory usage percentage of the current system.
         /// </summary>

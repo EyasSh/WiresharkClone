@@ -4,6 +4,9 @@ using MongoDB.Bson.Serialization.Attributes;
 using PacketDotNet;
 namespace Server.Models
 {
+    /// <summary>
+    /// Represents a packet with its metadata and application-layer data.
+    /// </summary>
     public class PacketInfo
     {
         public static Dictionary<string, string> Descriptions = new Dictionary<string, string>
@@ -28,6 +31,18 @@ namespace Server.Models
         public int HeaderLength { get; set; }
         public int TotalLength { get; set; }
         public string? Description { get; set; }
+        /// <summary>
+        /// Raw application-layer payload bytes (TCP or UDP).
+        /// </summary>
+        [JsonIgnore]
+        [BsonIgnore]
+        public byte[]? ApplicationLayerPayload { get; set; }
+
+        /// <summary>
+        /// Printable/text form of the application-layer data (e.g. ASCII, UTF-8).
+        /// </summary>
+        public string? ApplicationLayerText { get; set; }
+        public bool hasJsonAppLayerText { get; set; } = false;
     }
 
 }

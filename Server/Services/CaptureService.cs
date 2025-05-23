@@ -4,6 +4,7 @@ using PacketDotNet;
 using SharpPcap.WinpkFilter;
 using System.Net;
 using Server.Models;
+using System.Text;
 
 namespace Server.Services;
 
@@ -125,7 +126,7 @@ public class Capturer
     /// </summary>
     private static void ProcessPacket(Packet parsedPacket)
     {
-        // Check for IP layer (IPv4 or IPv6)
+        // 1) IP layer
         var ipPacket = parsedPacket.Extract<IPPacket>();
         if (ipPacket == null)
         {
@@ -133,81 +134,190 @@ public class Capturer
             return;
         }
 
-        // Prepare a model to store relevant fields
+        // 2) Base info
         var info = new PacketInfo
         {
             IPVersion = ipPacket.Version,
             SourceIP = ipPacket.SourceAddress.ToString(),
             DestinationIP = ipPacket.DestinationAddress.ToString(),
-            Timestamp = DateTime.Now,  // or from the RawCapture if you need original timestamps
+            Timestamp = DateTime.Now,
             packet = parsedPacket,
             HeaderLength = parsedPacket.HeaderData.Length,
             TotalLength = parsedPacket.TotalPacketLength
         };
 
-        // Extract TCP
-        var tcp = parsedPacket.Extract<TcpPacket>();
-        if (tcp != null)
-        {
-            info.SourcePort = tcp.SourcePort;
-            info.DestinationPort = tcp.DestinationPort;
-            info.Protocol = "TCP";
-            Console.WriteLine($"TCP: {info.SourceIP}:{info.SourcePort} -> {info.DestinationIP}:{info.DestinationPort}");
-            info.Description = PacketInfo.Descriptions["TCP"];
-            // Possibly store or enqueue info
-            packets.Enqueue(info);
-            
-            return;
-        }
+        // 3) Grab L7 bytes once
+        var raw = PacketParser.GetApplicationLayerPayload(parsedPacket);
 
-        // Extract UDP
-        var udp = parsedPacket.Extract<UdpPacket>();
-        if (udp != null)
+        // 4) Dispatch by L4
+        if (parsedPacket.Extract<TcpPacket>() is TcpPacket tcp) HandleTcp(parsedPacket, tcp, raw, info);
+        else if (parsedPacket.Extract<UdpPacket>() is UdpPacket udp) HandleUdp(parsedPacket, udp, raw, info);
+        else if (parsedPacket.Extract<IcmpV4Packet>() is var icmp4) HandleIcmp4(info, icmp4);
+        else if (parsedPacket.Extract<IcmpV6Packet>() is var icmp6) HandleIcmp6(info, icmp6);
+        else if (parsedPacket.Extract<ArpPacket>() is var arp) HandleArp(info, arp);
+        else
         {
-            info.SourcePort = udp.SourcePort;
-            info.DestinationPort = udp.DestinationPort;
-            info.Protocol = "UDP";
-            Console.WriteLine($"UDP: {info.SourceIP}:{info.SourcePort} -> {info.DestinationIP}:{info.DestinationPort}");
-            info.Description = PacketInfo.Descriptions["UDP"];
-            // Possibly store or enqueue info
+            info.Protocol = "Other";
+            Console.WriteLine($"{ipPacket.Version} non-TCP/UDP/ICMP/ARP packet: {info.SourceIP} -> {info.DestinationIP}");
             packets.Enqueue(info);
-            return;
         }
-        var icmp = parsedPacket.Extract<IcmpV4Packet>();
-        if (icmp != null)
-        {
-            info.Protocol = "ICMP";
-            Console.WriteLine($"ICMP: {info.SourceIP} -> {info.DestinationIP}");
-            info.Description = PacketInfo.Descriptions["ICMP"];
-            // Possibly store or enqueue info
-            packets.Enqueue(info);
-            return;
-        }
-        var arp = parsedPacket.Extract<ArpPacket>();
-        if (arp != null)
-        {
-            info.Protocol = "ARP";
-            Console.WriteLine($"ARP: {info.SourceIP} -> {info.DestinationIP}");
-            info.Description = PacketInfo.Descriptions["ARP"];
-            // Possibly store or enqueue info
-            packets.Enqueue(info);
-            return;
-        }
-        var icmp6 = parsedPacket.Extract<IcmpV6Packet>();
-        if (icmp6 != null)
-        {
-            info.Protocol = "ICMPv6";
-            Console.WriteLine($"ICMPv6: {info.SourceIP} -> {info.DestinationIP}");
-            // Possibly store or enqueue info
-            packets.Enqueue(info);
-            return;
-        }
+    }
 
-        // If none of the above matched, handle other protocols
-        info.Protocol = "Other";
-        Console.WriteLine($"{ipPacket.Version} non-TCP/UDP/ICMP/ARP packet: {info.SourceIP} -> {info.DestinationIP}");
-        // Possibly store or enqueue info
+    // --- Protocol handlers ---
+
+    /// <summary>
+    /// Handles a TCP packet by setting the appropriate fields in the <see cref="PacketInfo"/> instance
+    /// and decoding the application-layer payload.
+    /// </summary>
+    /// <param name="pkt">The parsed packet.</param>
+    /// <param name="tcp">The TCP layer.</param>
+    /// <param name="raw">The raw application-layer payload.</param>
+    /// <param name="info">The <see cref="PacketInfo"/> instance to populate.</param>
+
+    static void HandleTcp(Packet pkt, TcpPacket tcp, byte[]? raw, PacketInfo info)
+    {
+        info.SourcePort = tcp.SourcePort;
+        info.DestinationPort = tcp.DestinationPort;
+        info.Protocol = "TCP";
+        info.Description = PacketInfo.Descriptions["TCP"];
+        Console.WriteLine($"TCP: {info.SourceIP}:{info.SourcePort} → {info.DestinationIP}:{info.DestinationPort}");
+
+        DecodeAndStoreAppLayer(raw, tcp.SourcePort, tcp.DestinationPort, info);
+
         packets.Enqueue(info);
     }
+
+    /// <summary>
+    /// Handles a UDP packet by setting the appropriate fields in the <see cref="PacketInfo"/> instance
+    /// and decoding the application-layer payload.
+    /// </summary>
+    /// <param name="pkt">The parsed packet.</param>
+    /// <param name="udp">The UDP layer.</param>
+    /// <param name="raw">The raw application-layer payload.</param>
+    /// <param name="info">The <see cref="PacketInfo"/> instance to populate.</param>
+    static void HandleUdp(Packet pkt, UdpPacket udp, byte[]? raw, PacketInfo info)
+    {
+        info.SourcePort = udp.SourcePort;
+        info.DestinationPort = udp.DestinationPort;
+        info.Protocol = "UDP";
+        info.Description = PacketInfo.Descriptions["UDP"];
+        Console.WriteLine($"UDP: {info.SourceIP}:{info.SourcePort} → {info.DestinationIP}:{info.DestinationPort}");
+
+        DecodeAndStoreAppLayer(raw, udp.SourcePort, udp.DestinationPort, info);
+
+        packets.Enqueue(info);
+    }
+
+    /// <summary>
+    /// Handles ICMPv4 packets by populating the protocol and description fields in the given PacketInfo 
+    /// and enqueues the packet information for further processing.
+    /// </summary>
+    /// <param name="info">The PacketInfo object to populate with protocol details.</param>
+    /// <param name="icmp4">The ICMPv4 packet to process.</param>
+
+    static void HandleIcmp4(PacketInfo info, IcmpV4Packet icmp4)
+    {
+        if (icmp4 == null) return;
+        info.Protocol = "ICMP";
+        info.Description = PacketInfo.Descriptions["ICMP"];
+        Console.WriteLine($"ICMPv4: {info.SourceIP} → {info.DestinationIP}");
+        packets.Enqueue(info);
+    }
+
+    /// <summary>
+    /// Handles ICMPv6 packets by setting the protocol and description fields and adding the packet to the queue.
+    /// </summary>
+    /// <param name="info">The packet info to populate.</param>
+    /// <param name="icmp6">The ICMPv6 packet.</param>
+    static void HandleIcmp6(PacketInfo info, IcmpV6Packet icmp6)
+    {
+        if (icmp6 == null) return;
+        info.Protocol = "ICMPv6";
+        info.Description = PacketInfo.Descriptions["ICMP"];
+        Console.WriteLine($"ICMPv6: {info.SourceIP} → {info.DestinationIP}");
+        packets.Enqueue(info);
+    }
+
+    /// <summary>
+    /// Handles ARP packets by setting the protocol and description fields and adding the packet to the queue.
+    /// </summary>
+    /// <param name="info">The packet info to populate.</param>
+    /// <param name="arp">The ARP packet.</param>
+    static void HandleArp(PacketInfo info, ArpPacket arp)
+    {
+        if (arp == null) return;
+        info.Protocol = "ARP";
+        info.Description = PacketInfo.Descriptions["ARP"];
+        Console.WriteLine($"ARP: {info.SourceIP} → {info.DestinationIP}");
+        packets.Enqueue(info);
+    }
+
+    // --- Shared L7 decoder ---
+
+    /// <summary>
+    /// Decodes the raw application-layer payload and stores it in a PacketInfo instance.
+    /// The decoder checks for JSON, TLS on 443, DNS on 53/5353, SSDP on 1900, and falls back to
+    /// readable text or a binary marker.
+    /// </summary>
+    /// <param name="raw">The raw application-layer payload to decode.</param>
+    /// <param name="srcPort">The source port of the packet.</param>
+    /// <param name="dstPort">The destination port of the packet.</param>
+    /// <param name="info">The PacketInfo instance to store the decoded application-layer text.</param>
+    static void DecodeAndStoreAppLayer(byte[]? raw, int srcPort, int dstPort, PacketInfo info)
+    {
+        // A) TLS on 443: label it immediately, even if raw is empty/null
+        if (srcPort == 443 || dstPort == 443)
+        {
+            info.ApplicationLayerText = "[TLS-encrypted payload]";
+            Console.WriteLine(info.ApplicationLayerText);
+            return;
+        }
+
+        // B) If there really is no payload, bail out
+        if (raw == null || raw.Length == 0)
+            return;
+
+        // C) JSON?
+        if (PacketParser.TryExtractJsonText(raw, out var json))
+        {
+            info.ApplicationLayerText = json;
+            info.hasJsonAppLayerText = true;
+            Console.WriteLine("JSON: " + json);
+            return;
+        }
+
+        // D) DNS on 53/5353
+        if (srcPort is 53 or 5353 || dstPort is 53 or 5353)
+        {
+            var dnsText = PacketParser.FormatMdnsMessage(raw);
+            info.ApplicationLayerText = dnsText;
+            Console.WriteLine(dnsText);
+            return;
+        }
+
+        // E) SSDP on 1900
+        if (srcPort == 1900 || dstPort == 1900)
+        {
+            var ssdp = Encoding.UTF8.GetString(raw).Trim();
+            info.ApplicationLayerText = ssdp;
+            Console.WriteLine("SSDP: " + ssdp.Replace("\r\n", " | "));
+            return;
+        }
+
+        // F) Fallback: readable text or binary
+        var latin = PacketParser.ExtractLatinText(raw);
+        if (!string.IsNullOrEmpty(latin))
+        {
+            info.ApplicationLayerText = latin;
+            Console.WriteLine("L7 Text: " + latin);
+        }
+        else
+        {
+            info.ApplicationLayerText = "[binary payload]";
+            Console.WriteLine(info.ApplicationLayerText);
+        }
+    }
+
+
 }
 

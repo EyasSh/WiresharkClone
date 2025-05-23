@@ -19,6 +19,13 @@ function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
+/**
+ * Handles the login form submission by sending a POST request to the user 
+ * controller's login action. If the request is successful, it stores the 
+ * authentication token and user data in local storage and navigates to the 
+ * home page. If the request fails, it logs the error.
+ */
+
     const handleSubmit = async () => {
        
     

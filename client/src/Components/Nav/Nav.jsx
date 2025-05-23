@@ -27,6 +27,13 @@ function Nav({ hubConnection, sid }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = useNavigate();
     
+    /**
+     * Handles a click event on a navigation item.
+     * If the item is 'logout', it disconnects the SignalR connection, clears the session data, and navigates to the login page.
+     * If the item is 'settings', it opens the settings modal.
+     * If the item is 'packets', 'home', or 'performance', it navigates to the corresponding page and passes the session ID as state.
+     * @param {string} item The navigation item that was clicked.
+     */
     const handleClick = async (item) => {
         setActiveItem(item);
 
@@ -57,6 +64,9 @@ function Nav({ hubConnection, sid }) {
             navigate('/security'); 
         }
     };
+    /**
+     * Closes the settings modal.
+     */
     const closeModal = () => {
         setIsModalOpen(false); // Close the modal
     };
