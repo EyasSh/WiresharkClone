@@ -4,6 +4,7 @@
 import React, { useEffect, useState } from 'react';
 import './Packets.css'; // Add consistent styles for profile page
 import hubConnection from '../Sockets/SignalR';
+import PacketReport from '../PacketReport/PacketReport';
 
 /**
  * Profile component displays the user's profile information.
@@ -28,12 +29,9 @@ function Packets({hubConnection}) {
     }, []); // Empty dependency array to run only once on mount
 
     return (
-        <div className="Profile-Container">
-            <h1>Packet History Page</h1>
-            <p>Welcome to the profile page {name}!</p>
-            <p>Connection State: {connection?.state || 'No Connection'}</p>
-            <p>Session ID: {connection.connectionId}</p>
-        </div>
+        <>
+            <PacketReport />
+        </>
     );
 }
 

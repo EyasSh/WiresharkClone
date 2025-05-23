@@ -2,9 +2,12 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
+using MongoDB.Driver;
 using Newtonsoft.Json;
+using Server.DB;
 using Server.Models;
 namespace Server.Services;
+
 public interface IPacketContext
 {
     Task ConnectNotification(string sid, string warningLevel);
@@ -13,6 +16,13 @@ public interface IPacketContext
 public class PacketHub : Hub<IPacketContext>
 {
     private static readonly ConcurrentDictionary<string, string> _connections = new();
+    private static IMongoCollection<PacketInfo>? _packetsCollection;
+    private static MongoDBWrapper? _mongoDBWrapper;
+    public PacketHub(MongoDBWrapper mongoDBWrapper)
+    {
+        _mongoDBWrapper = mongoDBWrapper;
+        _packetsCollection = mongoDBWrapper.Packets;
+    }
     /// <summary>
     /// This is the OnConnectedAsync method that will be called when the client establishes a connection to the server.
     /// It will add the connection to the list of connections and send a message to the client with the connection ID.
@@ -46,6 +56,17 @@ public class PacketHub : Hub<IPacketContext>
         Analyzer.DetectPortScan(packets, 5, Analyzer.defaultQuarterWindow);
         Analyzer.DetectPingOfDeathV4(packets);
         Analyzer.DetectPingOfDeathV6(packets);
+        var suspackets = packets.Where(p => p.isSuspicious == true || p.isMalicious == true).ToList();
+        if (suspackets.Count > 0)
+        {
+            _packetsCollection?.InsertMany(suspackets);
+            System.Console.WriteLine($"Inserted {suspackets.Count} suspicious packets into the database");
+        }
+        else
+        {
+            System.Console.WriteLine($"No suspicious packets found");
+        }
+
         Clients.Caller.ReceivePackets(packets.ToArray());
     }
     public override async Task OnDisconnectedAsync(Exception? exception)

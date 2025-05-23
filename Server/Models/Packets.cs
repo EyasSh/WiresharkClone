@@ -9,6 +9,8 @@ namespace Server.Models
     /// </summary>
     public class PacketInfo
     {
+        [JsonIgnore]
+        [BsonIgnore]
         public static Dictionary<string, string> Descriptions = new Dictionary<string, string>
         {
            { "TCP", "Transmission Control Protocol is Used inTCP flood attacks more popularly known as DDoS attacks. TCP flood attacks are a type of denial-of-service attack that targets the TCP protocol. The attacker sends a large number of TCP packets to a target system, overwhelming it and causing it to become unresponsive." },
@@ -16,6 +18,9 @@ namespace Server.Models
            { "ICMP", "Internet Control Message Protocol is used in Ping of Death attacks in which the attacker sends a packet who's size is bigger than the normal size of an ICP packet over 65,535 bytes." },
             { "ARP", "Address Resolution Protocol is used in ARP spoofing attacks. ARP spoofing attacks are a type of attack that targets the Address Resolution Protocol (ARP). The attacker sends false ARP messages to a target system, causing it to associate the attacker's MAC address with the IP address of a legitimate system." },
         };
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string? Id { get; set; }
         public IPVersion IPVersion { get; set; }
         [JsonIgnore]
         [BsonIgnore]
@@ -34,8 +39,6 @@ namespace Server.Models
         /// <summary>
         /// Raw application-layer payload bytes (TCP or UDP).
         /// </summary>
-        [JsonIgnore]
-        [BsonIgnore]
         public byte[]? ApplicationLayerPayload { get; set; }
 
         /// <summary>

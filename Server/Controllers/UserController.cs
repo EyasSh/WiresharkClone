@@ -23,6 +23,7 @@ namespace Server.Controllers
     {
         private readonly IHubContext<SocketService> _hubContext;
         IMongoCollection<User> _users;
+        IMongoCollection<PacketInfo> _packets;
         private readonly EmailService _emailService;
         private const string apiKey = "730392f1c1b50b2c0dd1ddac270b3802472f07bb3863282d02162322b8f76e22";
         private readonly IConfiguration _conf;
@@ -34,12 +35,14 @@ namespace Server.Controllers
         */
         public UserController(MongoDBWrapper dBWrapper, IConfiguration conf
         , IHubContext<SocketService> hubContext, EmailService emailService
-        )
+       )
         {
+
             _users = dBWrapper.Users;
             _conf = conf;
             _hubContext = hubContext;
             _emailService = emailService;
+            _packets = dBWrapper.Packets;
         }
 
         /// <summary>
@@ -509,6 +512,13 @@ namespace Server.Controllers
                 </html>
             ", pdf, user?.Id + "" + DateOnly.FromDateTime(DateTime.Now) + "" + ".pdf");
             return Ok();
+        }
+        [Authorize]
+        [HttpGet("packets")]
+        public Task<IActionResult> GetPackets()
+        {
+            var packets = _packets.Find(_ => true).ToList();
+            return Task.FromResult<IActionResult>(Ok(packets));
         }
     }
 }
