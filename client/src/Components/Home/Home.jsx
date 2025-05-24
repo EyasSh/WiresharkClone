@@ -70,16 +70,23 @@ export default function Home() {
   }, []);
 
   // ─── THIS is the one & only filter effect ────────────────
-  useEffect(() => {
-    const result = packetsArr.filter(p =>
-      filter === 'All' ? true : p.protocol === filter
-    );
-    console.log(
-      `[FilterEffect] filter="${filter}" raw=${packetsArr.length} → filtered=${result.length}`
-    );
-    setFilteredPackets(result);
-    setSelectedIndex(-1); // clear any detail when the list changes
-  }, [packetsArr, filter]);
+ useEffect(() => {
+   const result = packetsArr.filter(p =>
+     filter === 'All' ? true : p.protocol === filter
+   );
+   console.log(
+     `[FilterEffect] filter="${filter}" raw=${packetsArr.length} → filtered=${result.length}`
+   );
+   setFilteredPackets(result);
+ }, [packetsArr, filter]);
+useEffect(() => {
+  console.log('selectedIndex is now', selectedIndex);
+}, [selectedIndex]);
+
+ // only clear the detail when the *filter* itself changes
+ useEffect(() => {
+   setSelectedIndex(-1);
+ }, [filter]);
 
   // ─── pick the packet for the detail box ──────────────────
   const selectedPacket =
@@ -111,6 +118,8 @@ export default function Home() {
           <Packet
             // use a key that changes whenever filter toggles back to All
             key={`${p.protocol}-${p.timestamp}-${i}`}
+            index={i}
+            clickHandler={() => { console.log('click', i); setSelectedIndex(i); }}
             packetType={`Protocol: ${p.protocol} | IP v${p.ipVersion}`}
             sourceIP={p.sourceIP}
             destinationIP={p.destinationIP}
@@ -119,8 +128,9 @@ export default function Home() {
             protocol={p.protocol}
             packetDescription={p.description}
             timestamp={p.timestamp}
-            index={i}
-            clickHandler={() => setSelectedIndex(i)}
+            isSuspicious={p.isSuspicious}
+            isMalicious={p.isMalicious}
+            
           />
         ))}
       </div>

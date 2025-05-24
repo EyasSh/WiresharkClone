@@ -1,26 +1,48 @@
+/* common container styles */
+.Packet-Container,
+.Packet-Container-Warning,
+.Packet-Container-Error {
+  border-radius: 8px;
+  margin: 1rem auto;
+  overflow: hidden;
+  transition: max-height 0.5s ease;
+  width: 75vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+}
+
+/* common span styles */
+.Packet-Container span,
+.Packet-Container-Warning span,
+.Packet-Container-Error span {
+  margin: 0;
+  font-weight: bold;
+  font-size: 1.2rem;
+  padding: 0.5rem;
+}
+
+/* common hover */
+.Packet-Container:hover,
+.Packet-Container-Warning:hover,
+.Packet-Container-Error:hover {
+  cursor: pointer;
+}
+
+/* variants */
 .Packet-Container {
-    background-color: #181818;
-    color: #ffffff;
-    border-radius: 8px;
-    margin: 1rem auto;
-    box-shadow: 0px 0px 10px rgba(0,0,0,0.75);
-    overflow: hidden; 
-    /* Adding a transition on max-height for smooth open/close */
-    transition: max-height 0.5s ease;
-    width: 75vw;
-    display : flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding:1rem;
-  }
-  .Packet-Container span {
-    margin: 0;
-    font-weight: bold;
-    font-size: 1.2rem;
-    padding: 0.5rem;
-  }
-  .Packet-Container:hover{
-    cursor: pointer;
-  }
-  
+  background-color: #181818;
+  color: #ffffff;
+}
+
+.Packet-Container-Warning {
+  background-color: #ffcc00;
+  color: #000000;
+}
+
+.Packet-Container-Error {
+  background-color: #ff0000;
+  color: #ffffff;
+}

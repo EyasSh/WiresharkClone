@@ -25,6 +25,7 @@
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+  /* Improves font rendering on macOS */
   -moz-osx-font-smoothing: grayscale;
   height: max-content;
   user-select: none;
@@ -198,42 +199,7 @@ input:-webkit-autofill:focus {
     padding:1rem;
   
 }
-[data-theme="light"] .paper-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  background-color: transparent; /* or a light shade like #fff */
-}
-[data-theme='light'] .packet-paper {
-  width: 50%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;      /* push content to right edge */
-  padding: 20px;
-  gap: 3em;
-  /* styling enhancements */
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-[data-theme="light"] .paper-container h2 {
-  margin-bottom: 16px;
-  color: #222;
-}
 
-[data-theme="light"] .packet-paper p {
-  margin: 0;
-  text-align: left;    /* ensure the text is left-aligned */
-  color: #333;
-  font-size: 14px;
-}
-
-body[data-theme="light"] .packet-paper p strong {
-  color: #555;
-}
 [data-theme='dark'] {
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
@@ -280,41 +246,46 @@ body[data-theme="light"] .packet-paper p strong {
   -webkit-text-fill-color: white !important;
   transition: background-color 5000s ease-in-out 0s;
 }
-[data-theme="dark"] .packet-paper {
-  width: 50%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  /* flex-end pushes children to the right edge in a column layout */
-  align-items: flex-start;      
-  padding: 20px;
-  gap: 3em;
-  background-color: #151515;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-[data-theme="dark"] .paper-container h2 {
-  margin-bottom: 16px;
-  color: #fff;
-}
-
-[data-theme="dark"] .packet-paper p {
-  margin: 0;
-  text-align: left;
-  color: #fff;
-  font-size: 14px;
-}
-
-[data-theme="dark"] .packet-paper p strong {
-  color: #fff;
-}
-[data-theme="dark"] .paper-container {
+/* —————— base layout (always on) —————— */
+.paper-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 20px;
-  background-color: transparent; /* or a dark shade like #151515 */
 }
+.packet-paper {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 20px;
+  gap: 3em;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  font-size: 14px;
+  background-color: #444cdf;
+}
+.packet-paper p { margin: 0; }
+.packet-paper p strong { font-weight: bold; }
+
+
+[data-theme='light'] .packet-paper {
+  background: #f9f9f9;
+  color: #333;
+}
+[data-theme='light'] .packet-paper p strong {
+  color: #555;
+}
+
+
+[data-theme='dark'] .packet-paper {
+  background: #151515;
+  color: #fff;
+}
+[data-theme='dark'] .packet-paper p strong {
+  color: #fff;
+}
+
+
 
 

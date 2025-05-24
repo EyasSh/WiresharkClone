@@ -37,13 +37,13 @@ function Packet({
    * @function
    */
   const handleClick = () => {
-    if (props.clickHandler && props.index>=0) {
-      props.clickHandler(props.index);
-    }
-  }
+  console.log('Packet clicked!', props.index);
+  props.clickHandler(props.index);
+}
 
+const style = props.isMalicious ? 'Packet-Container-Error' : props.isSuspicious ? 'Packet-Container-Warning' : 'Packet-Container';
   return (
-    <div className={`Packet-Container`} onClick={()=>handleClick()}>
+    <div className={style} onClick={()=>handleClick()}>
       <span>{SourceIP}</span>
       <span>{SourcePort}</span>
       <span>{Type}</span>
@@ -63,6 +63,8 @@ Packet.propTypes = {
   packetDescription: PropTypes.string,
   clickHandler: PropTypes.func,
   index: PropTypes.number,
+  isSuspicious: PropTypes.bool,
+  isMalicious: PropTypes.bool,
 };
 
 export default Packet;

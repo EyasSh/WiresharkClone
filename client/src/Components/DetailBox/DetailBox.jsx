@@ -3,6 +3,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import '../../index.css';
+import './DetailBox.css';
 import JsonParser from '../../Services/JsonParser';
 
 /**
@@ -18,7 +19,7 @@ import JsonParser from '../../Services/JsonParser';
  */
 function DetailBox({ packet, onClose }) {
   console.log('🔍 DetailBox render, packet =', packet);
-  if (!packet) return null;
+  if (!packet) {console.log('🔍 DetailBox render, packet is null'); return null;}
 
   return (
     <div
