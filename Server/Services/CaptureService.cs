@@ -11,7 +11,7 @@ namespace Server.Services;
 
 public class Capturer
 {
-    public static ConcurrentQueue<PacketInfo> packets = new ConcurrentQueue<PacketInfo>();
+    public static Queue<PacketInfo> packets = new Queue<PacketInfo>();
 
     /// <summary>
     /// Starts the capture process for network packets.
@@ -23,9 +23,9 @@ public class Capturer
     /// The method will then enter an infinite loop, capturing packets one by one.
     /// For each packet, it will parse the packet using <see cref="Packet.ParsePacket"/>, and then process it using <see cref="ProcessPacket"/>, and (optionally) sleep for a small period of time to prevent busy-waiting.
     /// </remarks>
-    public static ConcurrentQueue<PacketInfo> StartCapture()
+    public static Queue<PacketInfo> StartCapture()
     {
-        packets = new ConcurrentQueue<PacketInfo>();
+        packets = new Queue<PacketInfo>();
 
         var devices = CaptureDeviceList.Instance;
         if (devices == null || devices.Count < 1)
@@ -64,8 +64,7 @@ public class Capturer
         {
             device.Open(DeviceModes.Promiscuous, 1000);
             Console.WriteLine("🟢 Starting capture...");
-            var endTime = DateTime.UtcNow + Analyzer.defaultWindow;
-            while (DateTime.UtcNow < endTime)
+            for(int i=0; i<600; i++)
             {
                 GetPacketStatus status = device.GetNextPacket(out PacketCapture packetCapture);
                 if (status != GetPacketStatus.PacketRead)

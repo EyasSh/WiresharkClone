@@ -2,7 +2,7 @@ import  { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './FilterButton.css';
 
-const OPTIONS = ['All', 'TCP', 'UDP', 'ICMP',"ARP"];
+const OPTIONS = ['All', 'TCP', 'UDP', 'ICMP',"ARP","Suspicious and Malicious"];
 
 /**
  * A dropdown button component for selecting a filter option.

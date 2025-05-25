@@ -72,7 +72,7 @@ export default function Home() {
   // ─── THIS is the one & only filter effect ────────────────
  useEffect(() => {
    const result = packetsArr.filter(p =>
-     filter === 'All' ? true : p.protocol === filter
+     filter === 'All' ? true : p.protocol === filter || p.isSuspicious || p.isMalicious
    );
    console.log(
      `[FilterEffect] filter="${filter}" raw=${packetsArr.length} → filtered=${result.length}`

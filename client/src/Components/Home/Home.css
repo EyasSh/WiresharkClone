@@ -6,6 +6,7 @@
     align-items: center;
     justify-content: center;
     gap:2vh;
+    overflow-x: hidden;
  
 }
 .Items{
@@ -29,5 +30,6 @@
 .Filter-Container {
     position:absolute;
     top:14%;
-    left: 10%;
+    left: 5%;
+    width :105%;
 }

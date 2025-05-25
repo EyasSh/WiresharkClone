@@ -17,27 +17,25 @@ public static class Analyzer
     public static TimeSpan defaultHalfWindow = TimeSpan.FromSeconds(30);
     public static TimeSpan defaultWindow = TimeSpan.FromSeconds(60);
 
-    // — threshold at ~1000 packets per minute:
-    //    •  60 s window → 1 000 packets
-    //    •  30 s window →   500 packets
-    //    •  15 s window →   250 packets
-    public static int udpThreshold = 1_000; // 1000 packets per minute
-    public static int udpHalfThreshold = 500;
-    public static int udpQuarterThreshold = 250;
+    public static int udpTcpSynThreshold = 600;
+    public static int udpHalfThreshold = 300;
+    public static int udpQuarterThreshold = 150;
+    public static int portScanThreshold = 20;
+    public static int synHalfThreshold = 10;
+    public static int synQuarterThreshold = 5;
 
-    // For SYN-flood, same PPM logic:
-    public static int synThreshold = 1_000;
-    public static int synHalfThreshold = 500;
-    public static int synQuarterThreshold = 250;
-
-    public static int portScanThreshold = 20;  // leave as-is unless you also want to adjust
-
+    /// <summary>
+    /// Detect SYN flood attacks: count SYNs per source IP
+    /// </summary>
+    /// <param name="packets">Enumerable of <see cref="PacketInfo"/> objects representing the packets.</param>
+    /// <param name="synThreshold">The minimum number of SYNs to consider a SYN flood.</param>
+    /// <param name="window">The time window to consider.</param>
     public static void DetectSynFlood(
         IEnumerable<PacketInfo> packets,
         int synThreshold,
         TimeSpan window)
     {
-        var cutoff = DateTime.UtcNow - window;
+        var cutoff = DateTime.Now - window;
         var synPkts = packets
             .Where(p =>
                 p.Timestamp >= cutoff &&
@@ -57,12 +55,18 @@ public static class Analyzer
         }
     }
 
+    /// <summary>
+    /// Detect UDP flood attacks: count UDP packets per source IP
+    /// </summary>
+    /// <param name="packets">Enumerable of <see cref="PacketInfo"/> objects representing the packets.</param>
+    /// <param name="udpThreshold">The minimum number of UDP packets to consider a UDP flood.</param>
+    /// <param name="window">The time window to consider.</param>
     public static void DetectUdpFlood(
         IEnumerable<PacketInfo> packets,
         int udpThreshold,
         TimeSpan window)
     {
-        var cutoff = DateTime.UtcNow - window;
+        var cutoff = DateTime.Now - window;
         var udpPkts = packets
             .Where(p =>
                 p.Timestamp >= cutoff &&
@@ -91,7 +95,7 @@ public static class Analyzer
         int portScanThreshold,
         TimeSpan window)
     {
-        var cutoff = DateTime.UtcNow - window;
+        var cutoff = DateTime.Now - window;
         var scans = packets
             .Where(p =>
                 p.Timestamp >= cutoff &&
