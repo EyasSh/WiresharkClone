@@ -16,25 +16,28 @@ public static class Analyzer
     public static TimeSpan defaultQuarterWindow = TimeSpan.FromSeconds(15);
     public static TimeSpan defaultHalfWindow = TimeSpan.FromSeconds(30);
     public static TimeSpan defaultWindow = TimeSpan.FromSeconds(60);
-    public static int udpTcpSynThreshold = 600;
-    public static int udpHalfThreshold = 300;
-    public static int udpQuarterThreshold = 150;
-    public static int portScanThreshold = 20;
-    public static int synHalfThreshold = 10;
-    public static int synQuarterThreshold = 5;
-    /// <summary>
-    /// Detect SYN flood: count TCP SYN packets per source IP in the time window
-    /// </summary>
-    /// <param name="packets">Enumerable of <see cref="PacketInfo"/> objects representing the packets.</param>
-    /// <param name="synThreshold">Threshold of TCP SYN packets per source IP.</param>
-    /// <param name="window">Time window in which to detect SYN flood.</param>
+
+    // — threshold at ~1000 packets per minute:
+    //    •  60 s window → 1 000 packets
+    //    •  30 s window →   500 packets
+    //    •  15 s window →   250 packets
+    public static int udpThreshold = 1_000; // 1000 packets per minute
+    public static int udpHalfThreshold = 500;
+    public static int udpQuarterThreshold = 250;
+
+    // For SYN-flood, same PPM logic:
+    public static int synThreshold = 1_000;
+    public static int synHalfThreshold = 500;
+    public static int synQuarterThreshold = 250;
+
+    public static int portScanThreshold = 20;  // leave as-is unless you also want to adjust
+
     public static void DetectSynFlood(
         IEnumerable<PacketInfo> packets,
         int synThreshold,
         TimeSpan window)
     {
         var cutoff = DateTime.UtcNow - window;
-        // filter only TCP SYN packets in the time window
         var synPkts = packets
             .Where(p =>
                 p.Timestamp >= cutoff &&
@@ -47,20 +50,13 @@ public static class Analyzer
         {
             if (grp.Count() > synThreshold)
             {
-                Console.WriteLine($"⚠️ SYN-Flood suspected from {grp.Key}: {grp.Count()} SYNs in last {window.TotalSeconds}s");
-                foreach (var pi in grp)
-                    pi.isSuspicious = true;
+                Console.WriteLine(
+                  $"⚠️ SYN-Flood suspected from {grp.Key}: {grp.Count()} SYNs in last {window.TotalSeconds}s");
+                foreach (var pi in grp) pi.isSuspicious = true;
             }
         }
     }
 
-
-    /// <summary>
-    /// Detect UDP flood: count packets per source IP in the time window
-    /// </summary>
-    /// <param name="packets">Enumerable of <see cref="PacketInfo"/> objects</param>
-    /// <param name="udpThreshold">Threshold of UDP packets per source IP</param>
-    /// <param name="window">Time window in which to detect UDP flood</param>
     public static void DetectUdpFlood(
         IEnumerable<PacketInfo> packets,
         int udpThreshold,
@@ -77,13 +73,12 @@ public static class Analyzer
         {
             if (grp.Count() > udpThreshold)
             {
-                Console.WriteLine($"⚠️ UDP-Flood suspected from {grp.Key}: {grp.Count()} packets in last {window.TotalSeconds}s");
-                foreach (var pi in grp)
-                    pi.isSuspicious = true;
+                Console.WriteLine(
+                  $"⚠️ UDP-Flood suspected from {grp.Key}: {grp.Count()} packets in last {window.TotalSeconds}s");
+                foreach (var pi in grp) pi.isSuspicious = true;
             }
         }
     }
-
 
     /// <summary>
     /// Detect TCP Port Scan: count unique destination ports per source IP

@@ -50,10 +50,10 @@ public class PacketHub : Hub<IPacketContext>
     /// </summary>
     public void GetPackets()
     {
-        Queue<PacketInfo> packets = Capturer.StartCapture();
-        Analyzer.DetectSynFlood(packets, 150, Analyzer.defaultQuarterWindow);
-        Analyzer.DetectUdpFlood(packets, 150, Analyzer.defaultQuarterWindow);
-        Analyzer.DetectPortScan(packets, 5, Analyzer.defaultQuarterWindow);
+        ConcurrentQueue<PacketInfo> packets = Capturer.StartCapture();
+        Analyzer.DetectSynFlood(packets, Analyzer.synQuarterThreshold, Analyzer.defaultQuarterWindow);
+        Analyzer.DetectUdpFlood(packets, Analyzer.udpQuarterThreshold, Analyzer.defaultQuarterWindow);
+        Analyzer.DetectPortScan(packets, Analyzer.portScanThreshold, Analyzer.defaultQuarterWindow);
         Analyzer.DetectPingOfDeathV4(packets);
         Analyzer.DetectPingOfDeathV6(packets);
         var suspackets = packets.Where(p => p.isSuspicious == true || p.isMalicious == true).ToList();
@@ -66,7 +66,7 @@ public class PacketHub : Hub<IPacketContext>
         {
             System.Console.WriteLine($"No suspicious packets found");
         }
-
+        System.Console.WriteLine($"Sending {packets.Count} packets to client {Context.ConnectionId}");
         Clients.Caller.ReceivePackets(packets.ToArray());
     }
     public override async Task OnDisconnectedAsync(Exception? exception)

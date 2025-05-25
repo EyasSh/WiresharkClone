@@ -5,12 +5,13 @@ using SharpPcap.WinpkFilter;
 using System.Net;
 using Server.Models;
 using System.Text;
+using System.Collections.Concurrent;
 
 namespace Server.Services;
 
 public class Capturer
 {
-    public static Queue<PacketInfo> packets = new Queue<PacketInfo>();
+    public static ConcurrentQueue<PacketInfo> packets = new ConcurrentQueue<PacketInfo>();
 
     /// <summary>
     /// Starts the capture process for network packets.
@@ -22,9 +23,9 @@ public class Capturer
     /// The method will then enter an infinite loop, capturing packets one by one.
     /// For each packet, it will parse the packet using <see cref="Packet.ParsePacket"/>, and then process it using <see cref="ProcessPacket"/>, and (optionally) sleep for a small period of time to prevent busy-waiting.
     /// </remarks>
-    public static Queue<PacketInfo> StartCapture()
+    public static ConcurrentQueue<PacketInfo> StartCapture()
     {
-        packets = new Queue<PacketInfo>();
+        packets = new ConcurrentQueue<PacketInfo>();
 
         var devices = CaptureDeviceList.Instance;
         if (devices == null || devices.Count < 1)
@@ -63,8 +64,8 @@ public class Capturer
         {
             device.Open(DeviceModes.Promiscuous, 1000);
             Console.WriteLine("🟢 Starting capture...");
-
-            for (int i = 0; i < 600; i++)
+            var endTime = DateTime.UtcNow + Analyzer.defaultWindow;
+            while (DateTime.UtcNow < endTime)
             {
                 GetPacketStatus status = device.GetNextPacket(out PacketCapture packetCapture);
                 if (status != GetPacketStatus.PacketRead)
