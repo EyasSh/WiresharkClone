@@ -37,3 +37,23 @@
     font-weight: bold;
     filter: saturate(3);
 }
+
+.CNavCont{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    padding: 10px 20px; /* Adjust padding for better spacing */
+    position: absolute; /* Allows it to be positioned relative to the parent */
+    top: 8%; /* Aligns it to the top of the parent */
+    left: 0; /* Aligns it to the left of the parent */
+    background-color: #181818;
+}
+.CNavItems{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    justify-content: space-around;
+}

@@ -126,7 +126,7 @@ export function Main({ hubConnection, sid, packetConnection, psid }) {
                 <Route path="/home" element={<Home hubConnection={packetConnection} sid={psid} />} />
                 <Route path="/performance" element={<Performance hubConnection={hubConnection} sid={sid} />} />
                 <Route path="/packets" element={<Packets hubConnection={hubConnection} sid={sid} />} />
-                <Route path='/security' element={<VirusChecker />} />
+                <Route path='/security/*' element={<VirusChecker />} />
             </Routes>
         </>
     );
