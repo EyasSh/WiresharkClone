@@ -1,0 +1,26 @@
+.HistoryBox {
+    display : flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px;
+    justify-content: space-around;
+    border: none;
+    border-radius: 5px;
+    background-color: #171717;
+    color: #fff;
+    width : 100%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2vh;
+}
+
+.HistoryBox-Name {
+    font-weight: bold;
+}
+
+.HistoryBox-Date {
+    color: #888;
+}
+
+.HistoryBox-Result {
+    color: white;
+}

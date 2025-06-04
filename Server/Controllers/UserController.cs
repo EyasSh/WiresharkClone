@@ -24,6 +24,7 @@ namespace Server.Controllers
         private readonly IHubContext<SocketService> _hubContext;
         IMongoCollection<User> _users;
         IMongoCollection<PacketInfo> _packets;
+        IMongoCollection<VirusCheckerHistory> _virusCheckerHistory;
         private readonly EmailService _emailService;
         private const string apiKey = "730392f1c1b50b2c0dd1ddac270b3802472f07bb3863282d02162322b8f76e22";
         private readonly IConfiguration _conf;
@@ -43,6 +44,7 @@ namespace Server.Controllers
             _hubContext = hubContext;
             _emailService = emailService;
             _packets = dBWrapper.Packets;
+            _virusCheckerHistory = dBWrapper.VirusCheckerHistory;
         }
 
         /// <summary>
@@ -375,12 +377,39 @@ namespace Server.Controllers
                     $"{Guid.NewGuid()}_VirusScanReport.pdf"
                 );
                 System.Console.WriteLine("Email sent successfully.");
+                if (malicious > 0)
+                {
+                    var historyRecord = new VirusCheckerHistory
+                    {
+                        Name = file.FileName,
+                        Date = DateTime.Now,
+                        Result = "Malicious"
+                    };
+                    await _virusCheckerHistory.InsertOneAsync(historyRecord);
+                }
                 return Ok(resultMessage);
             }
             catch (Exception ex)
             {
                 return StatusCode(500, new JObject { ["message"] = $"An error occurred: {ex.Message}" });
             }
+        }
+        /// <summary>
+        /// Retrieves the history of virus scans.
+        /// </summary>
+        /// <returns>
+        /// A successful status code (200) with the list of virus scan history records if the request was successful,
+        /// or an internal server error status code (500) if an error occurred while retrieving the history.
+        /// </returns>
+        /// <remarks>
+        /// The history contains the file name, date of scan, and the result of the scan (malicious or not).
+        /// </remarks>
+        [Authorize]
+        [HttpGet("history")]
+        public async Task<IActionResult> GetHistory()
+        {
+            var history = await _virusCheckerHistory.Find(_ => true).ToListAsync();
+            return Ok(history);
         }
 
         /// <summary>

@@ -24,3 +24,14 @@
     height: 15vh;
 
 }
+.FileHistoryContainer
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: fit-content;
+    width: 200%;
+    overflow-x: hidden;
+    
+}
