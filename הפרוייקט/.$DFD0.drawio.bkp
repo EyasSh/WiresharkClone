@@ -65,7 +65,7 @@
             <mxPoint x="160" y="290" as="sourcePoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="jx4DSbA3mmBtBKJR21YE-1" value="F18: בקשה לבדיקת תעבורה &lt;br&gt;ונתוני משתמש&amp;nbsp;&lt;div&gt;&lt;br/&gt;&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="ykph8vgxGZFGmV6vcb2X-95" vertex="1" connectable="0">
+        <mxCell id="jx4DSbA3mmBtBKJR21YE-1" value="F18: בקשה לבדיקת תעבורה &lt;br&gt;ונתוני משתמש&amp;nbsp;&lt;div&gt;&lt;br/&gt;&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="ykph8vgxGZFGmV6vcb2X-95">
           <mxGeometry x="-0.0655" y="-2" relative="1" as="geometry">
             <mxPoint y="3" as="offset" />
           </mxGeometry>
@@ -101,10 +101,6 @@
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="460" y="265" as="targetPoint" />
             <mxPoint x="680" y="267.5" as="sourcePoint" />
-            <Array as="points">
-              <mxPoint x="680" y="240" />
-              <mxPoint x="468" y="240" />
-            </Array>
           </mxGeometry>
         </mxCell>
         <mxCell id="tAwtbT0l2tdigMmU-B7L-10" value="F6: נתוני ניטור היסטוריים&lt;br&gt;&amp;nbsp;(לניתוח דפוסים)" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="tAwtbT0l2tdigMmU-B7L-9" vertex="1" connectable="0">
@@ -183,14 +179,10 @@
             <mxPoint x="-13" as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="1ERfAXlUvEpN1vJGgylA-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.12;entryY=-0.033;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="ykph8vgxGZFGmV6vcb2X-82" edge="1" target="ykph8vgxGZFGmV6vcb2X-74">
+        <mxCell id="1ERfAXlUvEpN1vJGgylA-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="ykph8vgxGZFGmV6vcb2X-82" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="670" y="679.5" as="targetPoint" />
             <mxPoint x="480" y="679.5" as="sourcePoint" />
-            <Array as="points">
-              <mxPoint x="470" y="640" />
-              <mxPoint x="687" y="640" />
-            </Array>
           </mxGeometry>
         </mxCell>
         <mxCell id="1ERfAXlUvEpN1vJGgylA-24" value="F16: פרטי קבצים זדוניים&amp;nbsp;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="1ERfAXlUvEpN1vJGgylA-16" vertex="1" connectable="0">
@@ -234,7 +226,7 @@
             <mxPoint x="-5" y="8" as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="1ERfAXlUvEpN1vJGgylA-30" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="ykph8vgxGZFGmV6vcb2X-73" target="ykph8vgxGZFGmV6vcb2X-80" edge="1">
+        <mxCell id="1ERfAXlUvEpN1vJGgylA-30" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="ykph8vgxGZFGmV6vcb2X-80" target="tAwtbT0l2tdigMmU-B7L-7" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="400" y="450" as="sourcePoint" />
             <mxPoint x="450" y="400" as="targetPoint" />
@@ -253,17 +245,6 @@
         </mxCell>
         <mxCell id="1ERfAXlUvEpN1vJGgylA-34" value="F1: פרטי רישום" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="1ERfAXlUvEpN1vJGgylA-33" vertex="1" connectable="0">
           <mxGeometry x="-0.1306" y="2" relative="1" as="geometry">
-            <mxPoint as="offset" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="5T5FbwG1NiTb0xSCTwGT-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=1;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="ykph8vgxGZFGmV6vcb2X-74" target="ykph8vgxGZFGmV6vcb2X-82">
-          <mxGeometry relative="1" as="geometry">
-            <mxPoint x="670" y="790" as="targetPoint" />
-            <mxPoint x="470" y="790.5" as="sourcePoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="5T5FbwG1NiTb0xSCTwGT-2" value="F16: פרטי קבצים זדוניים&amp;nbsp;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="5T5FbwG1NiTb0xSCTwGT-1">
-          <mxGeometry x="-0.052" y="-1" relative="1" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
