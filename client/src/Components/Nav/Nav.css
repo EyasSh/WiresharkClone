@@ -46,7 +46,7 @@
     width: 97.9%;
     padding: 10px 20px; /* Adjust padding for better spacing */
     position: absolute; /* Allows it to be positioned relative to the parent */
-    top: 8%; /* Aligns it to the top of the parent */
+    top: 7.8%; /* Aligns it to the top of the parent */
     left: 0; /* Aligns it to the left of the parent */
     background-color: #181818;
 }

@@ -61,9 +61,10 @@ function FileChecker() {
     return (
         <>
             <div className='File-Container'>
+                <h1>File Checker</h1>
                 <Input type='file' action={(e)=>setFile(e)} required={true} />
                 <Button content='Check File' action={async()=>await handleFile()} status='signup' />
-                <span className='url-status'>{fileStatus}</span>
+                <b><span className='url-status'>{fileStatus}</span></b>
             </div>
         </>
     );

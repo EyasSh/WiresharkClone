@@ -76,9 +76,10 @@ function LinkChecker() {
     return (
         <>
             <div className='Link-Container'>
+                <h1>URL Checker</h1>
                 <Input type='url' placeholder='Enter URL' value={url} action={(e)=>setUrl(e)} required={true} />
                 <Button content='Check URL' action={async()=>await handleUrl()} status='signup' />
-                <span className='url-status'>{urlStatus}</span>
+                <b><span className='url-status'>{urlStatus}</span></b>
             </div>
         </>
     );
