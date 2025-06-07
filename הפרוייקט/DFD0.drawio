@@ -10,7 +10,7 @@
         <mxCell id="ykph8vgxGZFGmV6vcb2X-72" value="E1: User" style="whiteSpace=wrap;html=1;aspect=fixed;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
           <mxGeometry x="80" y="120" width="80" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="ykph8vgxGZFGmV6vcb2X-73" value="D2: מאגר פקטות חריגות" style="html=1;dashed=0;whiteSpace=wrap;shape=partialRectangle;right=0;left=0;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1" vertex="1">
+        <mxCell id="ykph8vgxGZFGmV6vcb2X-73" value="D2: מאגר נתוני ניטור ואיומים" style="html=1;dashed=0;whiteSpace=wrap;shape=partialRectangle;right=0;left=0;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1" vertex="1">
           <mxGeometry x="680" y="265" width="140" height="30" as="geometry" />
         </mxCell>
         <mxCell id="ykph8vgxGZFGmV6vcb2X-74" value="D4: מאגר פרטי קבצים זדוניים" style="html=1;dashed=0;whiteSpace=wrap;shape=partialRectangle;right=0;left=0;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1" vertex="1">
@@ -65,7 +65,7 @@
             <mxPoint x="160" y="290" as="sourcePoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="jx4DSbA3mmBtBKJR21YE-1" value="F18: בקשה לבדיקת תעבורה &lt;br&gt;ונתוני משתמש&amp;nbsp;&lt;div&gt;&lt;br/&gt;&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="ykph8vgxGZFGmV6vcb2X-95" vertex="1" connectable="0">
+        <mxCell id="jx4DSbA3mmBtBKJR21YE-1" value="F16: בקשה לבדיקת תעבורה &lt;br&gt;ונתוני משתמש&amp;nbsp;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="ykph8vgxGZFGmV6vcb2X-95" vertex="1" connectable="0">
           <mxGeometry x="-0.0655" y="-2" relative="1" as="geometry">
             <mxPoint y="3" as="offset" />
           </mxGeometry>
@@ -112,7 +112,7 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="1ERfAXlUvEpN1vJGgylA-1" value="E2: שירות מייל חיצוני (MAILJIT API)" style="whiteSpace=wrap;html=1;aspect=fixed;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+        <mxCell id="1ERfAXlUvEpN1vJGgylA-1" value="E2: שירות מייל חיצוני (MAILJET API)" style="whiteSpace=wrap;html=1;aspect=fixed;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
           <mxGeometry x="80" y="375" width="80" height="80" as="geometry" />
         </mxCell>
         <mxCell id="1ERfAXlUvEpN1vJGgylA-2" value="E3: VIRUS TOTAL API" style="whiteSpace=wrap;html=1;aspect=fixed;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
@@ -128,7 +128,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="1ERfAXlUvEpN1vJGgylA-8" value="F10: נתוני דוחות" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="1ERfAXlUvEpN1vJGgylA-3" vertex="1" connectable="0">
+        <mxCell id="1ERfAXlUvEpN1vJGgylA-8" value="F9: נתוני דוחות" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="1ERfAXlUvEpN1vJGgylA-3" vertex="1" connectable="0">
           <mxGeometry x="-0.134" y="-3" relative="1" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
@@ -139,7 +139,7 @@
             <mxPoint x="420" y="390" as="sourcePoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="1ERfAXlUvEpN1vJGgylA-7" value="F9: פרטי התראה&lt;br&gt;&amp;nbsp;(מייל)" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="1ERfAXlUvEpN1vJGgylA-4" vertex="1" connectable="0">
+        <mxCell id="1ERfAXlUvEpN1vJGgylA-7" value="F8: פרטי התראה&lt;br&gt;&amp;nbsp;(מייל)" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="1ERfAXlUvEpN1vJGgylA-4" vertex="1" connectable="0">
           <mxGeometry x="-0.0674" y="1" relative="1" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
@@ -150,7 +150,7 @@
             <mxPoint x="585" y="410" as="sourcePoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="1ERfAXlUvEpN1vJGgylA-12" value="F11: נתוני שימוש (לדוחות, גרפים),&amp;nbsp;&lt;br&gt;פרטי פקטות חריגות" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="1ERfAXlUvEpN1vJGgylA-10" vertex="1" connectable="0">
+        <mxCell id="1ERfAXlUvEpN1vJGgylA-12" value="F10: נתוני שימוש (לדוחות, גרפים),&amp;nbsp;&lt;br&gt;פרטי פקטות חריגות" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="1ERfAXlUvEpN1vJGgylA-10" vertex="1" connectable="0">
           <mxGeometry x="-0.0123" y="2" relative="1" as="geometry">
             <mxPoint y="1" as="offset" />
           </mxGeometry>
@@ -164,7 +164,7 @@
             <mxPoint x="359.5999999999999" y="654.2000000000002" as="sourcePoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="1ERfAXlUvEpN1vJGgylA-18" value="F14: נתוני קובץ לבדיקה" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="1ERfAXlUvEpN1vJGgylA-14" vertex="1" connectable="0">
+        <mxCell id="1ERfAXlUvEpN1vJGgylA-18" value="F12: נתוני קובץ לבדיקה" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="1ERfAXlUvEpN1vJGgylA-14" vertex="1" connectable="0">
           <mxGeometry x="0.0577" relative="1" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
@@ -178,12 +178,12 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="1ERfAXlUvEpN1vJGgylA-19" value="F15: נתוני תוצאות בדיקה" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="1ERfAXlUvEpN1vJGgylA-15" vertex="1" connectable="0">
+        <mxCell id="1ERfAXlUvEpN1vJGgylA-19" value="F13: נתוני תוצאות בדיקה" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="1ERfAXlUvEpN1vJGgylA-15" vertex="1" connectable="0">
           <mxGeometry x="-0.0777" y="-1" relative="1" as="geometry">
             <mxPoint x="-13" as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="1ERfAXlUvEpN1vJGgylA-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.12;entryY=-0.033;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="ykph8vgxGZFGmV6vcb2X-82" edge="1" target="ykph8vgxGZFGmV6vcb2X-74">
+        <mxCell id="1ERfAXlUvEpN1vJGgylA-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.12;entryY=-0.033;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="ykph8vgxGZFGmV6vcb2X-82" target="ykph8vgxGZFGmV6vcb2X-74" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="670" y="679.5" as="targetPoint" />
             <mxPoint x="480" y="679.5" as="sourcePoint" />
@@ -193,7 +193,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="1ERfAXlUvEpN1vJGgylA-24" value="F16: פרטי קבצים זדוניים&amp;nbsp;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="1ERfAXlUvEpN1vJGgylA-16" vertex="1" connectable="0">
+        <mxCell id="1ERfAXlUvEpN1vJGgylA-24" value="F14: נתוני קבצים זדוניים&amp;nbsp;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="1ERfAXlUvEpN1vJGgylA-16" vertex="1" connectable="0">
           <mxGeometry x="-0.052" y="-1" relative="1" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
@@ -204,7 +204,7 @@
             <mxPoint x="180" y="590" as="sourcePoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="1ERfAXlUvEpN1vJGgylA-23" value="F13: נתוני קובץ לבדיקה" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="1ERfAXlUvEpN1vJGgylA-17" vertex="1" connectable="0">
+        <mxCell id="1ERfAXlUvEpN1vJGgylA-23" value="F11: נתוני קובץ לבדיקה" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="1ERfAXlUvEpN1vJGgylA-17" vertex="1" connectable="0">
           <mxGeometry x="-0.2204" y="-1" relative="1" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
@@ -215,7 +215,7 @@
             <mxPoint x="450" y="720" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="1ERfAXlUvEpN1vJGgylA-26" value="F17: נתוני תוצאות בדיקה&amp;nbsp;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="1ERfAXlUvEpN1vJGgylA-25" vertex="1" connectable="0">
+        <mxCell id="1ERfAXlUvEpN1vJGgylA-26" value="F15: נתוני תוצאות בדיקה&amp;nbsp;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="1ERfAXlUvEpN1vJGgylA-25" vertex="1" connectable="0">
           <mxGeometry x="0.0268" relative="1" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
@@ -229,20 +229,9 @@
             <mxPoint x="450" y="400" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="1ERfAXlUvEpN1vJGgylA-29" value="F8 : פרטי התראה&lt;br&gt;&amp;nbsp;(זמן אמת, דוחות)" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="1ERfAXlUvEpN1vJGgylA-28" vertex="1" connectable="0">
+        <mxCell id="1ERfAXlUvEpN1vJGgylA-29" value="F7 : פרטי התראה&lt;br&gt;&amp;nbsp;(זמן אמת, דוחות)" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="1ERfAXlUvEpN1vJGgylA-28" vertex="1" connectable="0">
           <mxGeometry x="0.0198" y="1" relative="1" as="geometry">
             <mxPoint x="-5" y="8" as="offset" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="1ERfAXlUvEpN1vJGgylA-30" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="ykph8vgxGZFGmV6vcb2X-73" target="ykph8vgxGZFGmV6vcb2X-80" edge="1">
-          <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="400" y="450" as="sourcePoint" />
-            <mxPoint x="450" y="400" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="1ERfAXlUvEpN1vJGgylA-31" value="F7: פרטי איומים מזוהים, נתוני ניטור" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="1ERfAXlUvEpN1vJGgylA-30" vertex="1" connectable="0">
-          <mxGeometry x="-0.1429" relative="1" as="geometry">
-            <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="1ERfAXlUvEpN1vJGgylA-33" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0.1;entryY=0.24;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="ykph8vgxGZFGmV6vcb2X-72" target="ykph8vgxGZFGmV6vcb2X-79" edge="1">
@@ -256,15 +245,18 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="5T5FbwG1NiTb0xSCTwGT-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=1;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="ykph8vgxGZFGmV6vcb2X-74" target="ykph8vgxGZFGmV6vcb2X-82">
+        <mxCell id="5T5FbwG1NiTb0xSCTwGT-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=1;entryY=1;entryDx=0;entryDy=0;" parent="1" source="ykph8vgxGZFGmV6vcb2X-74" target="ykph8vgxGZFGmV6vcb2X-82" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="670" y="790" as="targetPoint" />
             <mxPoint x="470" y="790.5" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="670" y="708" />
+            </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="5T5FbwG1NiTb0xSCTwGT-2" value="F16: פרטי קבצים זדוניים&amp;nbsp;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="5T5FbwG1NiTb0xSCTwGT-1">
+        <mxCell id="5T5FbwG1NiTb0xSCTwGT-2" value="F17: פרטי קבצים זדוניים&amp;nbsp;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="5T5FbwG1NiTb0xSCTwGT-1" vertex="1" connectable="0">
           <mxGeometry x="-0.052" y="-1" relative="1" as="geometry">
-            <mxPoint as="offset" />
+            <mxPoint x="-9" as="offset" />
           </mxGeometry>
         </mxCell>
       </root>
