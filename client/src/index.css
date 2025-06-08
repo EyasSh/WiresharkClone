@@ -199,7 +199,35 @@ input:-webkit-autofill:focus {
     padding:1rem;
   
 }
-
+[data-theme="light"] .HistoryBox {
+    display : flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px;
+    justify-content: space-around;
+    border: none;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #000;
+    width : 100%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2vh;
+}
+[data-theme="light"] .HistoryBox-Result {
+    color: black;
+}
+[data-theme="light"] .CNavCont{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    width: 97.9%;
+    padding: 10px 20px; /* Adjust padding for better spacing */
+    position: absolute; /* Allows it to be positioned relative to the parent */
+    top: 7.8%; /* Aligns it to the top of the parent */
+    left: 0; /* Aligns it to the left of the parent */
+    background-color: #fff;
+}
 [data-theme='dark'] {
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
@@ -284,6 +312,20 @@ input:-webkit-autofill:focus {
 }
 [data-theme='dark'] .packet-paper p strong {
   color: #fff;
+}
+[data-theme="dark"] .HistoryBox {
+    display : flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px;
+    justify-content: space-around;
+    border: none;
+    border-radius: 5px;
+    background-color: #171717;
+    color: #fff;
+    width : 100%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2vh;
 }
 
 
