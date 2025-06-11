@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.9 Chrome/134.0.6998.205 Electron/35.4.0 Safari/537.36" version="27.0.9">
   <diagram name="Page-1" id="mhAEVez_X24ELlxLN8yT">
-    <mxGraphModel dx="1042" dy="626" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="719" dy="432" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -65,7 +65,7 @@
             <mxPoint x="160" y="290" as="sourcePoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="jx4DSbA3mmBtBKJR21YE-1" value="F16: בקשה לבדיקת תעבורה &lt;br&gt;ונתוני משתמש&amp;nbsp;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="ykph8vgxGZFGmV6vcb2X-95" vertex="1" connectable="0">
+        <mxCell id="jx4DSbA3mmBtBKJR21YE-1" value="F16: פרטי בקשה לבדיקת תעבורה &lt;br&gt;ונתוני משתמש&amp;nbsp;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="ykph8vgxGZFGmV6vcb2X-95" vertex="1" connectable="0">
           <mxGeometry x="-0.0655" y="-2" relative="1" as="geometry">
             <mxPoint y="3" as="offset" />
           </mxGeometry>
