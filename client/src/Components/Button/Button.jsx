@@ -17,7 +17,7 @@ import { Link } from 'react-router';
  * @returns {ReactElement} The Button component.
  */
 function Button(props) {
-    const statusClass = statusHandler(props.status);
+    const statusClass = props.status || '';
     const buttonContent = props.content.toString();
     
     if (props.link) {
@@ -34,19 +34,6 @@ function Button(props) {
                 {buttonContent}
             </button>
         );
-    }
-}
-
-function statusHandler(status) {
-    switch (status) {
-        case "action":
-            return "action";
-        case "purchase":
-            return "purchase";
-        case "signup":
-            return "signup";
-        default:
-            return "";
     }
 }
 

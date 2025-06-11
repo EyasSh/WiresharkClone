@@ -21,9 +21,9 @@ export default function Home() {
   const navigate = useNavigate();
 
   // ─── raw data & filter ───────────────────────────────────
-  const [packetsArr, setPacketsArr] = useState([]);
-  const [filter, setFilter]       = useState('All');
-  const [filteredPackets, setFilteredPackets] = useState([]);
+  const [packetsArr, setPacketsArr] = useState([]); 
+  const [filter, setFilter]       = useState('All'); 
+  const [filteredPackets, setFilteredPackets] = useState([]); 
   const [selectedIndex, setSelectedIndex]     = useState(-1);
 
   // ─── auth check ──────────────────────────────────────────
