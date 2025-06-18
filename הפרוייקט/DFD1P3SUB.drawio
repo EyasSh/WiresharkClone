@@ -1,0 +1,84 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.9 Chrome/134.0.6998.205 Electron/35.4.0 Safari/537.36" version="27.0.9">
+  <diagram name="Page-1" id="6cTaFYNUz-4A4CKpsW0U">
+    <mxGraphModel dx="1042" dy="626" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="eSsZDF76-mUCqIWXwvMX-1" value="D3: מאגר ניתוני שימוש חומרה" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1" vertex="1">
+          <mxGeometry x="990" y="360" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="eSsZDF76-mUCqIWXwvMX-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="eSsZDF76-mUCqIWXwvMX-5" target="eSsZDF76-mUCqIWXwvMX-6" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eSsZDF76-mUCqIWXwvMX-3" value="F15: אחוזי שימוש חומרה" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="eSsZDF76-mUCqIWXwvMX-2" vertex="1" connectable="0">
+          <mxGeometry x="-0.2392" y="2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eSsZDF76-mUCqIWXwvMX-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="eSsZDF76-mUCqIWXwvMX-5" target="eSsZDF76-mUCqIWXwvMX-1" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eSsZDF76-mUCqIWXwvMX-5" value="P3.1:מאזין שימוש חומרה" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
+          <mxGeometry x="715" y="240" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="eSsZDF76-mUCqIWXwvMX-6" value="E1:User" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+          <mxGeometry x="360" y="230" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="eSsZDF76-mUCqIWXwvMX-7" value="E2: Mailjet שירות" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+          <mxGeometry x="360" y="370" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="eSsZDF76-mUCqIWXwvMX-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" parent="1" source="eSsZDF76-mUCqIWXwvMX-12" target="eSsZDF76-mUCqIWXwvMX-7" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eSsZDF76-mUCqIWXwvMX-9" value="F18: דיווח על שימוש חריג" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="eSsZDF76-mUCqIWXwvMX-8" vertex="1" connectable="0">
+          <mxGeometry x="-0.3506" y="-3" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eSsZDF76-mUCqIWXwvMX-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" parent="1" source="eSsZDF76-mUCqIWXwvMX-12" target="eSsZDF76-mUCqIWXwvMX-1" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eSsZDF76-mUCqIWXwvMX-11" value="F17:קריאת נתוני שימוש יתר" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="eSsZDF76-mUCqIWXwvMX-10" vertex="1" connectable="0">
+          <mxGeometry x="-0.3263" y="1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eSsZDF76-mUCqIWXwvMX-12" value="P3.2:שליחת ד&quot;וח" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
+          <mxGeometry x="715" y="480" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="eSsZDF76-mUCqIWXwvMX-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.25;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="eSsZDF76-mUCqIWXwvMX-5" target="eSsZDF76-mUCqIWXwvMX-1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="893" y="320" />
+              <mxPoint x="893" y="368" />
+            </Array>
+            <mxPoint x="820" y="370" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eSsZDF76-mUCqIWXwvMX-14" value="F14: קריאת ממוצעי שימוש" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="eSsZDF76-mUCqIWXwvMX-13" vertex="1" connectable="0">
+          <mxGeometry x="-0.011" y="2" relative="1" as="geometry">
+            <mxPoint x="135" y="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eSsZDF76-mUCqIWXwvMX-15" value="F16:תיעוד נתוני שימוש יתר" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="eSsZDF76-mUCqIWXwvMX-13" vertex="1" connectable="0">
+          <mxGeometry x="-0.6108" y="1" relative="1" as="geometry">
+            <mxPoint x="40" y="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eSsZDF76-mUCqIWXwvMX-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.425;entryY=-0.025;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="eSsZDF76-mUCqIWXwvMX-6" target="eSsZDF76-mUCqIWXwvMX-5" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="540" y="238" />
+              <mxPoint x="540" y="238" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eSsZDF76-mUCqIWXwvMX-17" value="F13: בקשת בדיקת אחוזי שימוש" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="eSsZDF76-mUCqIWXwvMX-16" vertex="1" connectable="0">
+          <mxGeometry x="-0.1747" y="-2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
