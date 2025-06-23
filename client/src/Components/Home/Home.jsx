@@ -71,13 +71,22 @@ export default function Home() {
 
   // ─── THIS is the one & only filter effect ────────────────
  useEffect(() => {
-   const result = packetsArr.filter(p =>
-     filter === 'All' ? true : p.protocol === filter || p.isSuspicious || p.isMalicious
-   );
+   const result = packetsArr.filter(p => {
+  if (filter === 'All') return true;
+  if (filter === 'Suspicious and Malicious') return p.isSuspicious || p.isMalicious;
+  return p.protocol === filter;
+});
+
+
    console.log(
      `[FilterEffect] filter="${filter}" raw=${packetsArr.length} → filtered=${result.length}`
    );
-   setFilteredPackets(result);
+   if(result.length> 0) 
+   {setFilteredPackets(result);}
+   else{
+      setFilteredPackets([]);
+      setSelectedIndex(-1); // clear detail box if no packets match the filter
+   }
  }, [packetsArr, filter]);
 useEffect(() => {
   console.log('selectedIndex is now', selectedIndex);
