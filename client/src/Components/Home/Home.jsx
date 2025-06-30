@@ -88,9 +88,7 @@ export default function Home() {
       setSelectedIndex(-1); // clear detail box if no packets match the filter
    }
  }, [packetsArr, filter]);
-useEffect(() => {
-  console.log('selectedIndex is now', selectedIndex);
-}, [selectedIndex]);
+
 
  // only clear the detail when the *filter* itself changes
  useEffect(() => {
