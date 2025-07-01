@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import React from 'react';
+import {useState} from 'react';
 import { FaMoon, FaSun } from 'react-icons/fa';
 import './Settings.css';
 
@@ -17,7 +17,7 @@ import './Settings.css';
  * with an icon and a text label indicating the mode switch.
  */
 function Settings({ isOpen, onClose, children }) {  
-    const [isLightMode, setIsLightMode] = React.useState(
+    const [isLightMode, setIsLightMode] = useState(
         window.matchMedia('(prefers-color-scheme: light)').matches
     );
 

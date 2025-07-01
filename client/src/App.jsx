@@ -87,6 +87,14 @@ export default function App() {
 
         startConnection();
     // eslint-disable-next-line react-hooks/exhaustive-deps
+    let likesLightTheme = window.matchMedia('(prefers-color-scheme: light)').matches
+    if (likesLightTheme) {
+        document.documentElement.setAttribute('data-theme', 'light');
+    }
+    else{
+        document.documentElement.setAttribute('data-theme', 'dark');
+    }
+    
     }, []);
 
     if (!connection) {
