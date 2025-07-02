@@ -17,9 +17,9 @@ public static class Analyzer
     public static TimeSpan defaultHalfWindow = TimeSpan.FromSeconds(30);
     public static TimeSpan defaultWindow = TimeSpan.FromSeconds(60);
 
-    public static int udpTcpSynThreshold = 600;
-    public static int udpHalfThreshold = 300;
-    public static int udpQuarterThreshold = 150;
+    public static int udpTcpSynThreshold = 550;
+    public static int udpHalfThreshold = 275;
+    public static int udpQuarterThreshold = 132;
     public static int portScanThreshold = 20;
     public static int synHalfThreshold = 10;
     public static int synQuarterThreshold = 5;
@@ -50,7 +50,7 @@ public static class Analyzer
             {
                 Console.WriteLine(
                   $"⚠️ SYN-Flood suspected from {grp.Key}: {grp.Count()} SYNs in last {window.TotalSeconds}s");
-                foreach (var pi in grp) pi.isSuspicious = true;
+                foreach (var pi in grp) { pi.isSuspicious = true; pi.isMalicious = true; }
             }
         }
     }
@@ -79,10 +79,12 @@ public static class Analyzer
             {
                 Console.WriteLine(
                   $"⚠️ UDP-Flood suspected from {grp.Key}: {grp.Count()} packets in last {window.TotalSeconds}s");
-                foreach (var pi in grp) pi.isSuspicious = true;
+                foreach (var pi in grp) {pi.isSuspicious = true; pi.isMalicious = true; }
+                
+            }
             }
         }
-    }
+    
 
     /// <summary>
     /// Detect TCP Port Scan: count unique destination ports per source IP

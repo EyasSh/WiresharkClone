@@ -41,9 +41,9 @@ function Packet({
   props.clickHandler(props.index);
 }
 
-const style = props.isMalicious ? 'Packet-Container-Error' : props.isSuspicious ? 'Packet-Container-Warning' : 'Packet-Container';
+
   return (
-    <div className={style} onClick={()=>handleClick()}>
+    <div className={props.isMalicious && props.isSuspicious ? "Packet-Container-Error":props.isMalicious ? "Packet-Container-Error" : props.isSuspicious ? "Packet-Container-Warning":  "Packet-Container"} onClick={()=>handleClick()}>
       <span>{SourceIP}</span>
       <span>{SourcePort}</span>
       <span>{Type}</span>
