@@ -104,13 +104,25 @@ export default function Home() {
   return (
     <div className="Home-Container">
       <header className="Header">
-        <h1>Packet Analyzer</h1>
-        <p className="Description">
-          Packets Colored <strong style={{ color: 'yellow' }}>Yellow</strong> are suspicious
-        </p>
-        <p className="Description">
-          Packets Colored <strong style={{ color: 'red' }}>Red</strong> are potentially malicious
-        </p>
+        <div className='Danger-Container'>
+          
+          <span>Malicious Packet</span>
+          <div className="Malicious-Color"></div>
+        </div>
+        <div className='Danger-Container'>
+          
+          <span>Suspicious Packet</span>
+          <div className="Suspicious-Color"></div>
+        </div>
+        <div className='Danger-Container'>
+          
+          
+          <span>Safe Packet</span>
+          <div className='Safe-Color-Container'>
+            <div className="Safe-Color-Light"></div>
+            <div className="Safe-Color-Dark"></div>
+          </div>
+        </div>
       </header>
 
       <div className="Filter-Container">
