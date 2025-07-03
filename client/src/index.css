@@ -228,6 +228,49 @@ input:-webkit-autofill:focus {
     left: 0; /* Aligns it to the left of the parent */
     background-color: #fff;
 }
+[data-theme="light"] .detail-box {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #ffffff;
+  padding: 0.5rem 3rem;
+  
+}
+[data-theme="light"] .close{
+  font-size: 1.5rem;
+  color: #181f181f;            /* white text against the dark background */
+  font-weight: 600;
+  position: fixed;
+  right: 0.7rem;
+  bottom: 41%;
+  color: #181818;
+}
+[data-theme="light"] .detail-box-content {
+  max-height: 60vh;       /* allow room to scroll if content gets tall */
+  overflow-y: auto;
+  padding-right: 0.5rem;  /* space for a scrollbar */
+}
+
+[data-theme="light"] .detail-box-content p,
+[data-theme="light"] .detail-box-content h3 {
+  margin: 0.5rem 0;
+  color: #181818;            /* white text against the dark background */
+  line-height: 1.4;
+}
+
+[data-theme="light"] .detail-box-content strong {
+  display: inline-block;
+  width: 200px;           /* align all labels */
+  font-weight: 600;
+}
+
+[data-theme="light"] .detail-box-content h3 {
+  margin-top: 1rem;
+  font-size: 1.2rem;
+  border-bottom: 1px solid #222;
+  padding-bottom: 0.25rem;
+}
 [data-theme='dark'] {
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
@@ -326,6 +369,48 @@ input:-webkit-autofill:focus {
     width : 100%;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     margin-bottom: 2vh;
+}
+[data-theme='dark'] .detail-box {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #181818;
+  padding: 0.5rem 3rem;
+  
+}
+[data-theme='dark'] .close{
+  font-size: 1.5rem;
+  color: #fff;            /* white text against the dark background */
+  font-weight: 600;
+  position: fixed;
+  right: 0.7rem;
+  bottom: 41%;
+}
+[data-theme='dark'] .detail-box-content {
+  max-height: 60vh;       /* allow room to scroll if content gets tall */
+  overflow-y: auto;
+  padding-right: 0.5rem;  /* space for a scrollbar */
+}
+
+[data-theme='dark'] .detail-box-content p,
+[data-theme='dark'] .detail-box-content h3 {
+  margin: 0.5rem 0;
+  color: #fff;            /* white text against the dark background */
+  line-height: 1.4;
+}
+
+[data-theme='dark'] .detail-box-content strong {
+  display: inline-block;
+  width: 200px;           /* align all labels */
+  font-weight: 600;
+}
+
+[data-theme='dark'] .detail-box-content h3 {
+  margin-top: 1rem;
+  font-size: 1.2rem;
+  border-bottom: 1px solid #222;
+  padding-bottom: 0.25rem;
 }
 
 

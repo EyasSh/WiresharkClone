@@ -407,7 +407,7 @@ namespace Server.Controllers
         /// </remarks>
         [Authorize]
         [HttpGet("history")]
-        public async Task<IActionResult> GetHistory([FromQuery] string? userId = null)
+        public async Task<IActionResult> GetHistory([FromQuery] string? userId)
         {
             var history = await _virusCheckerHistory.Find(h => h.UserId == userId).ToListAsync();
             return Ok(history);

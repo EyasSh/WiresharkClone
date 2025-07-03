@@ -49,7 +49,7 @@ export default function Home() {
     packetHubConnection.off('ReceivePackets');
     packetHubConnection.on('ReceivePackets', newPackets => {
       setPacketsArr(old => {
-        const upd = [...old, ...newPackets];
+        const upd = [...newPackets, ...old];
         localStorage.setItem('packets', JSON.stringify(upd));
         return upd;
       });

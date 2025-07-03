@@ -8,7 +8,8 @@ function FileHistory() {
     useEffect(() => {
         const fetchChecks = async () => {
             const token= localStorage.getItem('X-Auth-Token')
-            const userId = localStorage.getItem('UserId')
+            const user = localStorage.getItem('user')
+            const userId = JSON.parse(user).id;
             const result = await axios(`http://localhost:5256/api/user/history?userId=${userId}`, {
                 headers: {
                     'X-Auth-Token': token,

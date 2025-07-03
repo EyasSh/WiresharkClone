@@ -6,9 +6,8 @@
   width: 100%;
   background: #181818;
   padding: 0.5rem 3rem;
-  /* anything else you need… */
+  
 }
-/* DetailBox.css */
 .close{
   font-size: 1.5rem;
   color: #fff;            /* white text against the dark background */
