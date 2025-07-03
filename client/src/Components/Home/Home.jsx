@@ -149,6 +149,7 @@ export default function Home() {
             timestamp={p.timestamp}
             isSuspicious={p.isSuspicious}
             isMalicious={p.isMalicious}
+            isSelected={selectedIndex === i}
             
           />
         ))}

@@ -33,6 +33,7 @@ function FileChecker() {
       const user = JSON.parse(localStorage.getItem('user'));
       const email = user.email;
       formData.append('email', email);
+      formData.append('userId', user.id); // Assuming you store user ID in localStorage
       
 
       const res = await axios.post(

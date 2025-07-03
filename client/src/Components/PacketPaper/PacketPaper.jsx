@@ -16,8 +16,10 @@ import PropTypes from 'prop-types';
 function PacketPaper({ packet }) {
   return (
     <div className="paper-container">
-      <div className="packet-paper" style={{ backgroundColor: packet.isMalicious ? '#ffcccc' : packet.isSuspicious ? '#fff3cd' : '#d4edda', color: packet.isMalicious ? '#a94442' : packet.isSuspicious ? '#856404' : '#155724' }}>
-        <p style={{color: packet.isMalicious ? '#a94442' : packet.isSuspicious ? '#856404' : '#155724'}}><strong>Source IP:</strong> {packet.sourceIP}</p>
+
+      <div className="packet-paper"  style={{border: packet.isMalicious ? '5px solid red' : packet.isSuspicious ? '5px solid orange' : '2px solid green'}}>
+        
+        <p ><strong>Source IP:</strong> {packet.sourceIP}</p>
         <p><strong>Destination IP:</strong> {packet.destinationIP}</p>
         <p><strong>Protocol:</strong> {packet.protocol}</p>
         <p><strong>Source Port:</strong> {packet.sourcePort}</p>

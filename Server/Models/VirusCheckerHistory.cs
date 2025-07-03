@@ -19,4 +19,6 @@ public class VirusCheckerHistory
 
     [BsonElement("result")]
     public string Result { get; set; } = string.Empty;
+    [BsonElement("userId")]
+    public string UserId { get; set; } = string.Empty;
 }

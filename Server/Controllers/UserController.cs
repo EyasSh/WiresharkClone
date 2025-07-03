@@ -293,7 +293,7 @@ namespace Server.Controllers
         /// </remarks>
         [Authorize]
         [HttpPost("file")]
-        public async Task<IActionResult> UploadFile([FromForm] IFormFile file, [FromForm] string email)
+        public async Task<IActionResult> UploadFile([FromForm] IFormFile file, [FromForm] string email, [FromForm] string userId)
         {
             if (file == null || file.Length == 0)
             {
@@ -383,7 +383,8 @@ namespace Server.Controllers
                     {
                         Name = file.FileName,
                         Date = DateTime.Now,
-                        Result = "Malicious"
+                        Result = "Malicious",
+                        UserId = userId
                     };
                     await _virusCheckerHistory.InsertOneAsync(historyRecord);
                 }
@@ -406,9 +407,9 @@ namespace Server.Controllers
         /// </remarks>
         [Authorize]
         [HttpGet("history")]
-        public async Task<IActionResult> GetHistory()
+        public async Task<IActionResult> GetHistory([FromQuery] string? userId = null)
         {
-            var history = await _virusCheckerHistory.Find(_ => true).ToListAsync();
+            var history = await _virusCheckerHistory.Find(h => h.UserId == userId).ToListAsync();
             return Ok(history);
         }
 

@@ -43,7 +43,9 @@ function Packet({
 
 
   return (
-    <div className={props.isMalicious && props.isSuspicious ? "Packet-Container-Error":props.isMalicious ? "Packet-Container-Error" : props.isSuspicious ? "Packet-Container-Warning":  "Packet-Container"} onClick={()=>handleClick()}>
+    <div className={props.isMalicious && props.isSuspicious ? "Packet-Container-Error":props.isMalicious ? "Packet-Container-Error" : props.isSuspicious ? "Packet-Container-Warning":  "Packet-Container"} onClick={()=>handleClick()}
+      style={{backgroundColor: props.isSelected ? '#0a0aff': undefined}}
+    >
       <span>{SourceIP}</span>
       <span>{SourcePort}</span>
       <span>{Type}</span>
@@ -65,6 +67,7 @@ Packet.propTypes = {
   index: PropTypes.number,
   isSuspicious: PropTypes.bool,
   isMalicious: PropTypes.bool,
+  isSelected: PropTypes.bool,
 };
 
 export default Packet;
