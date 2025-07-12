@@ -1,0 +1,73 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.9 Chrome/134.0.6998.205 Electron/35.4.0 Safari/537.36" version="27.0.9">
+  <diagram name="Page-1" id="822b0af5-4adb-64df-f703-e8dfc1f81529">
+    <mxGraphModel dx="834" dy="501" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" background="none" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="U7eV14mEE60oopBk9NWP-3" value="" style="html=1;verticalLabelPosition=bottom;align=center;labelBackgroundColor=#ffffff;verticalAlign=top;strokeWidth=2;strokeColor=#0080F0;shadow=0;dashed=0;shape=mxgraph.ios7.icons.data;" vertex="1" parent="1">
+          <mxGeometry x="565" y="330" width="60" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="U7eV14mEE60oopBk9NWP-4" value="&lt;b&gt;Database&lt;br&gt;MongoDB&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=top;resizable=0;points=[];autosize=1;strokeColor=#6c8ebf;fillColor=#dae8fc;labelBorderColor=none;textShadow=0;labelBackgroundColor=none;fontColor=default;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="550" y="400" width="90" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="U7eV14mEE60oopBk9NWP-5" value="" style="aspect=fixed;sketch=0;html=1;dashed=0;whitespace=wrap;verticalLabelPosition=bottom;verticalAlign=top;fillColor=#2875E2;strokeColor=#ffffff;points=[[0.005,0.63,0],[0.1,0.2,0],[0.9,0.2,0],[0.5,0,0],[0.995,0.63,0],[0.72,0.99,0],[0.5,1,0],[0.28,0.99,0]];shape=mxgraph.kubernetes.icon2;kubernetesLabel=1;prIcon=api" vertex="1" parent="1">
+          <mxGeometry x="369.05999999999995" y="336" width="71.88" height="69" as="geometry" />
+        </mxCell>
+        <mxCell id="U7eV14mEE60oopBk9NWP-6" value="&lt;b style=&quot;background-color: rgb(255, 153, 153);&quot;&gt;Mailjet API&lt;br&gt;(Email , alerts)&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="350" y="400" width="110" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="U7eV14mEE60oopBk9NWP-7" value="Monitoring &amp;amp; Analysis Server" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_on_premise;strokeColor=#7D8998;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#5A6C86;dashed=0;" vertex="1" parent="1">
+          <mxGeometry x="400" y="150" width="180" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="U7eV14mEE60oopBk9NWP-13" value="- זיהוי איומים" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="U7eV14mEE60oopBk9NWP-7">
+          <mxGeometry y="50" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="U7eV14mEE60oopBk9NWP-10" value="- עיבוד פקטות" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="U7eV14mEE60oopBk9NWP-7">
+          <mxGeometry x="-5" y="30" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="U7eV14mEE60oopBk9NWP-14" value="- ניטור חומרה" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="U7eV14mEE60oopBk9NWP-7">
+          <mxGeometry x="-5" y="70" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="U7eV14mEE60oopBk9NWP-15" value="- שליחת התראות&amp;nbsp;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="U7eV14mEE60oopBk9NWP-7">
+          <mxGeometry x="-5" y="90" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="U7eV14mEE60oopBk9NWP-16" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="580" y="320" as="sourcePoint" />
+            <mxPoint x="560" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="U7eV14mEE60oopBk9NWP-17" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="420" y="280" as="sourcePoint" />
+            <mxPoint x="410" y="330" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="U7eV14mEE60oopBk9NWP-18" value="Internet" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="640" y="170" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="U7eV14mEE60oopBk9NWP-20" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;" edge="1" parent="1" target="U7eV14mEE60oopBk9NWP-18">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="590" y="210" as="sourcePoint" />
+            <mxPoint x="660" y="160" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="U7eV14mEE60oopBk9NWP-22" value="" style="outlineConnect=0;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;shape=mxgraph.aws3.management_console;fillColor=#D2D3D3;gradientColor=none;" vertex="1" parent="1">
+          <mxGeometry x="833.5" y="190" width="63" height="63" as="geometry" />
+        </mxCell>
+        <mxCell id="U7eV14mEE60oopBk9NWP-23" value="&lt;font style=&quot;font-size: 9px;&quot;&gt;מקבל נתונים&lt;br&gt;&amp;nbsp;מהשרת&amp;nbsp;&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="830" y="190" width="70" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="U7eV14mEE60oopBk9NWP-24" value="&lt;b&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;לקוח&lt;/font&gt;&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;labelBorderColor=none;textShadow=1;labelBackgroundColor=#33FFFF;" vertex="1" parent="1">
+          <mxGeometry x="840" y="253" width="50" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="U7eV14mEE60oopBk9NWP-25" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="U7eV14mEE60oopBk9NWP-18">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="790" y="190" as="sourcePoint" />
+            <mxPoint x="820" y="210" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
