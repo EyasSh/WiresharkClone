@@ -81,8 +81,8 @@ public class PdfGenerator
     /// <param name="user">Optional user object containing the name and ID.</param>
     /// <returns>A byte array representing the generated PDF.</returns>
     public static byte[] GeneratePerformancePdf(
-    (double cpuUsage, double ramUsage, double diskUsage) metrics,
-    User? user = null)
+     (double cpuUsage, double ramUsage, double diskUsage) metrics,
+     User? user = null, double averageCpuUsage = 0.0, double averageRamUsage = 0.0, double averageDiskUsage = 0.0)
     {
         var document = Document.Create(container =>
         {
@@ -104,42 +104,54 @@ public class PdfGenerator
                     .SemiBold()
                     .FontFamily("Segoe UI");
 
-                // 3. Single Content block with Column
+                // 3. Content with three-column table
                 page.Content()
                     .PaddingVertical(20)
                     .Column(col =>
                     {
-                        // 3.1 Metrics table
+                        // 3.1 Metrics table with Metric, Current Usage, Average Usage columns
                         col.Item().Table(table =>
                         {
                             table.ColumnsDefinition(c =>
                             {
-                                c.RelativeColumn();
-                                c.RelativeColumn();
+                                c.RelativeColumn();  // Metric
+                                c.RelativeColumn();  // Current Usage
+                                c.RelativeColumn();  // Average Usage
                             });
 
                             table.Header(header =>
                             {
-                                header.Cell().Background(Colors.Grey.Lighten2).Padding(5).Text("Metric").SemiBold().FontFamily("Tahoma");
-                                header.Cell().Background(Colors.Grey.Lighten2).Padding(5).Text("Value").SemiBold().FontFamily("Tahoma");
+                                header.Cell().Background(Colors.Grey.Lighten2).Padding(5)
+                                      .Text("Metric").SemiBold().FontFamily("Tahoma");
+
+                                header.Cell().Background(Colors.Grey.Lighten2).Padding(5)
+                                      .Text("Current Usage").SemiBold().FontFamily("Tahoma");
+
+                                header.Cell().Background(Colors.Grey.Lighten2).Padding(5)
+                                      .Text("Average Usage").SemiBold().FontFamily("Tahoma");
                             });
 
-                            void AddRow(string name, string value)
+                            void AddRow(string name, string current, string average)
                             {
                                 table.Cell().Padding(5)
                                      .BorderBottom(1).BorderColor(Colors.Grey.Lighten2)
                                      .Text(name);
+
                                 table.Cell().Padding(5)
                                      .BorderBottom(1).BorderColor(Colors.Grey.Lighten2)
-                                     .Text(value);
+                                     .Text(current);
+
+                                table.Cell().Padding(5)
+                                     .BorderBottom(1).BorderColor(Colors.Grey.Lighten2)
+                                     .Text(average);
                             }
 
-                            AddRow("CPU Usage", $"{metrics.cpuUsage / 100:P1}");
-                            AddRow("RAM Usage", $"{metrics.ramUsage / 100:P1}");
-                            AddRow("Disk Usage", $"{metrics.diskUsage / 100:P1}");
+                            AddRow("CPU Usage", $"{metrics.cpuUsage / 100:P1}", $"{averageCpuUsage / 100:P1}");
+                            AddRow("RAM Usage", $"{metrics.ramUsage / 100:P1}", $"{averageRamUsage / 100:P1}");
+                            AddRow("Disk Usage", $"{metrics.diskUsage / 100:P1}", $"{averageDiskUsage / 100:P1}");
                         });
 
-                        // 3.2 Conditional user info
+                        // 3.2 User info (optional)
                         if (user != null)
                         {
                             col.Item()
@@ -164,6 +176,7 @@ public class PdfGenerator
 
         return document.GeneratePdf();
     }
+
 
     /// <summary>
     /// Generates a packet report PDF and returns it as a byte array.

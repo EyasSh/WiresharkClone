@@ -14,4 +14,7 @@ public class PerformanceRequest
     public required double DiskUsage { get; set; }
     public required string Email { get; set; }
     public required string Name { get; set; }
+    public required double AverageCpuUsage { get; set; }
+    public required double AverageRamUsage { get; set; }
+    public required double AverageDiskUsage { get; set; }
 }

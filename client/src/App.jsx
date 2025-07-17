@@ -127,7 +127,7 @@ export function Main({ hubConnection, sid, packetConnection, psid }) {
 
     return (
         <>
-            {!excludedPaths.includes(location.pathname) && <Nav hubConnection={hubConnection} sid={sid} />}
+            {!excludedPaths.includes(location.pathname) && <Nav hubConnection={hubConnection} sid={sid} packetHub={packetConnection} />}
             <Routes>
                 <Route path="/" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />

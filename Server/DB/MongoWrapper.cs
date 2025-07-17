@@ -12,6 +12,7 @@ public class MongoDBWrapper
     public IMongoCollection<User> Users { get; init; }
     public IMongoCollection<PacketInfo> Packets { get; init; }
     public IMongoCollection<VirusCheckerHistory> VirusCheckerHistory { get; init; }
+    public IMongoCollection<Device> Devices { get; init; }
 
     public MongoDBWrapper(IConfiguration configuration)
     {
@@ -32,6 +33,7 @@ public class MongoDBWrapper
         Users = _database.GetCollection<User>("Users");
         Packets = _database.GetCollection<PacketInfo>("Packets");
         VirusCheckerHistory = _database.GetCollection<VirusCheckerHistory>("VirusCheckerHistory");
+        Devices = _database.GetCollection<Device>("Devices");
     }
 
 

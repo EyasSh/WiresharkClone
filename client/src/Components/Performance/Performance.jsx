@@ -42,7 +42,7 @@ function Performance({ hubConnection }) {
             if (hubConnection.state === "Connected") {
                 try {
                     console.log("Fetching metrics...");
-                    await hubConnection.invoke("GetMetrics");
+                    await hubConnection.invoke("GetMetrics" , email, name);
                     console.log("Metrics request sent");
                 } catch (error) {
                     console.error("Error fetching metrics:", error);
@@ -66,28 +66,7 @@ function Performance({ hubConnection }) {
                 console.log("Metrics received:");
                 if (isMounted) {
                     setMetrics({ cpuUsage, ramUsage, diskUsage });
-                    if(cpuUsage>= 80 || ramUsage >= 80 || diskUsage >= 80) {
-                       
-                        
-                        const res =  await axios.post(
-                          "http://localhost:5256/api/user/usage",
-                          {
-                            CpuUsage: cpuUsage,
-                            RamUsage: ramUsage,
-                            DiskUsage: diskUsage,
-                            Name: name,
-                            Email: email
-                          },
-                          {
-                            headers: {
-                              'X-Auth-Token': localStorage.getItem('X-Auth-Token'),
-                              'Content-Type': 'application/json'
-                            }
-                          }
-                        );
-                        
-                          
-                    }
+                 
                 }
             });
         };

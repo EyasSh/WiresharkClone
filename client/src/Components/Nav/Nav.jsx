@@ -23,7 +23,7 @@ import Settings from '../Settings/Settings';
  * @param {string} props.sid The session ID of the user.
  * @returns {ReactElement} The Nav component.
  */
-function Nav({ hubConnection, sid }) {
+function Nav({ hubConnection, sid, packetHub }) {
     const [activeItem, setActiveItem] = useState('home');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = useNavigate();

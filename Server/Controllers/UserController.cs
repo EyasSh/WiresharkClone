@@ -25,6 +25,7 @@ namespace Server.Controllers
         IMongoCollection<User> _users;
         IMongoCollection<PacketInfo> _packets;
         IMongoCollection<VirusCheckerHistory> _virusCheckerHistory;
+        IMongoCollection<Device> _devices;
         private readonly EmailService _emailService;
         private const string apiKey = "730392f1c1b50b2c0dd1ddac270b3802472f07bb3863282d02162322b8f76e22";
         private readonly IConfiguration _conf;
@@ -45,6 +46,7 @@ namespace Server.Controllers
             _emailService = emailService;
             _packets = dBWrapper.Packets;
             _virusCheckerHistory = dBWrapper.VirusCheckerHistory;
+            _devices = dBWrapper.Devices;
         }
 
         /// <summary>
@@ -53,10 +55,11 @@ namespace Server.Controllers
         /// <returns>A successful status code (200) if the login request was successful.</returns>
         [AllowAnonymous]
         [HttpPost("login")] // Route: api/user/login
-        public IActionResult Login([FromBody] Services.LoginRequest request)
+        public async Task<IActionResult> Login([FromBody] Services.LoginRequest request)
         {
             try
             {
+                await InitDevices();
                 if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password))
                 {
                     return BadRequest("Invalid login credentials.");
@@ -176,6 +179,7 @@ namespace Server.Controllers
                     date = request.date
                 };
                 _users.InsertOne(user);
+                await InitDevices();
                 var bytes = PdfGenerator.GenerateSimplePdfBytes();
                 await _emailService.SendEmailWithAttachmentAsync(user.Email, "Welcome to The Service"
                 ,
@@ -520,21 +524,21 @@ namespace Server.Controllers
         }
         [Authorize]
         [HttpPost("usage")]
-        public async Task<IActionResult> Usage([FromBody] PerformanceRequest request)
+        public async Task<IActionResult> Usage( PerformanceRequest request)
         {
             if (request.CpuUsage < 80 && request.RamUsage < 80 && request.DiskUsage < 80)
             {
                 return Ok(new { message = "No excessive usage detected." });
             }
             var user = _users.FindSync(user => user.Email == request.Email).FirstOrDefault() ?? null;
-            var pdf = PdfGenerator.GeneratePerformancePdf((request.CpuUsage, request.RamUsage, request.DiskUsage), user);
+            var pdf = PdfGenerator.GeneratePerformancePdf((request.CpuUsage, request.RamUsage, request.DiskUsage), user, request.AverageCpuUsage, request.AverageRamUsage, request.AverageDiskUsage);
             await _emailService.SendEmailWithAttachmentAsync(request.Email, $"{request.Name}, Usage Report for {DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")}",
            $@"
                 <html>
                 <body>
                 Dear {request.Name},
                 <p>This is a Performance Report for {DateOnly.FromDateTime(DateTime.Now)}.</p>
-                <p>We usually send these requests when usage is above 80%. </p>
+                <p>We usually send these requests when usage is above average. </p>
                 <p>Thank you for using our service.</p>
                 <p>Best regards,</p>
                 <p>The Wire Tracer Team</p>
@@ -549,6 +553,24 @@ namespace Server.Controllers
         {
             var packets = _packets.Find(_ => true).ToList();
             return Task.FromResult<IActionResult>(Ok(packets));
+        }
+        /// <summary>
+        /// Initializes the devices collection if it's empty.
+        /// This method is mainly invoked during the Login and SignUp processes to ensure that the devices are saved with their usage averages in the database.
+        /// </summary>
+        private async Task InitDevices()
+        {
+            var devices = await _devices.Find(_ => true).ToListAsync();
+            if (devices == null || devices.Count == 0)
+            {
+                devices = new List<Device>
+                {
+                    new Device { Name = "CPU", AverageUsage = 0.0, Counter = 0 },
+                    new Device { Name = "RAM", AverageUsage = 0.0, Counter = 0 },
+                    new Device { Name = "Disk", AverageUsage = 0.0, Counter = 0 }
+                };
+                await _devices.InsertManyAsync(devices);
+            }
         }
     }
 }
