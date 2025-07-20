@@ -36,18 +36,23 @@ function LinkChecker() {
  * In case of an error, logs the error details to the console.
  */
     const handleUrl = async()=>{
+        const user  = localStorage.getItem('user');
+
         try {
+            const email = user ? JSON.parse(user).email : '';
             const res = await axios.post(
                 'http://localhost:5256/api/user/domain',
-                `"${url}"`, // Send the URL as a raw string
+                {
+                    url,      // or url: url
+                    email     // will be "" if not logged in
+                },
                 {
                     headers: {
-                        'Content-Type': 'application/json',
-                        'X-Auth-Token': localStorage.getItem('X-Auth-Token'),
-                    },
+                                'Content-Type': 'application/json',
+                            'X-Auth-Token': localStorage.getItem('X-Auth-Token'),
+                        },
                 }
             );
-            
             if (res.status === 200) {
                 
                  // Extract stats from the response

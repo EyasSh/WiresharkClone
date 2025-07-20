@@ -180,15 +180,7 @@ namespace Server.Controllers
                 };
                 _users.InsertOne(user);
                 await InitDevices();
-                var bytes = PdfGenerator.GenerateSimplePdfBytes();
-                await _emailService.SendEmailWithAttachmentAsync(user.Email, "Welcome to The Service"
-                ,
-                $@"<html><body>Hello {user.Name}, <p>Welcome to Wire Tracer. 
-                We're glad you're here. We're here to make packet analysis easier for you.</p>
-                <br /> 
-                <p>We hope you have a nice day!</p>
-                The ReCoursia Team</body></html>", bytes, Guid.NewGuid().ToString() + ".pdf");
-
+                await SendWelcomeEmail(user.Email, user.Name);
                 return Ok("Sign-up successful.");
             }
             catch (Exception ex)
@@ -428,14 +420,21 @@ namespace Server.Controllers
         /// </returns>
         [Authorize]
         [HttpPost("domain")]
-        public async Task<IActionResult> DomainValidation([FromBody] string siteUri)
+        public async Task<IActionResult> DomainValidation([FromBody] DomainValidationRequest req)
         {
             try
             {
 
-
+                if (req == null)
+                {
+                    return BadRequest(new { message = "Request cannot be null." });
+                }
+                if (string.IsNullOrWhiteSpace(req.Email) || string.IsNullOrWhiteSpace(req.Url))
+                {
+                    return BadRequest(new { message = "Email and URL are required." });
+                }
                 // Validate the URL
-                if (string.IsNullOrWhiteSpace(siteUri))
+                if (string.IsNullOrWhiteSpace(req.Url))
                 {
 
                     return BadRequest(new { message = "Site URI is required." });
@@ -450,7 +449,7 @@ namespace Server.Controllers
                 request.AddHeader("x-apikey", apiKey);
 
                 // Place the URL directly in the body as a form field
-                string requestBody = $"url={Uri.EscapeDataString(siteUri)}"; // URL-encoded
+                string requestBody = $"url={Uri.EscapeDataString(req.Url)}"; // URL-encoded
                 request.AddStringBody(requestBody, DataFormat.None);
 
                 var response = await client.ExecuteAsync(request);
@@ -468,7 +467,7 @@ namespace Server.Controllers
                     return BadRequest(new { message = "Failed to send the URL for analysis.", details = response.Content });
                 }
 
-                Console.WriteLine($"VirusTotal Response: {response.Content}");
+
                 if (string.IsNullOrEmpty(response.Content))
                 {
 
@@ -511,6 +510,23 @@ namespace Server.Controllers
 
                 // Parse and return the analysis results
                 var analysisJson = JObject.Parse(analysisResponse.Content);
+                // analysisJson is a JObject produced by JObject.Parse(jsonString)
+                var statsToken = analysisJson["data"]?["attributes"]?["stats"];
+                int malicious = statsToken?["malicious"]?.Value<int>() ?? 0;
+                int suspicious = statsToken?["suspicious"]?.Value<int>() ?? 0;
+                int undetected = statsToken?["undetected"]?.Value<int>() ?? 0;
+                int harmless = statsToken?["harmless"]?.Value<int>() ?? 0;
+                int timeout = statsToken?["timeout"]?.Value<int>() ?? 0;
+
+                await SendLinkEmail(
+                    req.Email,
+                    req.Url,
+                    timeout,
+                    undetected,
+                    malicious,
+                    harmless,
+                    suspicious
+                );
                 return Ok(new
                 {
                     message = "Analysis completed successfully.",
@@ -524,7 +540,7 @@ namespace Server.Controllers
         }
         [Authorize]
         [HttpPost("usage")]
-        public async Task<IActionResult> Usage( PerformanceRequest request)
+        public async Task<IActionResult> Usage(PerformanceRequest request)
         {
             if (request.CpuUsage < 80 && request.RamUsage < 80 && request.DiskUsage < 80)
             {
@@ -572,5 +588,159 @@ namespace Server.Controllers
                 await _devices.InsertManyAsync(devices);
             }
         }
+        /// <summary>
+        /// Sends an email containing a domain scan report with the analysis results.
+        /// </summary>
+        /// <param name="email">The recipient's email address.</param>
+        /// <param name="url">The URL that was scanned.</param>
+        /// <param name="timeout">The number of engines that timed out during the scan.</param>
+        /// <param name="undetected">The number of engines that did not detect any issues.</param>
+        /// <param name="malicious">The number of engines that flagged the URL as malicious.</param>
+        /// <param name="harmless">The number of engines that marked the URL as harmless.</param>
+        /// <param name="suspicious">The number of engines that flagged the URL as suspicious.</param>
+        /// <remarks>
+        /// Constructs an HTML formatted email with a summary of the scan results and sends it using the email service.
+        /// </remarks>
+
+        private async Task SendLinkEmail(
+     string email,
+     string url,
+     int timeout,
+     int undetected,
+     int malicious,
+     int harmless,
+     int suspicious)
+        {
+            var summary = malicious > 0
+                ? $"⚠️ Heads up: {malicious} engine{(malicious == 1 ? "" : "s")} flagged this URL."
+                : "✅ Good news: No engines flagged this URL as malicious.";
+
+            string HtmlEscape(string s) => System.Net.WebUtility.HtmlEncode(s);
+
+            var urlDisplay = HtmlEscape(url);
+
+            string htmlBody = $@"
+<div style=""font-family:Segoe UI,Arial,sans-serif; background:#f5f7fa; padding:24px;"">
+  <div style=""max-width:600px; margin:0 auto; background:#ffffff; border-radius:10px;
+              box-shadow:0 4px 12px rgba(0,0,0,0.08); overflow:hidden; border:1px solid #e2e8f0;"">
+    <div style=""background:linear-gradient(135deg,#4f46e5,#3b82f6); padding:18px 24px;"">
+      <h2 style=""margin:0; font-size:20px; color:#ffffff;"">Domain Scan Report</h2>
+      <p style=""margin:4px 0 0; font-size:13px; letter-spacing:.5px; color:#e0f2fe;"">{DateTime.Now:dd-MM-yyyy HH:mm} Local Time</p>
+    </div>
+    <div style=""padding:24px 24px 8px;"">
+      <h3 style=""margin:0 0 12px; font-size:18px; color:#1e293b;"">Results for:
+        <span style=""color:#2563eb; word-break:break-all;"">{urlDisplay}</span>
+      </h3>
+      <p style=""margin:0 0 16px; font-size:15px; line-height:1.5; color:#334155;"">
+        {summary}
+      </p>
+
+      <table cellspacing=""0"" cellpadding=""0"" style=""width:100%; border-collapse:collapse; font-size:14px;"">
+        <thead>
+          <tr>
+            <th align=""left"" style=""padding:8px 10px; background:#f1f5f9; color:#475569; font-weight:600; border-bottom:1px solid #e2e8f0;"">Category</th>
+            <th align=""right"" style=""padding:8px 10px; background:#f1f5f9; color:#475569; font-weight:600; border-bottom:1px solid #e2e8f0;"">Count</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style=""padding:8px 10px; border-bottom:1px solid #e2e8f0; color:#dc2626; font-weight:{(malicious > 0 ? "600" : "400")};"">
+              Malicious
+            </td>
+            <td align=""right"" style=""padding:8px 10px; border-bottom:1px solid #e2e8f0; color:#dc2626; font-weight:{(malicious > 0 ? "600" : "400")};"">
+              {malicious}
+            </td>
+          </tr>
+          <tr>
+            <td style=""padding:8px 10px; border-bottom:1px solid #e2e8f0; color:#f59e0b; font-weight:{(suspicious > 0 ? "600" : "400")};"">
+              Suspicious
+            </td>
+            <td align=""right"" style=""padding:8px 10px; border-bottom:1px solid #e2e8f0; color:#f59e0b; font-weight:{(suspicious > 0 ? "600" : "400")};"">
+              {suspicious}
+            </td>
+          </tr>
+          <tr>
+            <td style=""padding:8px 10px; border-bottom:1px solid #e2e8f0; color:#0369a1;"">
+              Undetected
+            </td>
+            <td align=""right"" style=""padding:8px 10px; border-bottom:1px solid #e2e8f0; color:#0369a1;"">
+              {undetected}
+            </td>
+          </tr>
+          <tr>
+            <td style=""padding:8px 10px; border-bottom:1px solid #e2e8f0; color:#16a34a;"">
+              Harmless
+            </td>
+            <td align=""right"" style=""padding:8px 10px; border-bottom:1px solid #e2e8f0; color:#16a34a;"">
+              {harmless}
+            </td>
+          </tr>
+          <tr>
+            <td style=""padding:8px 10px; color:#64748b;"">
+              Timeout
+            </td>
+            <td align=""right"" style=""padding:8px 10px; color:#64748b;"">
+              {timeout}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div style=""margin:18px 0 8px; font-size:13px; line-height:1.5; color:#64748b;"">
+        <p style=""margin:0 0 8px;"">
+          Total engines counted: {harmless + undetected + suspicious + malicious + timeout}.
+        </p>
+        {(malicious > 0 ? @"<p style=""margin:0 0 8px;"">Consider re-checking the source, scanning related files, and if this is a false positive let us know.</p>" : @"")}
+        <p style=""margin:0;"">Have questions? Just reply — we actually read these.</p>
+      </div>
+    </div>
+    <div style=""background:#f1f5f9; padding:14px 24px; font-size:12px; color:#64748b;"">
+      <p style=""margin:0;"">Stay safe,</p>
+      <p style=""margin:4px 0 0; font-weight:600; color:#334155;"">The Wire Tracer Team 🛰️</p>
+    </div>
+  </div>
+</div>";
+
+            await _emailService.SendEmailAsync(
+                email,
+                "Your Domain Scan Report",
+                htmlBody
+            );
+        }
+        private async Task SendWelcomeEmail(string email, string name)
+        {
+            await _emailService.SendEmailAsync(
+                email,
+                "Welcome to Wire Tracer",
+                $@"
+                    <!DOCTYPE html>
+                    <html lang=""en"">
+                    <body style=""margin:0; padding:0; background:#f5f7fa; font-family:Segoe UI,Arial,sans-serif;"">
+                        <div style=""max-width:560px; margin:32px auto; background:#ffffff; border:1px solid #e2e8f0;
+                            border-radius:8px; overflow:hidden;"">
+                            <div style=""background:#2563eb; padding:18px 24px;"">
+                            <h1 style=""margin:0; font-size:20px; color:#ffffff; font-weight:600;"">Welcome aboard!</h1>
+                            </div>
+                            <div style=""padding:24px 28px 16px; color:#1e293b; font-size:15px; line-height:1.55;"">
+                                <p style=""margin:0 0 14px;"">Hi <strong>{System.Net.WebUtility.HtmlEncode(name)}</strong>,</p>
+                                <p style=""margin:0 0 14px;"">
+                                Thanks for joining <strong>Wire Tracer</strong>. We’re excited to help you
+                                simplify packet analysis and turn raw traffic into clear, actionable insights.
+                                </p>
+
+                                <p style=""margin:22px 0 6px;"">Have a great day,</p>
+                                <p style=""margin:0; font-weight:600; color:#334155;"">The Wire Tracer Team</p>
+                        </div>
+                        <div style=""background:#f1f5f9; padding:10px 18px; text-align:center;
+                            font-size:11px; color:#64748b;"">
+                            <p style=""margin:0;"">&copy; {DateTime.Now:yyyy} Wire Tracer. All rights reserved.</p>
+                        </div>
+                    </div>
+                </body>
+            </html>"
+            );
+
+        }
+
     }
 }
