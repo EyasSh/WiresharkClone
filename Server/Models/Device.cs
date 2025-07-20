@@ -19,4 +19,8 @@ public class Device
     public int Counter { get; set; } = 0;
     [BsonElement("sum")]
     public double Sum { get; set; } = 0.0;
+    [BsonElement("sumOfDeviations")]
+    public double SumOfDeviations { get; set; } = 0.0;
+    [BsonElement("numOfDeviations")]
+    public int NumOfDeviations { get; set; } = 0;
 }

@@ -69,20 +69,35 @@ public class PdfGenerator
 
         return document.GeneratePdf();
     }
+
     /// <summary>
     /// Generates a performance report PDF and returns it as a byte array.
     /// The PDF includes a header with the title "Performance Report", a table
-    /// with the CPU, RAM, and disk usage metrics, and an optional footer with
-    /// the user's name and ID. The metrics are passed as a tuple of three
-    /// doubles. The user is an optional parameter, and if provided, the
-    /// footer will contain the user's name and ID.
+    /// with the current, average, and standard deviation of CPU, RAM, and disk usage,
+    /// and an optional footer with the user's name and email.
+    /// The metrics are passed as an anonymous object containing the CPU, RAM, and disk usage,
+    /// and the user is an optional parameter, and if provided, the footer will contain the user's name and email.
     /// </summary>
-    /// <param name="metrics">Tuple of three doubles representing the CPU, RAM, and disk usage metrics.</param>
-    /// <param name="user">Optional user object containing the name and ID.</param>
+    /// <param name="metrics">An anonymous object containing the CPU, RAM, and disk usage.</param>
+    /// <param name="user">Optional user object containing the name and email.</param>
+    /// <param name="averageCpuUsage">The average CPU usage.</param>
+    /// <param name="averageRamUsage">The average RAM usage.</param>
+    /// <param name="averageDiskUsage">The average disk usage.</param>
+    /// <param name="cpuSd">The standard deviation of the CPU usage.</param>
+    /// <param name="ramSd">The standard deviation of the RAM usage.</param>
+    /// <param name="diskSd">The standard deviation of the disk usage.</param>
     /// <returns>A byte array representing the generated PDF.</returns>
     public static byte[] GeneratePerformancePdf(
-     (double cpuUsage, double ramUsage, double diskUsage) metrics,
-     User? user = null, double averageCpuUsage = 0.0, double averageRamUsage = 0.0, double averageDiskUsage = 0.0)
+       (
+           double cpuUsage, double ramUsage, double diskUsage) metrics,
+       User? user = null,
+       double averageCpuUsage = 0.0,
+       double averageRamUsage = 0.0,
+       double averageDiskUsage = 0.0,
+       double cpuSd = 0.0,
+       double ramSd = 0.0,
+       double diskSd = 0.0
+   )
     {
         var document = Document.Create(container =>
         {
@@ -104,12 +119,12 @@ public class PdfGenerator
                     .SemiBold()
                     .FontFamily("Segoe UI");
 
-                // 3. Content with three-column table
+                // 3. Content with four-column table
                 page.Content()
                     .PaddingVertical(20)
                     .Column(col =>
                     {
-                        // 3.1 Metrics table with Metric, Current Usage, Average Usage columns
+                        // Metrics table with Metric, Current, Average, StdDev
                         col.Item().Table(table =>
                         {
                             table.ColumnsDefinition(c =>
@@ -117,21 +132,22 @@ public class PdfGenerator
                                 c.RelativeColumn();  // Metric
                                 c.RelativeColumn();  // Current Usage
                                 c.RelativeColumn();  // Average Usage
+                                c.RelativeColumn();  // Std Deviation
                             });
 
                             table.Header(header =>
                             {
                                 header.Cell().Background(Colors.Grey.Lighten2).Padding(5)
                                       .Text("Metric").SemiBold().FontFamily("Tahoma");
-
                                 header.Cell().Background(Colors.Grey.Lighten2).Padding(5)
                                       .Text("Current Usage").SemiBold().FontFamily("Tahoma");
-
                                 header.Cell().Background(Colors.Grey.Lighten2).Padding(5)
                                       .Text("Average Usage").SemiBold().FontFamily("Tahoma");
+                                header.Cell().Background(Colors.Grey.Lighten2).Padding(5)
+                                      .Text("Std Deviation").SemiBold().FontFamily("Tahoma");
                             });
 
-                            void AddRow(string name, string current, string average)
+                            void AddRow(string name, string current, string average, string sd)
                             {
                                 table.Cell().Padding(5)
                                      .BorderBottom(1).BorderColor(Colors.Grey.Lighten2)
@@ -144,14 +160,30 @@ public class PdfGenerator
                                 table.Cell().Padding(5)
                                      .BorderBottom(1).BorderColor(Colors.Grey.Lighten2)
                                      .Text(average);
+
+                                table.Cell().Padding(5)
+                                     .BorderBottom(1).BorderColor(Colors.Grey.Lighten2)
+                                     .Text(sd);
                             }
 
-                            AddRow("CPU Usage", $"{metrics.cpuUsage / 100:P1}", $"{averageCpuUsage / 100:P1}");
-                            AddRow("RAM Usage", $"{metrics.ramUsage / 100:P1}", $"{averageRamUsage / 100:P1}");
-                            AddRow("Disk Usage", $"{metrics.diskUsage / 100:P1}", $"{averageDiskUsage / 100:P1}");
+                            AddRow(
+                                "CPU Usage",
+                                $"{metrics.cpuUsage / 100:P1}",
+                                $"{averageCpuUsage / 100:P1}",
+                                $"{cpuSd / 100:P1}");
+                            AddRow(
+                                "RAM Usage",
+                                $"{metrics.ramUsage / 100:P1}",
+                                $"{averageRamUsage / 100:P1}",
+                                $"{ramSd / 100:P1}");
+                            AddRow(
+                                "Disk Usage",
+                                $"{metrics.diskUsage / 100:P1}",
+                                $"{averageDiskUsage / 100:P1}",
+                                $"{diskSd / 100:P1}");
                         });
 
-                        // 3.2 User info (optional)
+                        // User info (optional)
                         if (user != null)
                         {
                             col.Item()
