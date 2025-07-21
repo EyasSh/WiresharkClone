@@ -620,7 +620,7 @@ namespace Server.Controllers
             var urlDisplay = HtmlEscape(url);
 
             string htmlBody = $@"
-<div style=""font-family:Segoe UI,Arial,sans-serif; background:#f5f7fa; padding:24px;"">
+<div style=""font-family:Segoe UI,Arial,sans-serif; background:transparent; padding:24px;"">
   <div style=""max-width:600px; margin:0 auto; background:#ffffff; border-radius:10px;
               box-shadow:0 4px 12px rgba(0,0,0,0.08); overflow:hidden; border:1px solid #e2e8f0;"">
     <div style=""background:linear-gradient(135deg,#4f46e5,#3b82f6); padding:18px 24px;"">
@@ -715,7 +715,7 @@ namespace Server.Controllers
                 $@"
                     <!DOCTYPE html>
                     <html lang=""en"">
-                    <body style=""margin:0; padding:0; background:#f5f7fa; font-family:Segoe UI,Arial,sans-serif;"">
+                    <body style=""margin:0; padding:0; background:transparent; font-family:Segoe UI,Arial,sans-serif;"">
                         <div style=""max-width:560px; margin:32px auto; background:#ffffff; border:1px solid #e2e8f0;
                             border-radius:8px; overflow:hidden;"">
                             <div style=""background:#2563eb; padding:18px 24px;"">
