@@ -47,7 +47,7 @@ namespace Server.Services
             {
                 await Clients.Caller.ConnectNotification(sid, "ok");
 
-                var devicesList = await _devicesCollection.Find(_ => true).ToListAsync();
+                List<Device> devicesList = await _devicesCollection.Find(_ => true).ToListAsync();
                 if (devicesList.Any())
                 {
                     _globalCount = devicesList[0].Counter;
