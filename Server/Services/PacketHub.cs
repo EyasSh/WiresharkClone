@@ -18,10 +18,14 @@ public class PacketHub : Hub<IPacketContext>
     private static readonly ConcurrentDictionary<string, string> _connections = new();
     private static IMongoCollection<PacketInfo>? _packetsCollection;
     private static MongoDBWrapper? _mongoDBWrapper;
-    public PacketHub(MongoDBWrapper mongoDBWrapper)
+    private static readonly TimeSpan EmailInterval = TimeSpan.FromMinutes(30);
+    private readonly EmailService _emailService;
+    private static readonly ConcurrentDictionary<string, DateTime> _lastEmailSent = new();
+    public PacketHub(MongoDBWrapper mongoDBWrapper, EmailService emailService)
     {
         _mongoDBWrapper = mongoDBWrapper;
         _packetsCollection = mongoDBWrapper.Packets;
+        _emailService = emailService;
     }
     /// <summary>
     /// This is the OnConnectedAsync method that will be called when the client establishes a connection to the server.
@@ -43,31 +47,72 @@ public class PacketHub : Hub<IPacketContext>
         }
 
     }
-    /// <summary>
-    /// Retrieves all packets captured by the server.
-    /// The packets are captured using the SharpPcap library.
-    /// Sends the captured packets to the calling client.
-    /// </summary>
-    public void GetPackets()
+    public async Task GetPackets(string email)
     {
-        Queue<PacketInfo> packets = Capturer.StartCapture();
+        System.Console.WriteLine($"Email: {email}");
+        // 1. Capture & analyze
+        var packets = Capturer.StartCapture();
         Analyzer.DetectSynFlood(packets, 150, Analyzer.defaultQuarterWindow);
         Analyzer.DetectUdpFlood(packets, 150, Analyzer.defaultQuarterWindow);
         Analyzer.DetectPortScan(packets, 5, Analyzer.defaultQuarterWindow);
         Analyzer.DetectPingOfDeathV4(packets);
         Analyzer.DetectPingOfDeathV6(packets);
-        var suspackets = packets.Where(p => p.isSuspicious == true || p.isMalicious == true).ToList();
+
+        var suspackets = packets
+            .Where(p => p.isSuspicious || p.isMalicious)
+            .ToList();
+
+        // 2. Persist
         if (suspackets.Count > 0)
         {
             _packetsCollection?.InsertMany(suspackets);
-            System.Console.WriteLine($"Inserted {suspackets.Count} suspicious packets into the database");
+            Console.WriteLine($"Inserted {suspackets.Count} suspicious packets into the database");
         }
         else
         {
-            System.Console.WriteLine($"No suspicious packets found");
+            Console.WriteLine("No suspicious packets found");
         }
-        System.Console.WriteLine($"Sending {packets.Count} packets to client {Context.ConnectionId}");
-        Clients.Caller.ReceivePackets(packets.ToArray());
+
+        // 3. Send packets to client immediately
+        Console.WriteLine($"Sending {packets.Count} packets to client {Context.ConnectionId}");
+        await Clients.Caller.ReceivePackets(packets.ToArray());
+
+        // 4. Now decide if we should email
+        if (suspackets.Count > 0)
+        {
+            var lastSentExists = _lastEmailSent.TryGetValue(email, out var lastSent);
+            var shouldSend = !lastSentExists || (DateTime.UtcNow - lastSent >= EmailInterval);
+
+            if (shouldSend)
+            {
+                var pdfBytes = PdfGenerator.GenerateFlaggedPacketsPdf(suspackets);
+                if (pdfBytes != null)
+                {
+                    // fire-and-forget:
+                    _ = _emailService.SendEmailWithAttachmentAsync(
+                            email,
+                            "Suspicious Packets Detected",
+                            "Please find attached the PDF report of suspicious packets detected.",
+                            pdfBytes,
+                            "suspicious_packets.pdf"
+                        )
+                        .ContinueWith(t =>
+                        {
+                            if (t.IsCompletedSuccessfully)
+                            {
+                                _lastEmailSent[email] = DateTime.UtcNow;
+                                Console.WriteLine($"Sent email notification to {email}.");
+                            }
+                            else
+                            {
+                                Console.Error.WriteLine($"Email failed: {t.Exception}");
+                            }
+                        });
+
+
+                }
+            }
+        }
     }
     public override async Task OnDisconnectedAsync(Exception? exception)
     {

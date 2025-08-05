@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // src/Home/Home.jsx
 
 import{ useState, useEffect } from 'react';
@@ -25,6 +26,7 @@ export default function Home() {
   const [filter, setFilter]       = useState('All'); 
   const [filteredPackets, setFilteredPackets] = useState([]); 
   const [selectedIndex, setSelectedIndex]     = useState(-1);
+  const [email,setEmail] = useState(localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).email : '');
 
   // ─── auth check ──────────────────────────────────────────
   useEffect(() => {
@@ -60,14 +62,15 @@ export default function Home() {
   // ─── initial fetch + interval ─────────────────────────────
   useEffect(() => {
     const fetchOnce = () => {
+
       if (packetHubConnection.state === 'Connected') {
-        packetHubConnection.invoke('GetPackets').catch(console.error);
+        packetHubConnection.invoke('GetPackets', email).catch(console.error);
       }
     };
     fetchOnce();
     const id = setInterval(fetchOnce, 60_000);
     return () => clearInterval(id);
-  }, []);
+  }, [email]);
 
   // ─── THIS is the one & only filter effect ────────────────
  useEffect(() => {

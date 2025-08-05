@@ -328,4 +328,147 @@ public class PdfGenerator
         var pdfBytes = document.GeneratePdf();
         return pdfBytes;  // :contentReference[oaicite:0]{index=0}
     }
+    /// <summary>
+    /// Generates a PDF report of flagged packets and returns it as a byte array.
+    /// The PDF includes a header titled "Flagged Packets Report" and a table 
+    /// summarizing the flagged packets, which are grouped by protocol, source IP, 
+    /// source port, destination IP, and destination port. Each row in the table 
+    /// displays the type, source IP, source port, destination IP, destination port, 
+    /// and count of packets for each group. The packets are filtered to include 
+    /// only those marked as suspicious or malicious.
+    /// </summary>
+    /// <param name="packets">Enumerable of <see cref="PacketInfo"/> objects representing the packets to be included in the report.</param>
+    /// <returns>A byte array representing the generated PDF.</returns>
+    public static byte[] GenerateFlaggedPacketsPdf(
+    IEnumerable<PacketInfo> packets)
+    {
+        // 1. Filter and group
+        var flaggedGroups = packets
+            .Where(p => p.isSuspicious || p.isMalicious)
+            .GroupBy(p => new
+            {
+                p.Protocol,
+                p.SourceIP,
+                p.SourcePort,
+                p.DestinationIP,
+                p.DestinationPort
+            });
+
+        // 2. Build document
+        var document = Document.Create(container =>
+        {
+            container.Page(page =>
+            {
+                // Page setup
+                page.Size(PageSizes.A4);
+                page.Margin(1, Unit.Inch);
+                page.DefaultTextStyle(x => x.FontSize(14).FontFamily("Arial"));
+
+                // Header
+                page.Header()
+                    .Height(50)
+                    .Background(Colors.Blue.Medium)
+                    .Padding(10)
+                    .AlignMiddle()
+                    .Text("Flagged Packets Report")
+                    .FontSize(22)
+                    .FontColor(Colors.White)
+                    .SemiBold();
+
+                // Content
+                page.Content()
+                    .PaddingVertical(20)
+                    .Column(col =>
+                    {
+                        // Optional: summary
+                        col.Item().Text(text =>
+                        {
+                            var total = flaggedGroups.Sum(g => g.Count());
+                            text.Span("Total flagged packets: ").SemiBold();
+                            text.Span(total.ToString());
+                        });
+
+                        col.Item().PaddingTop(10).LineHorizontal(1).LineColor(Colors.Grey.Lighten2);
+
+                        // Table
+                        col.Item().Table(table =>
+                        {
+                            // Define six columns: Type, Src IP, Src Port, Dest IP, Dest Port, Count
+                            table.ColumnsDefinition(c =>
+                            {
+                                c.RelativeColumn(2); // Type description
+                                c.RelativeColumn();  // Source IP
+                                c.RelativeColumn();  // Source Port
+                                c.RelativeColumn();  // Destination IP
+                                c.RelativeColumn();  // Destination Port
+                                c.RelativeColumn();  // Count
+                            });
+
+                            // Header row
+                            table.Header(header =>
+                            {
+                                header.Cell().Background(Colors.Grey.Lighten2).Padding(5)
+                                    .Text("Type").SemiBold();
+                                header.Cell().Background(Colors.Grey.Lighten2).Padding(5)
+                                    .Text("Src IP").SemiBold();
+                                header.Cell().Background(Colors.Grey.Lighten2).Padding(5)
+                                    .Text("Src Port").SemiBold();
+                                header.Cell().Background(Colors.Grey.Lighten2).Padding(5)
+                                    .Text("Dest IP").SemiBold();
+                                header.Cell().Background(Colors.Grey.Lighten2).Padding(5)
+                                    .Text("Dest Port").SemiBold();
+                                header.Cell().Background(Colors.Grey.Lighten2).Padding(5)
+                                    .Text("Count").SemiBold();
+                            });
+
+                            // Data rows
+                            foreach (var group in flaggedGroups)
+                            {
+                                var key = group.Key;
+                                var protocol = key.Protocol ?? "Unknown";
+                                var description = PacketInfo.Descriptions.TryGetValue(protocol, out var desc)
+                                    ? desc
+                                    : protocol;
+
+                                table.Cell().Padding(5)
+                                    .BorderBottom(1).BorderColor(Colors.Grey.Lighten2)
+                                    .Text(protocol);
+
+                                table.Cell().Padding(5)
+                                    .BorderBottom(1).BorderColor(Colors.Grey.Lighten2)
+                                    .Text(key.SourceIP);
+
+                                table.Cell().Padding(5)
+                                    .BorderBottom(1).BorderColor(Colors.Grey.Lighten2)
+                                    .Text(key.SourcePort?.ToString() ?? "-");
+
+                                table.Cell().Padding(5)
+                                    .BorderBottom(1).BorderColor(Colors.Grey.Lighten2)
+                                    .Text(key.DestinationIP);
+
+                                table.Cell().Padding(5)
+                                    .BorderBottom(1).BorderColor(Colors.Grey.Lighten2)
+                                    .Text(key.DestinationPort?.ToString() ?? "-");
+
+                                table.Cell().Padding(5)
+                                    .BorderBottom(1).BorderColor(Colors.Grey.Lighten2)
+                                    .Text(group.Count().ToString());
+                            }
+                        });
+
+                    });
+
+                // Footer
+                page.Footer()
+                    .AlignCenter()
+                    .Padding(5)
+                    .Text($"Generated on {DateTime.Now:yyyy-MM-dd HH:mm:ss}")
+                    .FontSize(10)
+                    .FontColor(Colors.Grey.Lighten1);
+            });
+        });
+
+        return document.GeneratePdf();
+    }
+
 }
