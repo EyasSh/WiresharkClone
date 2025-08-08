@@ -14,6 +14,14 @@ import './ResourceMeter.css';
  * @returns {ReactElement} A ReactElement representing the component.
  */
 function ResourceMeter({ resourceAvailability, resourceName, usage }) {
+    /**
+     * Returns the color of the resource meter based on the usage percentage.
+     *  - Green for below 70%
+     *  - Yellow for 70–89%
+     *  - Red for 90% and above
+     * @param {number} usage - The percentage of the resource that is currently being used.
+     * @returns {string} The color of the resource meter.
+     */
     const getColor = (usage) => {
         if (usage >= 70 && usage < 90) return '#ffc107'; // Yellow for 70–89%
         if (usage >= 90) return '#f44336'; // Red for 90% and above
@@ -22,9 +30,12 @@ function ResourceMeter({ resourceAvailability, resourceName, usage }) {
     const [animatedUsage, setAnimatedUsage] = useState(usage);
     const [color, setColor] = useState(getColor(usage)); // Track color in state
 
-    // Determine color based on usage percentage
     
-
+    
+/** 
+ * This useEffect handles the animation steps for seamlessly transitioning the usage percentage.
+ * It updates the animatedUsage state to create a smooth transition effect.
+*/
     useEffect(() => {
         const animationDuration = 300; // Duration in milliseconds
         const steps = 30; // Number of steps for smoother animation

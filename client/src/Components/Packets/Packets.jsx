@@ -1,9 +1,8 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 // Profile.jsx
-import React, { useEffect, useState } from 'react';
+import{ useEffect, useState } from 'react';
 import './Packets.css'; // Add consistent styles for profile page
-import hubConnection from '../Sockets/SignalR';
 import PacketReport from '../PacketReport/PacketReport';
 
 /**
@@ -18,7 +17,6 @@ import PacketReport from '../PacketReport/PacketReport';
  * their first name. It shows the current state of the SignalR connection and the session ID.
  * If the user's name is not available, it defaults to 'Guest'.
  */
-
 function Packets({hubConnection}) {
     // Retrieve the user data and parse it
     const [name, setName] = useState('Guest'); 

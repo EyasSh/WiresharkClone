@@ -10,13 +10,20 @@ using Server.Models;
 
 namespace Server.Services
 {
+    /// <summary>
+    /// IHubService defines the methods that can be called by the client.
+    /// It includes methods for connecting notifications, receiving metrics.
+    /// </summary>
     public interface IHubService
     {
         Task ConnectNotification(string sid, string warningLevel);
         Task ReceiveMetrics(double cpuUsage, double ramUsage, double diskUsage);
-        Task ReceivePackets(PacketInfo[] packets);
-    }
 
+    }
+    /// <summary>
+    /// SocketService is a SignalR hub that handles real-time communication for device performance metrics.
+    /// It captures system metrics, analyzes them, and sends notifications to connected clients.
+    /// </summary>
     public class SocketService : Hub<IHubService>
     {
         private static long _globalCount = 0;
@@ -31,12 +38,24 @@ namespace Server.Services
         // Tracks last email sent time per user (email address)
         private static readonly ConcurrentDictionary<string, DateTime> _lastEmailSent = new();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SocketService"/> class.
+        /// </summary>
+        /// <param name="mongoDBWrapper">The MongoDBWrapper to access device data in the database.</param>
+        /// <param name="emailService">The EmailService used for sending notifications.</param>
         public SocketService(MongoDBWrapper mongoDBWrapper, EmailService emailService)
         {
             _mongoDBWrapper = mongoDBWrapper;
             _devicesCollection = mongoDBWrapper.Devices;
             _emailService = emailService;
         }
+
+        /// <summary>
+        /// Called when a client connects to the SocketService hub.
+        /// This method registers the client's connection ID and notifies the client of a successful connection.
+        /// It also retrieves the list of devices from the database and enqueues them for performance tracking.
+        /// If an error occurs, an error notification is sent to the client.
+        /// </summary>
 
         public override async Task OnConnectedAsync()
         {
@@ -61,6 +80,12 @@ namespace Server.Services
             }
         }
 
+        /// <summary>
+        /// Captures system metrics, updates device averages, and checks for threshold deviation.
+        /// If the threshold is exceeded, sends an email with a PDF report to the user.
+        /// </summary>
+        /// <param name="email">The email address to send the report to.</param>
+        /// <param name="name">The user's name to display in the email.</param>
         public async Task GetMetrics(string email, string name)
         {
             var invocationNumber = Interlocked.Increment(ref _globalCount);
@@ -139,6 +164,13 @@ namespace Server.Services
             await Clients.Caller.ReceiveMetrics(cpuUsage, ramUsage, diskUsage);
         }
 
+        /// <summary>
+        /// Handles client disconnection from the SocketService hub.
+        /// Removes the client's connection ID from the active connections and logs the disconnection.
+        /// Updates the average usage of each tracked device and persists the changes to the database.
+        /// </summary>
+        /// <param name="exception">The exception associated with the disconnection, if any.</param>
+        /// <returns>A task that represents the asynchronous disconnect operation.</returns>
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
             var sid = Context.ConnectionId;

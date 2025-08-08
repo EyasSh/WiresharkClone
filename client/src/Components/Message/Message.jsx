@@ -12,7 +12,6 @@ import './Message.css';
  * @description If the provided severity does not match allowed values, it defaults to "normal".
  * The component applies a corresponding class name to the message based on its severity level.
  */
-
 function Message(props) {
     const { severity, children } = props;
 

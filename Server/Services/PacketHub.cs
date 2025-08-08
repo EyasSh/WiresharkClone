@@ -1,18 +1,21 @@
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using MongoDB.Driver;
-using Newtonsoft.Json;
 using Server.DB;
 using Server.Models;
 namespace Server.Services;
 
+/// <summary>
+/// IPacketContext defines the methods that can be called by the client.
+/// </summary>
 public interface IPacketContext
 {
     Task ConnectNotification(string sid, string warningLevel);
     Task ReceivePackets(PacketInfo[] packets);
 }
+/// <summary>
+/// PacketHub is a SignalR hub that handles real-time communication for packet analysis.
+/// </summary>
 public class PacketHub : Hub<IPacketContext>
 {
     private static readonly ConcurrentDictionary<string, string> _connections = new();
@@ -21,6 +24,11 @@ public class PacketHub : Hub<IPacketContext>
     private static readonly TimeSpan EmailInterval = TimeSpan.FromMinutes(30);
     private readonly EmailService _emailService;
     private static readonly ConcurrentDictionary<string, DateTime> _lastEmailSent = new();
+    /// <summary>
+    /// Constructor for PacketHub. Initializes the PacketHub with a MongoDBWrapper and an EmailService.
+    /// </summary>
+    /// <param name="mongoDBWrapper">The MongoDBWrapper for accessing the MongoDB database.</param>
+    /// <param name="emailService">The EmailService for sending emails.</param>
     public PacketHub(MongoDBWrapper mongoDBWrapper, EmailService emailService)
     {
         _mongoDBWrapper = mongoDBWrapper;
@@ -47,6 +55,17 @@ public class PacketHub : Hub<IPacketContext>
         }
 
     }
+    /// <summary>
+    /// Captures network packets, analyzes them for potential threats, and performs actions based on the analysis results.
+    /// </summary>
+    /// <param name="email">The email address to which notifications and reports may be sent.</param>
+    /// <remarks>
+    /// This method performs the following steps:
+    /// 1. Captures network packets and analyzes them for SYN floods, UDP floods, port scans, and Ping of Death attacks.
+    /// 2. Persists any suspicious packets to a MongoDB collection.
+    /// 3. Sends all captured packets back to the client connected to the server.
+    /// 4. Sends an email with a PDF report of suspicious packets if any are found and the notification criteria are met.
+    /// </remarks>
     public async Task GetPackets(string email)
     {
         System.Console.WriteLine($"Email: {email}");
@@ -114,6 +133,11 @@ public class PacketHub : Hub<IPacketContext>
             }
         }
     }
+    /// <summary>
+    /// Called when the client disconnects from the PacketHub.
+    /// </summary>
+    /// <param name="exception">The exception associated with the disconnection, if any.</param>
+    /// <returns>A task that represents the asynchronous disconnect operation.</returns>
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
         System.Console.WriteLine($"{Context.ConnectionId} disconnected from packet hub");

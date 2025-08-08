@@ -19,7 +19,6 @@ import './Packet.css';
  * 
  * @returns {ReactElement} A React component displaying the packet details in a styled container.
  */
-
 function Packet({
   ...props
 }) {

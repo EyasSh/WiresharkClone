@@ -7,8 +7,22 @@ import Button from '../Button/Button';
 function LinkChecker() {
     const [url, setUrl] = useState('');
     const [urlStatus, setUrlStatus] = useState(''); // State for displaying the result message
-     // Helper function to determine URL status message
-    const getUrlStatusMessage = (stats) => {
+    
+    
+    /**
+     * Given the statistical data from VirusTotal, determines the status message
+     * to be displayed for the user. The status message will be one of the following:
+     * 
+     * - "This URL is harmful. It was flagged as malicious by several engines."
+     * - "This URL is suspicious. It requires further caution."
+     * - "This URL is harmless. No issues were found."
+     * - "No sufficient data available for this URL."
+     * 
+     * @param {Object} stats An object with 3 properties: malicious, suspicious, and harmless.
+     * Each of these properties represents the number of engines that flagged the URL
+     * as malicious, suspicious, or harmless, respectively.
+     */
+     const getUrlStatusMessage = (stats) => {
         const { malicious, suspicious, harmless } = stats;
 
         if (malicious > 0) {

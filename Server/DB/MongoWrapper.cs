@@ -1,10 +1,11 @@
-using MongoDB.Bson;
-using MongoDB;
 using MongoDB.Driver;
 using Server.Models;
 namespace Server.DB;
 
-
+/// <summary>
+/// MongoDBWrapper is a class that provides a wrapper around MongoDB operations.
+/// It initializes the MongoDB client, database, and collections based on configuration settings.
+/// </summary>
 public class MongoDBWrapper
 {
     private readonly IMongoClient _client;

@@ -11,6 +11,15 @@ namespace Server.Services;
 /// </summary>
 public class PdfGenerator
 {
+        /// <summary>
+        /// Generates a PDF report for a single file, given its name and the counts of malicious and undetected results from VirusTotal.
+        /// The report includes the file name, the number of malicious and undetected results, and a footer with the report generation date.
+        /// The PDF is generated using the QuestPDF library.
+        /// </summary>
+        /// <param name="fileName">The name of the file to generate a report for.</param>
+        /// <param name="malicious">The number of malicious results from VirusTotal.</param>
+        /// <param name="undetected">The number of undetected results from VirusTotal.</param>
+        /// <returns>A byte array representing the generated PDF.</returns>
     public static byte[] GenerateFilePdf(string fileName, int malicious, int undetected)
     {
         int sum = malicious + undetected;

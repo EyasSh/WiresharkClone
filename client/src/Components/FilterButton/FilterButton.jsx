@@ -17,6 +17,11 @@ export default function FilterButton({ selected, onChange }) {
 
   // close when clicking outside
   useEffect(() => {
+    /**
+     * Handles a click event on the document. If the click is outside of the
+     * FilterButton component, it closes the dropdown menu.
+     * @param {MouseEvent} e The click event.
+     */
     function onClick(e) {
       if (ref.current && !ref.current.contains(e.target)) {
         setOpen(false);

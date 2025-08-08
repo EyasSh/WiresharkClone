@@ -17,8 +17,11 @@ using System.Threading.Tasks;
 
 namespace Server.Controllers
 {
+    /// <summary>
+    /// Controller for managing user-related actions.
+    /// </summary>
     [ApiController]
-    [Route("api/user")] // Base route for all actions in this controller
+    [Route("api/user")] 
     public class UserController : ControllerBase
     {
         private readonly IHubContext<SocketService> _hubContext;
@@ -154,7 +157,6 @@ namespace Server.Controllers
         /// </summary>
         /// <returns>A successful status code (200) if the sign-up request was
         /// successful.</returns>
-
         [AllowAnonymous]
         [HttpPost("signup")] // Route: api/user/signup
         public async Task<IActionResult> SignUp([FromBody] SignupRequest request)
@@ -538,6 +540,11 @@ namespace Server.Controllers
                 return StatusCode(500, new { message = $"An error occurred: {ex.Message}" });
             }
         }
+        /// <summary>
+        /// Handles the performance usage report.
+        /// </summary>
+        /// <param name="request">A <see cref="PerformanceRequest"/> object containing the CPU, RAM, and disk usage, the user's name and email, as well as the average CPU, RAM, and disk usage.</param>
+        /// <returns>A JSON response with a message indicating whether the usage is excessive or not. If excessive, an email with a PDF attachment is sent to the user.</returns>
         [Authorize]
         [HttpPost("usage")]
         public async Task<IActionResult> Usage(PerformanceRequest request)
@@ -563,6 +570,10 @@ namespace Server.Controllers
             ", pdf, user?.Id + "" + DateOnly.FromDateTime(DateTime.Now) + "" + ".pdf");
             return Ok();
         }
+        /// <summary>
+        /// Retrieves a list of all packets.
+        /// </summary>
+        /// <returns>A JSON response containing a list of <see cref="PacketInfo"/> objects.</returns>
         [Authorize]
         [HttpGet("packets")]
         public Task<IActionResult> GetPackets()
@@ -601,7 +612,6 @@ namespace Server.Controllers
         /// <remarks>
         /// Constructs an HTML formatted email with a summary of the scan results and sends it using the email service.
         /// </remarks>
-
         private async Task SendLinkEmail(
      string email,
      string url,
@@ -707,6 +717,14 @@ namespace Server.Controllers
                 htmlBody
             );
         }
+        /// <summary>
+        /// Sends a welcome email to a new user.
+        /// </summary>
+        /// <param name="email">The email address of the user to send the email to.</param>
+        /// <param name="name">The name of the user to send the email to.</param>
+        /// <remarks>
+        /// The email includes a welcome message, a link to the user's dashboard, and a link to the documentation.
+        /// </remarks>
         private async Task SendWelcomeEmail(string email, string name)
         {
             await _emailService.SendEmailAsync(

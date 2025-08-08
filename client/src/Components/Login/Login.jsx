@@ -25,7 +25,6 @@ function Login() {
  * authentication token and user data in local storage and navigates to the 
  * home page. If the request fails, it logs the error.
  */
-
     const handleSubmit = async () => {
        
     

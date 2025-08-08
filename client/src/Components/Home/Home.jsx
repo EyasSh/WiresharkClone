@@ -17,7 +17,6 @@ import './Home.css';
  *
  * @type {React.FC}
  */
-
 export default function Home() {
   const navigate = useNavigate();
 
@@ -61,6 +60,11 @@ export default function Home() {
 
   // ─── initial fetch + interval ─────────────────────────────
   useEffect(() => {
+    /**
+     * Fetches packets from the server using SignalR, if the connection is established.
+     * If the connection is not established, it does nothing.
+     * If the invocation throws an error, it logs the error to the console.
+     */
     const fetchOnce = () => {
 
       if (packetHubConnection.state === 'Connected') {
@@ -72,7 +76,10 @@ export default function Home() {
     return () => clearInterval(id);
   }, [email]);
 
-  // ─── THIS is the one & only filter effect ────────────────
+  /**
+   * The effect to filter packets based on the selected filter option.
+   * It updates the filteredPackets state based on the packetsArr and filter.
+   */
  useEffect(() => {
    const result = packetsArr.filter(p => {
   if (filter === 'All') return true;

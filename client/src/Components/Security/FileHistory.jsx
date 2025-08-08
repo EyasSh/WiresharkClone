@@ -6,6 +6,15 @@ import './VirusChecker.css';
 function FileHistory() {
     const [files,setFiles] = useState([]);
     useEffect(() => {
+/**
+ * Fetches the history of file checks for the current user from the server.
+ * Retrieves the user's authentication token and userId from local storage,
+ * then makes an API call to get the file history data.
+ * Updates the state with the retrieved data, which includes file name,
+ * date of check, and result.
+ * Utilizes Axios for the API request and updates the `files` state
+ * with the result data.
+ */
         const fetchChecks = async () => {
             const token= localStorage.getItem('X-Auth-Token')
             const user = localStorage.getItem('user')

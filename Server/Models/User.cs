@@ -2,6 +2,9 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 namespace Server.Models
 {
+    /// <summary>
+    /// This class represents a user model with properties for its unique identifier, name, email, and password.
+    /// </summary>
     public class User
     {
         [BsonId]

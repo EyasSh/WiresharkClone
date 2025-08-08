@@ -4,7 +4,10 @@ using System.Text;
 using System.Text.Json;
 using PacketDotNet;
 using ARSoft.Tools.Net.Dns;
-
+/// <summary>
+/// PacketParser is a static class that provides methods for parsing and analyzing network packets.
+/// It includes functionality to extract application layer payloads, decode them, and format DNS messages.
+/// </summary>
 public static class PacketParser
 {
     /// <summary>

@@ -28,6 +28,17 @@ namespace Server.Services
             _apiKey = configuration["Mailjet:ApiKey"];
             _apiSecret = configuration["Mailjet:ApiSecret"];
         }
+        /// <summary>
+        /// Sends an email asynchronously using the Mailjet client.
+        /// </summary>
+        /// <param name="to">The recipient's email address.</param>
+        /// <param name="subject">The subject of the email.</param>
+        /// <param name="body">The HTML body content of the email.</param>
+        /// <exception cref="Exception">Thrown if the email fails to send.</exception>
+        /// <remarks>
+        /// This method builds an email message using the provided parameters and sends it via the Mailjet API. 
+        /// An exception is thrown if the email sending process fails.
+        /// </remarks>
         public async Task SendEmailAsync(string to, string subject, string body)
         {
             // Instantiate the Mailjet client

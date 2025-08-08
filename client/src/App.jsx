@@ -18,6 +18,14 @@ import Performance from './Components/Performance/Performance';
 import Loading from './Components/Logo/Loading';
 import VirusChecker from './Components/Security/VirusChecker';
 
+/**
+ * The main App component that handles the SignalR connection and rendering of the main content.
+ * It establishes a connection to the SignalR hub when the component mounts and sets up event listeners for the ConnectNotification event.
+ * If the connection is established successfully, it sets the connection state to 'Connected' and sets the sid and psid states with the connection ID.
+ * If there is an error connecting to the hub, it sets the connection state to 'Disconnected' and displays an error notification.
+ * It also renders a notification component if a notification exists.
+ * @returns {ReactElement} The main App component.
+ */
 export default function App() {
     const [connection, setConnection] = useState(null);
     const [sid, setSid] = useState(() => localStorage.getItem('sid') || null);
@@ -86,7 +94,7 @@ export default function App() {
         };
 
         startConnection();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
     let likesLightTheme = window.matchMedia('(prefers-color-scheme: light)').matches
     if (likesLightTheme) {
         document.documentElement.setAttribute('data-theme', 'light');
@@ -95,7 +103,7 @@ export default function App() {
         document.documentElement.setAttribute('data-theme', 'dark');
     }
     
-    }, []);
+    }, [packetConnection]);
 
     if (!connection) {
         return <Loading />; // Wait until the connection is ready
@@ -120,7 +128,18 @@ export default function App() {
     );
 }
 
-// Main Component
+
+/**
+ * The main component of the application. It renders the navigation bar and the routes.
+ * The navigation bar is only visible if the current path is not in the excludedPaths array.
+ * The routes are defined below.
+ * @param {Object} props The props object
+ * @param {Object} props.hubConnection The SignalR hub connection object
+ * @param {string} props.sid The session ID of the user
+ * @param {Object} props.packetConnection The SignalR packet connection object
+ * @param {string} props.psid The session ID of the user for the packet connection
+ * @returns {ReactElement} The main component
+ */
 export function Main({ hubConnection, sid, packetConnection, psid }) {
     const location = useLocation();
     const excludedPaths = ['/', '/signup']; // Paths where Nav should not be visible

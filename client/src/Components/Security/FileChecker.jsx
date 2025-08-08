@@ -5,6 +5,14 @@ import Button from '../Button/Button';
 import axios from 'axios';
 import './VirusChecker.css';
 
+/**
+ * Renders a file upload input field and a button to check the uploaded file.
+ * The file is sent to the server to be checked against VirusTotal.
+ * If the server returns a 200 status, the file status is updated with a user-friendly message
+ * indicating whether the file is malicious or not.
+ * If an error occurs, the error is logged to the console.
+ * @returns {ReactElement} A React component with a file upload input field and a button to check the file.
+ */
 function FileChecker() {
     const [fileStatus, setFileStatus] = useState('');
     const [file, setFile] = useState(null);
@@ -17,7 +25,13 @@ function FileChecker() {
     return 'This file appears safe. No issues were detected.';
   };
 
-  // --- New handleFile logic ---
+
+  /**
+   * Handles the file upload and sends it to the server for analysis.
+   * On success, updates the file status with a user-friendly message
+   * indicating whether the file is malicious or not.
+   * If an error occurs, logs the error to the console.
+   */
   const handleFile = async () => {
     // Ensure a file is selected
     if (!file) {

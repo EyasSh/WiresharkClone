@@ -8,7 +8,10 @@ using System.Text;
 using System.Collections.Concurrent;
 
 namespace Server.Services;
-
+/// <summary>
+/// Capturer is a static class that handles the capture of network packets.
+/// It provides methods to start capturing packets, process them, and store them in a queue.
+/// </summary>
 public class Capturer
 {
     public static Queue<PacketInfo> packets = new Queue<PacketInfo>();
@@ -64,7 +67,7 @@ public class Capturer
         {
             device.Open(DeviceModes.Promiscuous, 1000);
             Console.WriteLine("🟢 Starting capture...");
-            for(int i=0; i<600; i++)
+            for (int i = 0; i < 600; i++)
             {
                 GetPacketStatus status = device.GetNextPacket(out PacketCapture packetCapture);
                 if (status != GetPacketStatus.PacketRead)
@@ -214,7 +217,6 @@ public class Capturer
     /// </summary>
     /// <param name="info">The PacketInfo object to populate with protocol details.</param>
     /// <param name="icmp4">The ICMPv4 packet to process.</param>
-
     static void HandleIcmp4(PacketInfo info, IcmpV4Packet icmp4)
     {
         if (icmp4 == null) return;

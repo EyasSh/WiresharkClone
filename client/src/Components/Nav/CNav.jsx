@@ -4,9 +4,20 @@ import { FaLink ,FaFile, FaHistory } from 'react-icons/fa';
 import { useState} from 'react';
 import './Nav.css';
 
+/**
+ * CNav is a secondary Nav component which renders a navigation bar with options for file check, file history, and link check.
+ * The active navigation item is highlighted and clicking a navigation item changes the active state 
+ * and navigates to the corresponding page using the useNavigate hook.
+ * The component uses useState to manage the active navigation item state.
+ */
 function CNav() {
     const navigate = useNavigate();
     const [activeItem, setActiveItem] = useState('security');
+    /**
+     * Handles a click event on a navigation item.
+     * Sets the activeItem state to the item that was clicked and navigates to the corresponding page using the useNavigate hook.
+     * @param {string} item The navigation item that was clicked.
+     */
    const handleClick = (item) => {
         setActiveItem(item);
         if (item === 'security') {

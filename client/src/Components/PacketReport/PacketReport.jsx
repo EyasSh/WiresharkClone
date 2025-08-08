@@ -4,12 +4,39 @@ import axios from 'axios';
 import PacketPaper from '../PacketPaper/PacketPaper';
 import Loading from "../Logo/Loading";
 
+/**
+ * PacketReport component fetches and displays a list of network packets.
+ * 
+ * @returns {React.ReactElement} A React component that renders the packet report page.
+ * 
+ * @description This component fetches packets from the server using an 
+ * asynchronous request and displays them in a list format. If packets are 
+ * being fetched, it shows a loading indicator. If an error occurs during 
+ * the fetch, an error message is displayed. The component uses the 
+ * `axios` library for HTTP requests and manages state with 
+ * React hooks (`useState` and `useEffect`).
+ */
 function PacketReport() {
   const [packets, setPackets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    /**
+     * Fetches packets from the server using an asynchronous request
+     * and updates the state variables accordingly.
+     * 
+     * @description This function sends a GET request to the server's
+     * /api/user/packets endpoint with the X-Auth-Token included in the
+     * request headers. If the response is successful (status 200), it
+     * updates the `packets` state variable with the received data and
+     * logs a success message to the console. If the response is not
+     * successful, it logs a warning message to the console. If an error
+     * occurs during the request, it logs the error to the console and
+     * updates the `error` state variable with the error value. Finally,
+     * it sets the `loading` state variable to `false` regardless of the
+     * outcome.
+     */
     const fetchPackets = async () => {
       setLoading(true);
       try {
