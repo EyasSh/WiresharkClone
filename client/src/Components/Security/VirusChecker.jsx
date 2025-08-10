@@ -1,5 +1,6 @@
+/* eslint-disable no-unused-vars */
 import './VirusChecker.css';
-import { BrowserRouter as Routes, Route } from 'react-router';
+import { BrowserRouter as Router, Routes, Route } from 'react-router';
 import FileChecker from './FileChecker';
 import FileHistory from './FileHistory';
 import LinkChecker from './LinkChecker';
