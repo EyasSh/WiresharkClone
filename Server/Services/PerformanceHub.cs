@@ -56,7 +56,6 @@ namespace Server.Services
         /// It also retrieves the list of devices from the database and enqueues them for performance tracking.
         /// If an error occurs, an error notification is sent to the client.
         /// </summary>
-
         public override async Task OnConnectedAsync()
         {
             var sid = Context.ConnectionId;

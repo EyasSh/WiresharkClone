@@ -82,10 +82,10 @@ export default function Home() {
    */
  useEffect(() => {
    const result = packetsArr.filter(p => {
-  if (filter === 'All') return true;
-  if (filter === 'Suspicious and Malicious') return p.isSuspicious || p.isMalicious;
-  return p.protocol === filter;
-});
+      if (filter === 'All') return true;
+      if (filter === 'Suspicious and Malicious') return p.isSuspicious || p.isMalicious;
+      return p.protocol === filter;
+    });
 
 
    console.log(
