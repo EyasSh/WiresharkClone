@@ -1,31 +1,32 @@
 /* eslint-disable no-unused-vars */
 // src/Home/Home.jsx
 
-import{ useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import axios from 'axios';
-import packetHubConnection from '../Sockets/packetHub';
+import './Home.css';
 import Packet from '../PacketBox/Packet';
 import DetailBox from '../DetailBox/DetailBox';
 import FilterButton from '../FilterButton/FilterButton';
-import './Home.css';
 
 /**
  * Home component is the main page of the application. It displays a list of packets
  * captured by the server, with an option to filter by protocol. When a packet is
  * selected, it shows the packet details in a modal box.
- *
- * @type {React.FC}
  */
-export default function Home() {
+export default function Home({ hubConnection, sid }) {
   const navigate = useNavigate();
 
   // ─── raw data & filter ───────────────────────────────────
-  const [packetsArr, setPacketsArr] = useState([]); 
-  const [filter, setFilter]       = useState('All'); 
-  const [filteredPackets, setFilteredPackets] = useState([]); 
-  const [selectedIndex, setSelectedIndex]     = useState(-1);
-  const [email,setEmail] = useState(localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).email : '');
+  const [packetsArr, setPacketsArr] = useState([]);
+  const [filter, setFilter] = useState('All');
+  const [filteredPackets, setFilteredPackets] = useState([]);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [email] = useState(
+    localStorage.getItem('user')
+      ? JSON.parse(localStorage.getItem('user')).email
+      : ''
+  );
 
   // ─── auth check ──────────────────────────────────────────
   useEffect(() => {
@@ -44,66 +45,47 @@ export default function Home() {
     })();
   }, [navigate]);
 
-  // ─── SignalR listener ─────────────────────────────────────
+  // ─── SignalR: Listen and fetch packets ───────────────────
   useEffect(() => {
-    if (packetHubConnection.state !== 'Connected') return;
-    packetHubConnection.off('ReceivePackets');
-    packetHubConnection.on('ReceivePackets', newPackets => {
-      setPacketsArr(old => {
-        const upd = [...newPackets, ...old];
-        localStorage.setItem('packets', JSON.stringify(upd));
-        return upd;
-      });
+    if (!hubConnection || hubConnection.state !== 'Connected') return;
+
+    // Set up the event handler BEFORE invoking GetPackets
+    hubConnection.off('ReceivePackets');
+    hubConnection.on('ReceivePackets', newPackets => {
+      console.log("Received new packets:", newPackets);
+      setPacketsArr(newPackets); // Replace with latest packets from server
     });
-    return () => packetHubConnection.off('ReceivePackets');
-  }, []);
 
-  // ─── initial fetch + interval ─────────────────────────────
-  useEffect(() => {
-    /**
-     * Fetches packets from the server using SignalR, if the connection is established.
-     * If the connection is not established, it does nothing.
-     * If the invocation throws an error, it logs the error to the console.
-     */
+    // Fetch packets once and then every 60 seconds
     const fetchOnce = () => {
-
-      if (packetHubConnection.state === 'Connected') {
-        packetHubConnection.invoke('GetPackets', email).catch(console.error);
-      }
+      hubConnection.invoke('GetPackets', email).catch(console.error);
     };
     fetchOnce();
     const id = setInterval(fetchOnce, 60_000);
-    return () => clearInterval(id);
-  }, [email]);
 
-  /**
-   * The effect to filter packets based on the selected filter option.
-   * It updates the filteredPackets state based on the packetsArr and filter.
-   */
- useEffect(() => {
-   const result = packetsArr.filter(p => {
+    // Cleanup
+    return () => {
+      clearInterval(id);
+      hubConnection.off('ReceivePackets');
+    };
+  }, [hubConnection, email]);
+
+  // ─── Filtering ───────────────────────────────────────────
+  useEffect(() => {
+    const result = packetsArr.filter(p => {
       if (filter === 'All') return true;
       if (filter === 'Suspicious and Malicious') return p.isSuspicious || p.isMalicious;
       return p.protocol === filter;
     });
 
+    setFilteredPackets(result);
+    if (result.length === 0) setSelectedIndex(-1);
+  }, [packetsArr, filter]);
 
-   console.log(
-     `[FilterEffect] filter="${filter}" raw=${packetsArr.length} → filtered=${result.length}`
-   );
-   if(result.length> 0) 
-   {setFilteredPackets(result);}
-   else{
-      setFilteredPackets([]);
-      setSelectedIndex(-1); // clear detail box if no packets match the filter
-   }
- }, [packetsArr, filter]);
-
-
- // only clear the detail when the *filter* itself changes
- useEffect(() => {
-   setSelectedIndex(-1);
- }, [filter]);
+  // Clear detail when filter changes
+  useEffect(() => {
+    setSelectedIndex(-1);
+  }, [filter]);
 
   // ─── pick the packet for the detail box ──────────────────
   const selectedPacket =
@@ -115,18 +97,14 @@ export default function Home() {
     <div className="Home-Container">
       <header className="Header">
         <div className='Danger-Container'>
-          
           <span>Malicious Packet</span>
           <div className="Malicious-Color"></div>
         </div>
         <div className='Danger-Container'>
-          
           <span>Suspicious Packet</span>
           <div className="Suspicious-Color"></div>
         </div>
         <div className='Danger-Container'>
-          
-          
           <span>Safe Packet</span>
           <div className='Safe-Color-Container'>
             <div className="Safe-Color-Light"></div>
@@ -145,10 +123,9 @@ export default function Home() {
       <div className="Packets-List">
         {filteredPackets.map((p, i) => (
           <Packet
-            // use a key that changes whenever filter toggles back to All
             key={`${p.protocol}-${p.timestamp}-${i}`}
             index={i}
-            clickHandler={() => { console.log('click', i); setSelectedIndex(i); }}
+            clickHandler={() => setSelectedIndex(i)}
             packetType={`Protocol: ${p.protocol} | IP v${p.ipVersion}`}
             sourceIP={p.sourceIP}
             destinationIP={p.destinationIP}
@@ -160,11 +137,9 @@ export default function Home() {
             isSuspicious={p.isSuspicious}
             isMalicious={p.isMalicious}
             isSelected={selectedIndex === i}
-            
           />
         ))}
       </div>
-
       {selectedPacket && (
         <DetailBox
           packet={selectedPacket}

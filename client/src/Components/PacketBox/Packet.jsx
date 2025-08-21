@@ -19,27 +19,23 @@ import './Packet.css';
  * 
  * @returns {ReactElement} A React component displaying the packet details in a styled container.
  */
-function Packet({
-  ...props
-}) {
-
+function Packet({ ...props }) {
   const [Type, setPacketType] = useState(props.packetType);
   const [SourceIP, setSourceIP] = useState(props.sourceIP);
   const [DestinationIP, setDestinationIP] = useState(props.destinationIP);
   const [SourcePort, setSourcePort] = useState(props.sourcePort);
   const [DestinationPort, setDestinationPort] = useState(props.destinationPort);
   const [Protocol, setProtocol] = useState(props.protocol);
-  const [PacketDescription, setPacketDescription] = useState(props. packetDescription);
+  const [PacketDescription, setPacketDescription] = useState(props.packetDescription);
   /**
    * Handles click events on the packet by calling the clickHandler function
    * with the packet's index if it exists and the index is valid.
    * @function
    */
   const handleClick = () => {
-  console.log('Packet clicked!', props.index);
-  props.clickHandler(props.index);
-}
-
+    console.log('Packet clicked!', props.index);
+    props.clickHandler(props.index);
+  }
 
   return (
     <div className={props.isMalicious && props.isSuspicious ? "Packet-Container-Error":props.isMalicious ? "Packet-Container-Error" : props.isSuspicious ? "Packet-Container-Warning":  "Packet-Container"} onClick={()=>handleClick()}

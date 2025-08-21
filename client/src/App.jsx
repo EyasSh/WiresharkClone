@@ -45,44 +45,47 @@ export default function App() {
          * @function startConnection
          * @returns {void}
          */
+        // ...existing code...
         const startConnection = async () => {
             try {
-                if (hubConnection.state === 'Connected') {
+                if (hubConnection.state === 'Disconnected') {
+                    await hubConnection.start();
+                    setConnection(hubConnection);
+                } else {
                     setConnection(hubConnection);
                 }
-                if(packetHubConnection.state === 'Connected') {
+
+                if (packetHubConnection.state === 'Disconnected') {
+                    await packetHubConnection.start();
+                    setPacketConnection(packetHubConnection);
+                } else {
                     setPacketConnection(packetHubConnection);
                 }
-                await hubConnection.start();
-                await packetHubConnection.start();
-                setConnection(hubConnection); // Pass the connected instance
-                setPacketConnection(packetHubConnection);
                 console.log('Connected to SignalR hub');
-                  // Listen for the ConnectNotification event
+                // Listen for the ConnectNotification event
                 hubConnection.on('ConnectNotification', (connectionId, status) => {
-                console.log(`Connection ID: ${connectionId}, Status: ${status}`);
-                setSid(connectionId);
-                localStorage.setItem('sid', connectionId);
-                    // Display notification
+                    console.log(`Connection ID: ${connectionId}, Status: ${status}`);
+                    setSid(connectionId);
+                    localStorage.setItem('sid', connectionId);
                     setNotification({
-                    severity: status === 'ok' ? 'ok' : 'err',
-                    children: status === 'ok'
-                        ? 'Initialized Session'
-                        : 'Connection error occurred.',
+                        severity: status === 'ok' ? 'ok' : 'err',
+                        children: status === 'ok'
+                            ? 'Initialized Session'
+                            : 'Connection error occurred.',
+                    });
                 });
-                });
-                packetConnection.on('ConnectNotification', (connectionId, status) => {
-                console.log(`Connection ID: ${connectionId}, Status: ${status}`);
-                setPSid(connectionId);
-                localStorage.setItem('psid', connectionId);
-                    // Display notification
+                // Use packetHubConnection here, not packetConnection
+                packetHubConnection.on('ConnectNotification', (connectionId, status) => {
+                    console.log(`Connection ID: ${connectionId}, Status: ${status}`);
+                    setPSid(connectionId);
+                    localStorage.setItem('psid', connectionId);
                     setPNotification({
-                    severity: status === 'ok' ? 'ok' : 'err',
-                    children: status === 'ok'
-                        ? 'Initialized Session'
-                        : 'Connection error occurred.',
-                    })
-                })
+                        severity: status === 'ok' ? 'ok' : 'err',
+                        children: status === 'ok'
+                            ? 'Initialized Session'
+                            : 'Connection error occurred.',
+                    });
+                });
             } catch (error) {
                 console.error('Error connecting to SignalR hub:', error);
                 setNotification({
@@ -102,11 +105,13 @@ export default function App() {
             document.documentElement.setAttribute('data-theme', 'dark');
         }
     
-    }, [packetConnection]);
+    }, []);
 
     if (!connection) {
         return <Loading />; // Wait until the connection is ready
     }
+
+    
 
     return (
         <Router>
@@ -149,7 +154,9 @@ export function Main({ hubConnection, sid, packetConnection, psid }) {
             <Routes>
                 <Route path="/" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
-                <Route path="/home" element={<Home hubConnection={packetConnection} sid={psid} />} />
+                <Route path="/home" element={packetConnection
+                    ? <Home hubConnection={packetConnection} sid={psid} />
+                    : <Loading />} />
                 <Route path="/performance" element={<Performance hubConnection={hubConnection} sid={sid} />} />
                 <Route path="/packets" element={<Packets hubConnection={hubConnection} sid={sid} />} />
                 <Route path='/security/*' element={<VirusChecker />} />

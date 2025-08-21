@@ -60,6 +60,9 @@ export default function FilterButton({ selected, onChange }) {
   );
 }
 
+// [<li key='All' className='ListItem selected' onClick={..}>'All'</li>, 
+//  <li key='TCP' className='ListItem' onClick={..}>'TCP'</li>]
+
 FilterButton.propTypes = {
   selected: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,

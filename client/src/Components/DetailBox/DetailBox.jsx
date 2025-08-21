@@ -22,10 +22,7 @@ function DetailBox({ packet, onClose }) {
   if (!packet) {console.log('🔍 DetailBox render, packet is null'); return null;}
 
   return (
-    <div
-      className="detail-box"
-       
-    >
+    <div className="detail-box">
       <span
         className="close"
         onClick={onClose}
