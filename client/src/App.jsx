@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */ 
 // App.jsx
 // App.jsx
@@ -28,11 +29,9 @@ import VirusChecker from './Components/Security/VirusChecker';
  */
 export default function App() {
     const [connection, setConnection] = useState(null);
-    const [sid, setSid] = useState(() => localStorage.getItem('sid') || null);
     const [notification,setNotification] = useState(null);
 
     const [packetConnection, setPacketConnection] = useState(null);
-    const [psid, setPSid] = useState(() => localStorage.getItem('psid') || null);
     const [pnotification,setPNotification] = useState(null);
 
     useEffect(() => {
@@ -65,8 +64,8 @@ export default function App() {
                 // Listen for the ConnectNotification event
                 hubConnection.on('ConnectNotification', (connectionId, status) => {
                     console.log(`Connection ID: ${connectionId}, Status: ${status}`);
-                    setSid(connectionId);
-                    localStorage.setItem('sid', connectionId);
+                  
+                    
                     setNotification({
                         severity: status === 'ok' ? 'ok' : 'err',
                         children: status === 'ok'
@@ -77,8 +76,7 @@ export default function App() {
                 // Use packetHubConnection here, not packetConnection
                 packetHubConnection.on('ConnectNotification', (connectionId, status) => {
                     console.log(`Connection ID: ${connectionId}, Status: ${status}`);
-                    setPSid(connectionId);
-                    localStorage.setItem('psid', connectionId);
+                    
                     setPNotification({
                         severity: status === 'ok' ? 'ok' : 'err',
                         children: status === 'ok'
@@ -127,7 +125,7 @@ export default function App() {
                     {pnotification.children}
                 </Notifications>
             )}
-            <Main hubConnection={connection} sid={sid} packetConnection={packetConnection} psid={psid} />
+            <Main hubConnection={connection}  />
         </Router>
     );
 }
@@ -144,21 +142,21 @@ export default function App() {
  * @param {string} props.psid The session ID of the user for the packet connection
  * @returns {ReactElement} The main component
  */
-export function Main({ hubConnection, sid, packetConnection, psid }) {
+export function Main({ hubConnection, packetConnection  }) {
     const location = useLocation();
     const excludedPaths = ['/', '/signup']; // Paths where Nav should not be visible
 
     return (
         <>
-            {!excludedPaths.includes(location.pathname) && <Nav hubConnection={hubConnection} sid={sid} packetHub={packetConnection} />}
+            {!excludedPaths.includes(location.pathname) && <Nav hubConnection={hubConnection} />}
             <Routes>
                 <Route path="/" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/home" element={packetConnection
-                    ? <Home hubConnection={packetConnection} sid={psid} />
+                    ? <Home hubConnection={packetConnection} />
                     : <Loading />} />
-                <Route path="/performance" element={<Performance hubConnection={hubConnection} sid={sid} />} />
-                <Route path="/packets" element={<Packets hubConnection={hubConnection} sid={sid} />} />
+                <Route path="/performance" element={<Performance hubConnection={hubConnection}  />} />
+                <Route path="/packets" element={<Packets hubConnection={hubConnection}  />} />
                 <Route path='/security/*' element={<VirusChecker />} />
             </Routes>
         </>

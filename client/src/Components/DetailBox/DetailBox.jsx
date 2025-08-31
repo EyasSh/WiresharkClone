@@ -30,7 +30,7 @@ function DetailBox({ packet, onClose }) {
       >
         ✕
       </span>
-      <h3>Packet Details</h3>
+      <h3 className="detail-box-title">Packet Details</h3>
       <div className="detail-box-content">
         <p><strong>Source IP:</strong> {packet.sourceIP}</p>
         <p><strong>Destination IP:</strong> {packet.destinationIP}</p>

@@ -1,6 +1,7 @@
 /* Hide scrollbars in Firefox */
 * {
-  scrollbar-width: none;
+  scrollbar-width: 5%;
+  scrollbar-color: #888 #333;
 }
 
 /* Hide scrollbars in IE10+ */
@@ -8,10 +9,6 @@
   -ms-overflow-style: none;
 }
 
-/* Hide scrollbars in Chrome, Safari, Opera */
-*::-webkit-scrollbar {
-  display: none;
-}
 
 :root {
   font-family: "Montserrat", Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -246,6 +243,19 @@ input:-webkit-autofill:focus {
   bottom: 41%;
   color: #181818;
 }
+[data-theme="light"] .detail-box-title{
+  color: #000;
+}
+[data-theme='light'] .Item-Labels{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-weight: 600;
+  padding: 0.5rem 0;
+  border-bottom: 2px solid #ccc;
+  margin-bottom: 0.5rem;
+  color: #fff;
+}
 [data-theme="light"] .detail-box-content {
   max-height: 60vh;       /* allow room to scroll if content gets tall */
   overflow-y: auto;
@@ -411,6 +421,16 @@ input:-webkit-autofill:focus {
   font-size: 1.2rem;
   border-bottom: 1px solid #222;
   padding-bottom: 0.25rem;
+}
+[data-theme='dark'] .Item-Labels{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-weight: 600;
+  padding: 0.5rem 0;
+  border-bottom: 2px solid #111;
+  margin-bottom: 0.5rem;
+  color: #fff;
 }
 
 

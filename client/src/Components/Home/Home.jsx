@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 // src/Home/Home.jsx
 
@@ -14,7 +15,7 @@ import FilterButton from '../FilterButton/FilterButton';
  * captured by the server, with an option to filter by protocol. When a packet is
  * selected, it shows the packet details in a modal box.
  */
-export default function Home({ hubConnection, sid }) {
+export default function Home({ hubConnection }) {
   const navigate = useNavigate();
 
   // ─── raw data & filter ───────────────────────────────────
@@ -121,6 +122,13 @@ export default function Home({ hubConnection, sid }) {
       </div>
 
       <div className="Packets-List">
+        <div className='Item-Labels'>
+         <span>Source IP</span>
+         <span>Source Port</span>
+         <span>Protocol</span>
+         <span>Destination IP</span>
+         <span>Destination Port</span>
+        </div>
         {filteredPackets.map((p, i) => (
           <Packet
             key={`${p.protocol}-${p.timestamp}-${i}`}
