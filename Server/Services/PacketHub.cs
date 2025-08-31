@@ -66,20 +66,23 @@ public class PacketHub : Hub<IPacketContext>
     /// 3. Sends all captured packets back to the client connected to the server.
     /// 4. Sends an email with a PDF report of suspicious packets if any are found and the notification criteria are met.
     /// </remarks>
-    public async Task GetPackets(string email)
+    public async Task GetPackets(string email, string userId)
     {
+        System.Console.WriteLine($"User ID: {userId}");
         System.Console.WriteLine($"Email: {email}");
         // 1. Capture & analyze
         Queue<PacketInfo> packets = Capturer.StartCapture();
-        Analyzer.DetectSynFlood(packets, 150, Analyzer.defaultQuarterWindow);
-        Analyzer.DetectUdpFlood(packets, 150, Analyzer.defaultQuarterWindow);
+        Analyzer.DetectSynFlood(packets, 10, Analyzer.defaultQuarterWindow);
+        Analyzer.DetectUdpFlood(packets, 10, Analyzer.defaultQuarterWindow);
         Analyzer.DetectPortScan(packets, 10, Analyzer.defaultQuarterWindow);
         Analyzer.DetectPingOfDeathV4(packets);
         Analyzer.DetectPingOfDeathV6(packets);
 
         var suspackets = packets
             .Where(p => p.isSuspicious || p.isMalicious)
+            .Select(p => { p.UserId = userId; return p; })
             .ToList();
+
 
         // 2. Persist
         if (suspackets.Count > 0)

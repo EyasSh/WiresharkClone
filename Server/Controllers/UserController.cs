@@ -21,7 +21,7 @@ namespace Server.Controllers
     /// Controller for managing user-related actions.
     /// </summary>
     [ApiController]
-    [Route("api/user")] 
+    [Route("api/user")]
     public class UserController : ControllerBase
     {
         private readonly IHubContext<SocketService> _hubContext;
@@ -570,16 +570,19 @@ namespace Server.Controllers
             ", pdf, user?.Id + "" + DateOnly.FromDateTime(DateTime.Now) + "" + ".pdf");
             return Ok();
         }
+
         /// <summary>
-        /// Retrieves a list of all packets.
+        /// Retrieves the packets for the given user ID.
         /// </summary>
-        /// <returns>A JSON response containing a list of <see cref="PacketInfo"/> objects.</returns>
+        /// <param name="userId">The ID of the user to retrieve packets for.</param>
+        /// <returns>A JSON response containing the packets.</returns>
         [Authorize]
         [HttpGet("packets")]
-        public Task<IActionResult> GetPackets()
+        public async Task<IActionResult> GetPackets([FromQuery] string? userId)
         {
-            var packets = _packets.Find(_ => true).ToList();
-            return Task.FromResult<IActionResult>(Ok(packets));
+            var cursor = Builders<PacketInfo>.Filter.Eq(p => p.UserId, userId);
+            var packets = await _packets.Find(cursor).ToListAsync();
+            return Ok(packets);
         }
         /// <summary>
         /// Initializes the devices collection if it's empty.

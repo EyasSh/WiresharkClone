@@ -20,6 +20,11 @@ function PacketReport() {
   const [packets, setPackets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [userId] = useState(
+    localStorage.getItem('user')
+      ? JSON.parse(localStorage.getItem('user')).id
+      : ''
+  );
 
   useEffect(() => {
     /**
@@ -41,15 +46,9 @@ function PacketReport() {
       setLoading(true);
       try {
         const token = localStorage.getItem('X-Auth-Token');
-        const response = await axios.get(
-          'http://localhost:5256/api/user/packets',
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              'X-Auth-Token': token,
-            },
-          }
-        );
+        const url = `http://localhost:5256/api/user/packets?userId=${encodeURIComponent(userId)}`;
+        const response = await axios.get(url, { headers: { 'X-Auth-Token': token } });
+
         if (response.status === 200) {
           setPackets(response.data);
           console.log(

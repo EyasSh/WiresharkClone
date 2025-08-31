@@ -125,7 +125,7 @@ export default function App() {
                     {pnotification.children}
                 </Notifications>
             )}
-            <Main hubConnection={connection}  />
+            <Main hubConnection={connection}  packetConnection={packetConnection} />
         </Router>
     );
 }

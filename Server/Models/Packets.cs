@@ -46,6 +46,7 @@ namespace Server.Models
         /// </summary>
         public string? ApplicationLayerText { get; set; }
         public bool hasJsonAppLayerText { get; set; } = false;
+        public string? UserId { get; set; }
     }
 
 }

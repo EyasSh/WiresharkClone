@@ -1,5 +1,4 @@
 /* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
 // src/Home/Home.jsx
 
 import { useState, useEffect } from 'react';
@@ -26,6 +25,11 @@ export default function Home({ hubConnection }) {
   const [email] = useState(
     localStorage.getItem('user')
       ? JSON.parse(localStorage.getItem('user')).email
+      : ''
+  );
+  const [userId] = useState(
+    localStorage.getItem('user')
+      ? JSON.parse(localStorage.getItem('user')).id
       : ''
   );
 
@@ -59,7 +63,9 @@ export default function Home({ hubConnection }) {
 
     // Fetch packets once and then every 60 seconds
     const fetchOnce = () => {
-      hubConnection.invoke('GetPackets', email).catch(console.error);
+     
+
+      hubConnection.invoke('GetPackets', email, userId).catch(console.error);
     };
     fetchOnce();
     const id = setInterval(fetchOnce, 60_000);
@@ -95,59 +101,59 @@ export default function Home({ hubConnection }) {
       : null;
 
   return (
-    <div className="Home-Container">
-      <header className="Header">
-        <div className='Danger-Container'>
-          <span>Malicious Packet</span>
-          <div className="Malicious-Color"></div>
+  <div className="Home-Container">
+    <header className="Header">
+      <div className="Danger-Container">
+        <span>Malicious Packet</span>
+        <div className="Malicious-Color"></div>
+      </div>
+      <div className="Danger-Container">
+        <span>Suspicious Packet</span>
+        <div className="Suspicious-Color"></div>
+      </div>
+      <div className="Danger-Container">
+        <span>Safe Packet</span>
+        <div className="Safe-Color-Container">
+          <div className="Safe-Color-Light"></div>
+          <div className="Safe-Color-Dark"></div>
         </div>
-        <div className='Danger-Container'>
-          <span>Suspicious Packet</span>
-          <div className="Suspicious-Color"></div>
-        </div>
-        <div className='Danger-Container'>
-          <span>Safe Packet</span>
-          <div className='Safe-Color-Container'>
-            <div className="Safe-Color-Light"></div>
-            <div className="Safe-Color-Dark"></div>
-          </div>
-        </div>
-      </header>
+      </div>
+    </header>
 
-      <div className="Filter-Container">
-        <FilterButton
-          selected={filter}
-          onChange={setFilter}
+    <div className="Filter-Container">
+      <FilterButton selected={filter} onChange={setFilter} />
+    </div>
+
+    <div className="Packets-List">
+      {filteredPackets.length > 0 && (
+        <div className="Item-Labels">
+          <span>Source IP</span>
+          <span>Source Port</span>
+          <span>Protocol</span>
+          <span>Destination IP</span>
+          <span>Destination Port</span>
+        </div>
+      )}
+
+      {filteredPackets.map((p, i) => (
+        <Packet
+          key={`${p.protocol}-${p.timestamp}-${i}`}
+          index={i}
+          clickHandler={() => setSelectedIndex(i)}
+          packetType={`Protocol: ${p.protocol} | IP v${p.ipVersion}`}
+          sourceIP={p.sourceIP}
+          destinationIP={p.destinationIP}
+          sourcePort={p.sourcePort}
+          destinationPort={p.destinationPort}
+          protocol={p.protocol}
+          packetDescription={p.description}
+          timestamp={p.timestamp}
+          isSuspicious={p.isSuspicious}
+          isMalicious={p.isMalicious}
+          isSelected={selectedIndex === i}
         />
-      </div>
+      ))}
 
-      <div className="Packets-List">
-        <div className='Item-Labels'>
-         <span>Source IP</span>
-         <span>Source Port</span>
-         <span>Protocol</span>
-         <span>Destination IP</span>
-         <span>Destination Port</span>
-        </div>
-        {filteredPackets.map((p, i) => (
-          <Packet
-            key={`${p.protocol}-${p.timestamp}-${i}`}
-            index={i}
-            clickHandler={() => setSelectedIndex(i)}
-            packetType={`Protocol: ${p.protocol} | IP v${p.ipVersion}`}
-            sourceIP={p.sourceIP}
-            destinationIP={p.destinationIP}
-            sourcePort={p.sourcePort}
-            destinationPort={p.destinationPort}
-            protocol={p.protocol}
-            packetDescription={p.description}
-            timestamp={p.timestamp}
-            isSuspicious={p.isSuspicious}
-            isMalicious={p.isMalicious}
-            isSelected={selectedIndex === i}
-          />
-        ))}
-      </div>
       {selectedPacket && (
         <DetailBox
           packet={selectedPacket}
@@ -155,6 +161,24 @@ export default function Home({ hubConnection }) {
           onClose={() => setSelectedIndex(-1)}
         />
       )}
-    </div>
-  );
+
+      {/* You render DetailBox twice; delete this block if unintentional */}
+      {selectedPacket && (
+        <DetailBox
+          packet={selectedPacket}
+          index={selectedIndex}
+          onClose={() => setSelectedIndex(-1)}
+        />
+      )}
+  </div>
+  {selectedPacket && (
+    <DetailBox
+      packet={selectedPacket}
+      index={selectedIndex}
+      onClose={() => setSelectedIndex(-1)}
+    />
+  )}
+</div>
+);
+
 }

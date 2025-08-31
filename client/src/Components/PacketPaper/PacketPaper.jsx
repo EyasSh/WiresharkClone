@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import '../../index.css';
 import PropTypes from 'prop-types';
 /**
@@ -32,6 +33,7 @@ function PacketPaper({ packet }) {
         <p><strong>Description:</strong> {packet.description}</p>
         <p><strong>Header Length:</strong> {packet.headerLength}</p>
         <p><strong>Total Length:</strong> {packet.totalLength}</p>
+        <p><strong>User Id:</strong> {packet.userId}</p>
       </div>
     </div>
   );
