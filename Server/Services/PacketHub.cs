@@ -70,10 +70,10 @@ public class PacketHub : Hub<IPacketContext>
     {
         System.Console.WriteLine($"Email: {email}");
         // 1. Capture & analyze
-        var packets = Capturer.StartCapture();
+        Queue<PacketInfo> packets = Capturer.StartCapture();
         Analyzer.DetectSynFlood(packets, 150, Analyzer.defaultQuarterWindow);
         Analyzer.DetectUdpFlood(packets, 150, Analyzer.defaultQuarterWindow);
-        Analyzer.DetectPortScan(packets, 5, Analyzer.defaultQuarterWindow);
+        Analyzer.DetectPortScan(packets, 10, Analyzer.defaultQuarterWindow);
         Analyzer.DetectPingOfDeathV4(packets);
         Analyzer.DetectPingOfDeathV6(packets);
 
