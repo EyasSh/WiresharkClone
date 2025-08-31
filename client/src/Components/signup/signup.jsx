@@ -6,6 +6,7 @@ import "../Login/Login.css";
 import Button from '../Button/Button';
 import axios from 'axios';
 import Logo from '../Logo/Logo';
+import { useNavigate } from 'react-router';
 
 
 
@@ -22,6 +23,7 @@ function Signup() {
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
     const [date, setDate] = useState(new Date()); // Initially a Date object
+    const navigate = useNavigate();
 
     /**
      * Handles the sign up form submission by sending a POST request to the user
@@ -40,6 +42,7 @@ function Signup() {
 
             if (response.status === 200) {
                 alert(`${response.data}`);
+                navigate('/');
             }
         } catch (e) {
             alert(`Sign Up Failed ${e.response ? e.response.data : e.message}`);
