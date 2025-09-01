@@ -37,14 +37,14 @@ button {
 
 .action {
     color: white !important;
-    background-color: #66acea !important;
+    background-color: #155b99 !important;
     text-align: center !important;
 }
 
 .action:hover {
     cursor: pointer !important;
-    border-color: #66afe9 !important; /* Change border color on focus */
-    box-shadow: 0 0 5px rgba(102, 175, 233, 0.6) !important; /* Adds a subtle shadow */
+    border-color: #155b99 !important; /* Change border color on focus */
+    box-shadow: 0 0 5px rgba(24, 94, 155, 0.6) !important; /* Adds a subtle shadow */
 }
 
 

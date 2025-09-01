@@ -30,7 +30,7 @@ function Button(props) {
         );
     } else {
         return (
-            <button className={statusClass || "signup"} onClick={props.action}>
+            <button className={statusClass || "default-class"} onClick={props.action}>
                 {buttonContent}
             </button>
         );

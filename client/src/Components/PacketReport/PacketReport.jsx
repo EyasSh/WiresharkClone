@@ -1,64 +1,102 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react';
 import './PacketReport.css';
 import axios from 'axios';
 import PacketPaper from '../PacketPaper/PacketPaper';
 import Loading from "../Logo/Loading";
+import Button from '../Button/Button';
 
 /**
- * PacketReport component fetches and displays a list of network packets.
- * 
- * @returns {React.ReactElement} A React component that renders the packet report page.
- * 
- * @description This component fetches packets from the server using an 
- * asynchronous request and displays them in a list format. If packets are 
- * being fetched, it shows a loading indicator. If an error occurs during 
- * the fetch, an error message is displayed. The component uses the 
- * `axios` library for HTTP requests and manages state with 
- * React hooks (`useState` and `useEffect`).
+ * PacketReport is a React component that displays a paginated list of packets.
+ * It fetches packets from the server when the user navigates to a new page, and
+ * caches the results to avoid unnecessary re-fetches.
+ *
+ * @param {Object} props - The component props.
+ * @param {string} [props.userId] - The ID of the user whose packets to display.
+ *
+ * @returns {ReactElement} The packet report component.
  */
 function PacketReport() {
+  const PAGE_SIZE = 10;
+
   const [packets, setPackets] = useState([]);
+  const [total, setTotal] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [cachedPages, setCachedPages] = useState({}); // { [pageNumber]: { items, total, pageSize, hasMore } }
+
   const [userId] = useState(
-    localStorage.getItem('user')
-      ? JSON.parse(localStorage.getItem('user')).id
-      : ''
+    localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).id : ''
   );
 
+  // If user changes, reset cache and go to page 1
   useEffect(() => {
-    /**
-     * Fetches packets from the server using an asynchronous request
-     * and updates the state variables accordingly.
-     * 
-     * @description This function sends a GET request to the server's
-     * /api/user/packets endpoint with the X-Auth-Token included in the
-     * request headers. If the response is successful (status 200), it
-     * updates the `packets` state variable with the received data and
-     * logs a success message to the console. If the response is not
-     * successful, it logs a warning message to the console. If an error
-     * occurs during the request, it logs the error to the console and
-     * updates the `error` state variable with the error value. Finally,
-     * it sets the `loading` state variable to `false` regardless of the
-     * outcome.
-     */
+    setCachedPages({});
+    setPageNumber(1);
+    setTotal(null);
+  }, [userId]);
+
+  useEffect(() => {
+    // 1) Serve from cache if present
+    const cached = cachedPages[pageNumber];
+    if (cached) {
+      setPackets(cached.items);
+      setTotal(cached.total ?? null);
+
+      const ps = cached.pageSize ?? PAGE_SIZE;
+      const totalPages = cached.total != null ? Math.ceil(cached.total / ps) : null;
+      setHasMore(
+        cached.hasMore != null
+          ? cached.hasMore
+          : (totalPages != null ? pageNumber < totalPages : cached.items.length === ps)
+      );
+
+      setLoading(false); // no network, instant render
+      console.log('Serving page', pageNumber, 'from cache');
+      return;
+    }
+
+    // 2) Otherwise fetch and then cache
     const fetchPackets = async () => {
       setLoading(true);
+      setError(null);
       try {
         const token = localStorage.getItem('X-Auth-Token');
-        const url = `http://localhost:5256/api/user/packets?userId=${encodeURIComponent(userId)}`;
-        const response = await axios.get(url, { headers: { 'X-Auth-Token': token } });
+        const url = `http://localhost:5256/api/user/packets?userId=${encodeURIComponent(
+          userId
+        )}&pageNumber=${pageNumber}&pageSize=${PAGE_SIZE}`;
+        const { data, status } = await axios.get(url, { headers: { 'X-Auth-Token': token } });
 
-        if (response.status === 200) {
-          setPackets(response.data);
-          console.log(
-            response.data.length
-              ? 'Packets fetched successfully:'
-              : 'No packets found',
-            response.data
-          );
+        if (status === 200) {
+          const items = data.items ?? [];
+          const totalFromServer = data.total ?? null;
+          const pageSizeFromServer = data.pageSize ?? PAGE_SIZE;
+
+          const totalPages =
+            totalFromServer != null ? Math.ceil(totalFromServer / pageSizeFromServer) : null;
+
+          const nextHasMore =
+            totalPages != null ? pageNumber < totalPages : items.length === pageSizeFromServer;
+
+          setPackets(items);
+          setTotal(totalFromServer);
+          setHasMore(nextHasMore);
+
+          // Cache this page
+          setCachedPages(prev => ({
+            ...prev,
+            [pageNumber]: {
+              items,
+              total: totalFromServer,
+              pageSize: pageSizeFromServer,
+              hasMore: nextHasMore,
+            },
+          }));
         } else {
-          console.warn('Unexpected status:', response.status);
+          console.warn('Unexpected status:', status);
         }
       } catch (err) {
         console.error('Error fetching packets:', err);
@@ -68,13 +106,23 @@ function PacketReport() {
       }
     };
 
-    fetchPackets();
-  }, []);
+    if (userId) fetchPackets();
+  }, [pageNumber, userId]); // (intentionally not depending on cachedPages)
 
-  // optional: log when packets updates
-  useEffect(() => {
-    console.log('Packets state updated:', packets);
-  }, [packets]);
+  const onPrev = () => {
+    if (pageNumber === 1) return alert('You are on the first page');
+    setPageNumber(p => p - 1);
+  };
+
+  const onNext = () => {
+    if (!hasMore) return alert('No more packets');
+    setPageNumber(p => p + 1);
+  };
+
+  const totalPages = total != null ? Math.ceil(total / PAGE_SIZE) : null;
+  const showNoMore =
+    (totalPages != null && pageNumber > totalPages) ||
+    (total == null && packets.length === 0 && pageNumber > 1);
 
   if (loading) {
     return (
@@ -82,7 +130,6 @@ function PacketReport() {
         <h2>Packet Report</h2>
         <div className="no-packets"><h2>Loading packets…</h2></div>
         <Loading />
-
       </div>
     );
   }
@@ -97,17 +144,30 @@ function PacketReport() {
   }
 
   return (
-    <div className="report-container">
-      <h2>Packet Report</h2>
-      {packets.length > 0 ? (
-        packets.map((packet, index) => (
-          <PacketPaper key={index} packet={packet} />
-        ))
-      ) : (
-        <div className="no-packets">
-          <h2>No Packets Found</h2>
-        </div>
-      )}
+    <div className="packet-report">
+      <div className="button-container">
+        <Button content="Previous Page" action={onPrev} />
+      </div>
+
+      <div className="report-container">
+        <h2>Packet Report</h2>
+        <h4>
+          Page {pageNumber}
+          {total !== null && <> • Total: {total} • Pages: {Math.max(1, Math.ceil(total / PAGE_SIZE))}</>}
+        </h4>
+
+        {showNoMore ? (
+          <div className="no-packets"><h2>No More Packets</h2></div>
+        ) : packets.length > 0 ? (
+          packets.map((packet, i) => <PacketPaper key={i} packet={packet} />)
+        ) : (
+          <div className="no-packets"><h2>No Packets Found</h2></div>
+        )}
+      </div>
+
+      <div className="button-container">
+        <Button content="Next Page" action={onNext} status="action" />
+      </div>
     </div>
   );
 }

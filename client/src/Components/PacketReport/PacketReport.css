@@ -1,13 +1,33 @@
-.report-container{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    margin-top: 3em;
-    width: 100%;
+.packet-report{
+  display: flex;
+  align-items: flex-start;      /* important for sticky children */
+  justify-content: space-around;
+  gap: 1rem;
 }
+
+.report-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  margin-top: 3em;
+  width: 100%;
+}
+
 .no-packets{
-    font-size: 20px;
-    color: #7c7c7c;
+  font-size: 20px;
+  color: #7c7c7c;
+}
+
+/* was missing top and display; remove padding-top */
+.button-container{
+  position: sticky;
+  top: 50vh;                    /* line where it “sticks” */
+  transform: translateY(-50%);  /* center on that line */
+  display: grid;                /* enables place-items */
+  place-items: center;
+  padding: 0.75rem;
+  border-radius: 8px;
+  z-index: 1;                   /* sit above content */
 }

@@ -14,6 +14,7 @@ using System.Net;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
+using Org.BouncyCastle.Bcpg;
 
 namespace Server.Controllers
 {
@@ -578,11 +579,28 @@ namespace Server.Controllers
         /// <returns>A JSON response containing the packets.</returns>
         [Authorize]
         [HttpGet("packets")]
-        public async Task<IActionResult> GetPackets([FromQuery] string? userId)
+        public async Task<IActionResult> GetPackets([FromQuery] PacketPageRequest q)
         {
-            var cursor = Builders<PacketInfo>.Filter.Eq(p => p.UserId, userId);
-            var packets = await _packets.Find(cursor).ToListAsync();
-            return Ok(packets);
+            var filter = Builders<PacketInfo>.Filter.Eq(p => p.UserId, q.UserId);
+
+            // optional total
+            long? total = null;
+            if (q.IncludeTotal)
+                total = await _packets.CountDocumentsAsync(filter);
+
+            var items = await _packets.Find(filter)
+                                      .SortByDescending(p => p.Timestamp) // if you have such a field
+                                      .Skip(q.Skip)
+                                      .Limit(q.Limit)
+                                      .ToListAsync();
+
+            return Ok(new
+            {
+                items,
+                total,               // null if not requested
+                pageNumber = q.PageNumber,
+                pageSize = q.PageSize
+            });
         }
         /// <summary>
         /// Initializes the devices collection if it's empty.
