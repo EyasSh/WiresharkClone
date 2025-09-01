@@ -572,11 +572,12 @@ namespace Server.Controllers
             return Ok();
         }
 
+
         /// <summary>
-        /// Retrieves the packets for the given user ID.
+        /// Retrieves packets that match the given <paramref name="q.UserId"/>, sorted in descending order by timestamp.
         /// </summary>
-        /// <param name="userId">The ID of the user to retrieve packets for.</param>
-        /// <returns>A JSON response containing the packets.</returns>
+        /// <param name="q">A <see cref="PacketPageRequest"/> object containing the packet query parameters.</param>
+        /// <returns>A JSON response with the packet objects, the total count of packets (if requested), the page number, and page size.</returns>
         [Authorize]
         [HttpGet("packets")]
         public async Task<IActionResult> GetPackets([FromQuery] PacketPageRequest q)
